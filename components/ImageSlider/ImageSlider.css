@@ -1,0 +1,43 @@
+/* ImageSlider.css */
+
+.slider-container {
+    width: 100%;
+    overflow: hidden;
+    position: relative;
+  }
+  
+  .slider {
+    display: flex;
+    transition: transform 0.5s ease-in-out;
+  }
+  
+  .slide {
+    min-width: 100%;
+    box-sizing: border-box;
+  }
+  
+  img {
+    width: 100%;
+    height: auto;
+  }
+  
+  .prev-btn,
+  .next-btn {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background-color: transparent;
+    border: none;
+    color: #fff;
+    font-size: 24px;
+    cursor: pointer;
+  }
+  
+  .prev-btn {
+    left: 10px;
+  }
+  
+  .next-btn {
+    right: 10px;
+  }
+  
