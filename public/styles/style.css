@@ -1,0 +1,38 @@
+*{
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+.vertical-menu {
+    /* width: inherit; */
+    height: 600px;
+    overflow-y: auto;
+  }
+  
+  .vertical-menu a {
+    background-color: #eee;
+    color: black;
+    display: block;
+    padding: 12px;
+    text-decoration: none;
+  }
+  
+  .vertical-menu a:hover {
+    background-color: #ccc;
+  }
+  
+  .vertical-menu a.active {
+    background-color: #04AA6D;
+    color: white;
+  }
+
+  .upcoming_event img{
+    background-size: contain;
+  }
+
+  .secnd_row .column{
+    height: 600px;
+    margin:0px 1rem;
+
+  }

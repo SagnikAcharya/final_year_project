@@ -105,6 +105,9 @@ app.get('/logout',(req,res)=>{
       });
 })
 
+app.get('/dashboard',(req,res)=>{
+    res.render('./dashboard/dashboard.ejs');
+})
 
 
 app.listen(8080,()=>{
