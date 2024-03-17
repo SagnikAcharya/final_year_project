@@ -11,6 +11,7 @@ const User=require('./models/user');
 
 
 const app=express();
+
 app.use(express.urlencoded({ extended: true }));  //data converted from urlencoded to json
 
 app.use(methodOverride("_method"));                 // used for Put/Patch(Update) on html forms
