@@ -8,6 +8,33 @@ const flash = require("connect-flash");
 const passport=require('passport');
 const LocalStrategy=require('passport-local');
 const User=require('./models/user');
+const Club=require('./models/clubs');
+const Event=require('./models/events');
+const flatpickr = require("flatpickr");
+const {catchAsync}=require('./middleware.js');
+const {isLoggedIn}=require('./middleware.js');
+
+
+// const { Calendar } = require('@fullcalendar/core');
+// const interactionPlugin = require('@fullcalendar/interaction');
+// const dayGridPlugin = require('@fullcalendar/daygrid');
+
+// const calendarEl = document.getElementById('calendar');
+// const calendar = new Calendar( {
+//   plugins: [
+//     interactionPlugin,
+//     dayGridPlugin
+//   ],
+//   initialView: 'dayGridMonth',
+//   editable: true, // important for activating event interactions!
+//   selectable: true, // important for activating date selectability!
+//   events: [
+//     { title: 'Meeting', start: new Date() }
+//   ]
+// })
+
+// calendar.render()
+
 
 
 const app=express();
@@ -15,7 +42,7 @@ const app=express();
 app.use(express.urlencoded({ extended: true }));  //data converted from urlencoded to json
 
 app.use(methodOverride("_method"));                 // used for Put/Patch(Update) on html forms
-app.use(express.static(path.join(__dirname,'public')));  
+app.use(express.static(path.join(__dirname, "public")));
 
 
 app.engine("ejs", ejsMate);   //templating engine 
@@ -33,12 +60,6 @@ const sessionConfig={
     }
 };
 
-const isLoggedIn=(req,res,next)=>{
-    if(!req.isAuthenticated()){
-        return res.redirect('/');
-    }
-    next();
-}
 
 app.use(session(sessionConfig));
 app.use(flash());
@@ -76,7 +97,7 @@ app.get("/",(req,res)=>{
 })
 
 app.get('/register',(req,res)=>{
-    res.render("./register");
+    res.render("./templates/register");
 })
 
 app.post('/register', async(req,res)=>{
@@ -90,12 +111,14 @@ app.post('/register', async(req,res)=>{
 })
 
 app.get('/login',(req,res)=>{
-    res.render("./login");
+    res.render("./templates/login");
 })
 
-app.post('/login',passport.authenticate('local',{failureMessage: true , failureRedirect:'/login',keepSessionInfo: true}), (req,res)=>{
+app.post('/login',passport.authenticate('local',{failureMessage: true , failureRedirect:'/',keepSessionInfo: true}), (req,res)=>{
+    const redirectUrl=req.session.returnTo || '/';
+    delete req.session.returnTo;
     req.flash('success',`Welcome back ${req.user.username}`);
-    res.redirect("/");
+    res.redirect(redirectUrl);
 })
 
 app.get('/logout',(req,res)=>{
@@ -110,6 +133,68 @@ app.get('/dashboard',(req,res)=>{
     res.render('./dashboard/dashboard.ejs');
 })
 
+app.get('/artCLub',(req,res)=>{
+    res.render('./clubs/artClub.ejs');
+})
+
+
+/////////
+app.post('/artClub', async(req,res)=>{
+    const {memberName,memberId,selectedDate}=req.body;
+    const usernew=new Club({memberName,memberName,selectedDate});
+    const newUser=await usernew.save()
+    console.log(newUser);
+    res.send(req.body);
+    
+})
+////////
+
+app.get('/event', async(req,res)=>{
+    const event=await Event.find({});
+    res.render('./templates/allEvents.ejs',{event});
+})
+
+app.get('/addevent',isLoggedIn,(req,res)=>{
+    res.render('./templates/addEvent.ejs');
+})
+
+app.post('/addEvent',async(req,res)=>{
+    const events=new Event(req.body.event);
+    const newEvent=await events.save();
+    req.flash('success','Successfully added a new event');
+    res.redirect(`/event/${newEvent._id}`);
+})
+
+app.get('/event/:id', async(req,res)=>{
+    const event=await Event.findById(req.params.id);
+    res.render('./templates/eventPage.ejs',{event});
+})
+
+app.get('/event/:id/edit',isLoggedIn,async(req,res)=>{
+    const event=await Event.findById(req.params.id);
+    res.render('./templates/editEvent.ejs',{event});
+})
+
+app.put('/event/:id',async(req,res)=>{
+    const event=await Event.findByIdAndUpdate(req.params.id,{...req.body.event});
+    req.flash('success','Event details updated successfully');
+    res.redirect(`/event/${event._id}`);
+})
+
+app.delete('/event/:id',async(req,res)=>{
+    await Event.findByIdAndDelete(req.params.id);
+    req.flash('error','Event deleted');
+    res.redirect('/event');
+})
+
+// app.get("*", (req, res, next) => {
+//     next(new ExpressError("Not Found", 404));
+//   });
+  
+//   app.use((err, req, res, next) => {
+//     const { statusCode = 500,message='Something went wrong' } = err;
+//     res.status(statusCode).render("./templates/error_404.ejs", { err });
+//   });
 
 app.listen(8080,()=>{
     console.log("Server running successfully on port 8080 ....");

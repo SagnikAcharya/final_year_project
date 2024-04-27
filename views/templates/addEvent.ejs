@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<%- include('../layouts/head.ejs') %>
+
+    <body>
+
+        <section>
+            <%- include('../layouts/navbar.ejs') %>
+        </section>
+
+        <section>
+            <div class="container col-4 my-5 shadow rounded-3 px-5 py-5">
+                <header class="header">
+                    <h1 id="title" class="text-center">Add a new Event</h1>
+                </header>
+                <div class="form-wrap">
+                    <form id="survey-form" method="POST" action="/addEvent" class="needs-validation" novalidate>
+                        <div class="row my-2">
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label id="name-label" for="name" class="my-1 fw-bold">Event Name</label>
+                                    <input type="text" name="event[Name]" id="name" placeholder="Enter event name"
+                                        class="form-control" required>
+
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row my-2 ">
+                            <div class="col-md-12">
+                                <div class="form-group mb-2">
+                                    <label id="name-label" for="name" class="my-1 fw-bold">Event Location</label>
+                                    <input type="text" id="auto" name="event[Location]"
+                                        class="search-outer form-control " placeholder="Search places">
+
+                                </div>
+                                <div id="map" class="rounded-3" style="max-height: 250px;"></div>
+                            </div>
+                        </div>
+
+                        <div class="row my-2">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label id="number-label" for="number" class="my-1 fw-bold">Event Start Date </label>
+                                    <input id="startDate" class="form-control" type="datetime-local"
+                                        name="event[startDate]" />
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label id="number-label" for="number" class="my-1 fw-bold">Event End Date </label>
+                                    <input id="endDate" class="form-control" type="datetime-local"
+                                        name="event[endDate]" />
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row my-2">
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label class="my-1 fw-bold">Event Type</label>
+                                    <select id="dropdown" name="event[Type]" class="form-control" required>
+                                        <option disabled selected value>Select</option>
+                                        <option value="Webinar">Webinar</option>
+                                        <option value="Seminar">Seminar</option>
+                                        <option value="Fest">Fest</option>
+                                        <option value="No">Prefer not to say</option>
+                                        <option value="other">Other</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row my-2">
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label class="my-1 fw-bold">Event Description</label>
+                                    <textarea id="comments" class="form-control" name="event[Description]"></textarea>
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <!-- <div class="row my-2">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label for="formFileMultiple" class="form-label" class="my-1 fw-bold">Upload Event
+                                    Posters/Banners</label>
+                                <input class="form-control" type="file" id="formFileMultiple" id="input-id" type="file"
+                                    accept=".jpg,.gif,.png" name="eventPoster" multiple>
+                            </div>
+
+                        </div>
+                    </div> -->
+
+                        <div class="row my-3">
+                            <div class="d-grid gap-2">
+                                <button type="submit" id="submit" class="btn btn-primary btn-block my-1 fw-bold">Add New
+                                    Event</button>
+                            </div>
+                        </div>
+
+                    </form>
+                </div>
+            </div>
+        </section>
+
+        <section>
+            <%- include('../layouts/footer.ejs') %>
+        </section>
+
+        <style>
+            body {
+                margin: 0
+            }
+
+            #map {
+                width: 100%;
+                height: 100vh;
+                margin: 0;
+                padding: 0;
+            }
+
+            #auto {
+                z-index: 999;
+                font-size: 15px;
+                padding: 10px;
+                border: 1px solid #ddd;
+                outline: none !important;
+                top: 5px;
+            }
+        </style>
+
+        <script src="/js/mapSearch.js"></script>
+        <script src="/js/script.js"></script>
+        <script src="/js/flatpickr.js"></script>
+        <script src="/js/formValidation.js"></script>
+
+
+
+    </body>
+
+
+</html>

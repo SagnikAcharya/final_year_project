@@ -1,0 +1,61 @@
+<div class="container-fluid" style="padding: 0;">
+    <nav class="navbar navbar-expand-lg position shadow  px-5  mb-5"
+        style="background-image: radial-gradient( circle farthest-corner at 10% 20%,  rgba(38,51,97,1) 0%, rgba(65,143,222,1) 79% );"">
+        <div class=" container-fluid text-white">
+        <a class=" navbar-brand" href="/">
+            <img src="./images/logo.svg" alt="" width="80" height="60">
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                <li class="nav-item">
+                    <a class="nav-link active text-white" aria-current="page" href="/"><span
+                            class="nav-icons">Home</span></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-white " href="#"><span class="nav-icons">About Us</span></a>
+                </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle text-white" href="#" role="button" data-bs-toggle="dropdown"
+                        aria-expanded="false">
+                        Clubs
+                    </a>
+                    <ul class="dropdown-menu bg-light">
+                        <li><a class="dropdown-item " href="#"><span class="nav-icons">Action</span></a></li>
+                        <li><a class="dropdown-item text-white" href="#">Another action</a></li>
+                        <li>
+                            <hr class="dropdown-divider">
+                        </li>
+                        <li><a class="dropdown-item text-white" href="#">Something else here</a></li>
+                    </ul>
+                </li>
+                <li class="nav-item ">
+                    <a class="nav-link text-white" href="/event"><span class="nav-icons">Events</span></a>
+                </li>
+                <li class="nav-item">
+                    <a href="/dashboard" class="nav-link text-white" aria-disabled="true">Dashboard</a>
+                </li>
+            </ul>
+            <div class="navbar-nav ">
+                <% if(!currentUser){ %>
+                    <a href="/login" class="nav-link text-white "><span class="nav-icons">Login</span></a>
+                    <a href="/register" class="nav-link text-white nav-icons"><span
+                            class="nav-icons">Register</span></a>
+                    <% }else{ %>
+                        <a class="nav-link fw-bolder text-white">
+
+                            Hi, <%= currentUser.username.toUpperCase() %>
+
+                        </a>
+                        <a href="/logout" class="nav-link text-white nav-icons"><span
+                                class="nav-icons">Logout</span></a>
+                        <% } %>
+            </div>
+        </div>
+</div>
+</nav>
+
+</div>
