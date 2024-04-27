@@ -1,3 +1,8 @@
+if(process.env.NODE_ENV !=="production"){
+    require('dotenv').config();
+}
+const dbURL=process.env.DB_URL;
+
 const express = require("express");
 const path = require("path");
 const methodOverride = require("method-override");    //used for parsing json
@@ -7,12 +12,14 @@ const session = require('express-session');
 const flash = require("connect-flash");
 const passport=require('passport');
 const LocalStrategy=require('passport-local');
+const { MongoClient, ServerApiVersion } = require('mongodb');
 const User=require('./models/user');
 const Club=require('./models/clubs');
 const Event=require('./models/events');
 const flatpickr = require("flatpickr");
 const {catchAsync}=require('./middleware.js');
 const {isLoggedIn}=require('./middleware.js');
+const MongoStore = require('connect-mongo');
 
 
 // const { Calendar } = require('@fullcalendar/core');
@@ -49,7 +56,41 @@ app.engine("ejs", ejsMate);   //templating engine
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
 
+
+
+
+
+
+// mongoose.connect('mongodb://127.0.0.1:27017/fivers');
+
+// const db=mongoose.connection;
+// db.on("error",console.error.bind(console,'connection error'));
+// db.once("open",()=>{
+//     console.log("Database Connected");
+// });
+
+mongoose.connect(dbURL, {
+    useNewUrlParser: true,
+    // useCreateIndex: true,
+    useUnifiedTopology: true,
+  });
+  const db = mongoose.connection;
+  db.on("error", console.error.bind(console, "connection error : "));
+  db.once("open", () => {
+    console.log("Database connected");
+  });
+
+  const store = new MongoStore({
+    mongoUrl: dbURL,
+    secret:'Keepthisasecret',
+    touchAfter : 24*3600,
+  })
+  store.on("error",function (e){
+    console.log("Connection Error");
+  })
+  
 const sessionConfig={
+    store: store,
     secret : 'secret',
     resave: true,
     saveUninitialized: true,
@@ -60,18 +101,8 @@ const sessionConfig={
     }
 };
 
-
 app.use(session(sessionConfig));
 app.use(flash());
-
-mongoose.connect('mongodb://127.0.0.1:27017/fivers');
-
-const db=mongoose.connection;
-db.on("error",console.error.bind(console,'connection error'));
-db.once("open",()=>{
-    console.log("Database Connected");
-});
-
 
 
 
