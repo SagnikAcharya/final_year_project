@@ -61,36 +61,24 @@ app.set("views", path.join(__dirname, "views"));
 
 
 
-// mongoose.connect('mongodb://127.0.0.1:27017/fivers');
+mongoose.connect('mongodb://127.0.0.1:27017/fivers');
 
-// const db=mongoose.connection;
-// db.on("error",console.error.bind(console,'connection error'));
-// db.once("open",()=>{
-//     console.log("Database Connected");
-// });
+const db=mongoose.connection;
+db.on("error",console.error.bind(console,'connection error'));
+db.once("open",()=>{
+    console.log("Database Connected");
+});
 
-mongoose.connect(dbURL, {
-    useNewUrlParser: true,
-    // useCreateIndex: true,
-    useUnifiedTopology: true,
-  });
-  const db = mongoose.connection;
-  db.on("error", console.error.bind(console, "connection error : "));
-  db.once("open", () => {
-    console.log("Database connected");
-  });
-
-  const store = new MongoStore({
-    mongoUrl: dbURL,
-    secret:'Keepthisasecret',
-    touchAfter : 24*3600,
-  })
-  store.on("error",function (e){
-    console.log("Connection Error");
-  })
+//   const store = new MongoStore({
+//     mongoUrl: dbURL,
+//     secret:'secret',
+//     touchAfter : 24*3600,
+//   })
+//   store.on("error",function (e){
+//     console.log("Connection Error");
+//   })
   
 const sessionConfig={
-    store: store,
     secret : 'secret',
     resave: true,
     saveUninitialized: true,
