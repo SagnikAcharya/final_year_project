@@ -206,6 +206,10 @@ app.delete('/event/:id',async(req,res)=>{
     res.redirect('/event');
 })
 
+app.get('/user',async(req,res)=>{
+    res.render('./templates/userProfile.ejs');
+})
+
 // app.get("*", (req, res, next) => {
 //     next(new ExpressError("Not Found", 404));
 //   });
