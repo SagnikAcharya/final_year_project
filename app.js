@@ -20,6 +20,7 @@ const flatpickr = require("flatpickr");
 const {catchAsync}=require('./middleware.js');
 const {isLoggedIn}=require('./middleware.js');
 const MongoStore = require('connect-mongo');
+const QRCode = require('qrcode');
 
 
 // const { Calendar } = require('@fullcalendar/core');
@@ -173,7 +174,7 @@ app.get('/event', async(req,res)=>{
     res.render('./templates/allEvents.ejs',{event});
 })
 
-app.get('/addevent',isLoggedIn,(req,res)=>{
+app.get('/addevent',(req,res)=>{
     res.render('./templates/addEvent.ejs');
 })
 
@@ -206,8 +207,41 @@ app.delete('/event/:id',async(req,res)=>{
     res.redirect('/event');
 })
 
-app.get('/user',async(req,res)=>{
-    res.render('./templates/userProfile.ejs');
+app.get('/user/:id',async(req,res)=>{
+    const newUser=await User.findById(req.params.id);
+    QRCode.toDataURL(newUser.username,(err,src)=>{
+        res.render('./templates/userProfile.ejs',{user:newUser,qr_code:src});
+    });
+})
+app.get('/addStudent',async(req,res)=>{
+    res.render('./adminSection/addStudent.ejs');
+})
+
+app.post('/addStudent',async(req,res)=>{
+    const users=new User(req.body.user); 
+    const newUser=await users.save();
+    req.flash('success','Successfully added a new user');
+    res.redirect(`/user/${newUser._id}`);
+})
+
+app.get('/allStudents', async(req,res)=>{
+    const users=await User.find({});
+    let i=1;
+    res.render('./adminSection/allStudents.ejs',{users,i});
+})
+app.post('/user/:id', async(req,res)=>{
+    await User.findByIdAndDelete(req.params.id);
+    res.redirect('/allStudents');
+})
+
+app.get('/user/:id/edit',isLoggedIn,async(req,res)=>{
+    const users=await User.findById(req.params.id);
+    res.render('./adminSection/editUser.ejs',{user:users});
+})
+app.put('/user/:id', async(req,res)=>{
+    const event=await Event.findByIdAndUpdate(req.params.id,{...req.body.user});
+    req.flash('error','Deleted');
+    res.redirect('/allStudents');
 })
 
 // app.get("*", (req, res, next) => {

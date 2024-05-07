@@ -3,15 +3,130 @@
 
 <%- include('../layouts/head.ejs') %>
 
-    <body>
+    <body class="">
+        <section class="container-fluid px-0 d-flex flex-column" style="max-height: 100vh;">
         <%- include('../layouts/navbar.ejs') %>
 
-
+            <section class="container d-flex align-items-center " style="height: 100vh;">
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="card card-background card-background-mask-primary tilt text-center" data-tilt>
+                            <img src="../images/profile.jpg" class="card-img-top m-auto" alt="..."
+                                style="height: 10rem; width: 10rem;">
+                            <div class="card-body">
+                                <h5 class="card-title">
+                                    <%= user.username.toUpperCase() %>
+                                </h5>
+                                <p class="card-text text-muted">
+                                    <%= user.roll %>
+                                </p>
+                                <button class="btn btn-primary myBtn">Show QR</button>
+                                <div class="">
+                                    <img src="<%= qr_code %>" class="m-auto blur qrBlur" alt=""
+                                        style="height: 15rem; width: 15rem;">
+                                </div>
+                            </div>
+            
+                        </div>
+                        </div>
+                        <div class="col-md-8">
+                            <div class="card card-background card-background-mask-primary tilt" data-tilt>
+                                <div class="card-header card-title">
+                                    Student Details
+                                </div>
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col-8">
+                                            <h6>Department:</h6>
+                                            <p>
+                                                <%= user.department %>
+                                            </p>
+                                        </div>
+                                        <div class="col-4">
+                                            <h6>Current Year:</h6>
+                                            <p>
+                                                <%= user.year %>
+                                            </p>
+                                        </div>
+                                    </div>
+                        
+                                    <div class="row">
+                                        <div class="col-8">
+                                            <h6>Email id:</h6>
+                                            <p>
+                                                <%= user.email %>
+                                            </p>
+                                        </div>
+                                        <div class="col-4">
+                                            <h6>Contact No:</h6>
+                                            <p>
+                                                <%= user.mobile %>
+                                            </p>
+                                        </div>
+                                    </div>
+                                    <hr>
+                                    <div class="row">
+                                        <div class="col">
+                                            <h6>Address</h6>
+                                            <p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Atque laudantium nostrum
+                                                temporibus
+                                                voluptates
+                                                doloribus quae, ipsa </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        
+                            <div class="card card-background card-background-mask-primary tilt my-3" data-tilt>
+                                <div class="card-header">
+                                    Clubs Joined
+                                </div>
+                                <div class="card-body">
+                        
+                        
+                                    <a href="/artClub" class="btn rounded-pill btn-secondary btn-sm">Art Club</a>
+                        
+                        
+                                    <a href="" class="btn rounded-pill btn-secondary btn-sm">Photography Club</a>
+                        
+                        
+                                    <a href="" class="btn rounded-pill btn-secondary btn-sm">Art Club</a>
+                        
+                        
+                                </div>
+                            </div>
+                        
+                        </div>
+                        
+                        </div>
+                        </section>
 
             <section>
-
                 <%- include('../layouts/footer.ejs') %>
             </section>
+        </section>
+        <style>
+            .qrBlur {
+                filter: blur(8px);
+                -webkit-filter: blur(8px);
+                transition: 3s;
+            }
+        
+            .qrNotBlur {
+                filter: none;
+                -webkit-filter: none;
+            }
+        </style>
+        <script>
+            let blur = document.querySelectorAll('.qrBlur');
+            let btn = document.querySelectorAll('.myBtn');
+            btn[0].addEventListener('click', function () {
+                blur[0].classList.remove("qrBlur");
+                blur[0].classList.add("qrNotBLur");
+                btn[0].innerHTML = "Student QR";
+            })
+
+        </script>
     </body>
 
 </html>

@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<%- include('../layouts/head.ejs') %>
+
+    <body>
+
+        <section class="d-flex flex-column" style="max-height: 100vh;">
+            <%- include('../layouts/navbar.ejs') %>
+
+
+                <section class="align-items-center d-flex" style="height: 100vh;">
+                    <div class="container col-4 my-5 shadow rounded-3 px-5 py-5">
+                        <header class="header">
+                            <h1 id="title" class="text-center">Add a new Student</h1>
+                        </header>
+                        <div class="form-wrap">
+                            <form id="survey-form" method="POST" action="/addStudent" class="needs-validation"
+                                novalidate>
+                                <div class="row my-2">
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            <label id="name-label" for="name" class="my-1 fw-bold">Student Name</label>
+                                            <input type="text" name="user[username]" id="name"
+                                                placeholder="Enter student name" class="form-control" required>
+
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row my-2 ">
+                                    <div class="col-md-12">
+                                        <div class="form-group mb-2">
+                                            <label id="name-label" for="name" class="my-1 fw-bold">Enter Student Roll
+                                                No.</label>
+                                            <input type="text" id="auto" name="user[roll]"
+                                                class="search-outer form-control " placeholder="Enter Roll No">
+                                        </div>
+                                        <div id="map" class="rounded-3" style="max-height: 250px;"></div>
+                                    </div>
+                                </div>
+
+                                <div class="row my-2">
+                                    <div class="col-md-8">
+                                        <div class="form-group">
+                                            <label class="my-1 fw-bold">Department</label>
+                                            <select id="dropdown" name="user[department]" class="form-control" required>
+                                                <option disabled selected value>Select</option>
+                                                <option value="Computer Science and Engineering (CSE)">Computer Science
+                                                    and
+                                                    Engineering (CSE)</option>
+                                                <option value="Electrical Engineering (EE)">Electrical Engineering (EE)
+                                                </option>
+                                                <option value="Information Technology (IT)">Information Technology (IT)
+                                                </option>
+                                                <option value="Electronics And Communication Engineering (ECE)">
+                                                    Electronics And
+                                                    Communication Engineering (ECE)</option>
+                                                <option value="Mechanical Engineering (ME)">Mechanical Engineering (ME)
+                                                </option>
+                                                <option
+                                                    value="Applied Electronics and Instrumentation Engineering (AEIE)">
+                                                    Applied Electronics and Instrumentation Engineering (AEIE)</option>
+                                                <option value="Civil Engineering (CE)">Civil Engineering (CE)</option>
+                                                <option value="Bachelor of Computer Application (BCA)">Bachelor of
+                                                    Computer
+                                                    Application (BCA)</option>
+                                                <option value="Department of Business Management (BBA)">Department of
+                                                    Business
+                                                    Management (BBA)</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <label class="my-1 fw-bold">Year</label>
+                                            <select id="dropdown" name="user[year]" class="form-control" required>
+                                                <option disabled selected value>Select</option>
+                                                <option value="First">First</option>
+                                                <option value="Second">Second</option>
+                                                <option value="Third">Third</option>
+                                                <option value="Fourth">Fourth</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row my-2">
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label id="name-label" for="name" class="my-1 fw-bold">Student Mobile
+                                                No.:</label>
+                                            <input class="form-control" type="text" name="user[mobile]"
+                                                placeholder="Mobile No." />
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label id="name-label" for="name" class="my-1 fw-bold">Student
+                                                Email:</label>
+                                            <input class="form-control" type="text" name="user[email]"
+                                                placeholder="Email Id" />
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row my-3">
+                                    <div class="d-grid gap-2">
+                                        <button type="submit" id="submit"
+                                            class="btn btn-primary btn-block my-1 fw-bold">Add New
+                                            Student</button>
+                                    </div>
+                                </div>
+
+                            </form>
+                        </div>
+                    </div>
+                </section>
+
+                <section>
+                    <%- include('../layouts/footer.ejs') %>
+                </section>
+
+        </section>
+        <script src="/js/script.js"></script>
+        <script src="/js/flatpickr.js"></script>
+        <script src="/js/formValidation.js"></script>
+
+
+
+    </body>
+
+
+</html>

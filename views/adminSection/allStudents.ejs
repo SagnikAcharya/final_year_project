@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<%- include('../layouts/head.ejs') %>
+
+    <body>
+        <section>
+            <%- include('../layouts/navbar.ejs') %>
+        </section>
+        <section class="container my-3">
+
+            <table class="table table-striped rounded shadow">
+                <thead>
+                    <tr>
+                        <th scope="col">Sl no.</th>
+                        <th scope="col">Student Name</th>
+                        <th scope="col">Student Roll</th>
+                        <th scope="col">Department</th>
+                        <th scope="col"></th>
+                        <th scope="col"></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% for(let user of users){ %>
+                        <tr>
+                            <th scope="row">
+                                <%- i++ %>
+                            </th>
+                            <td>
+                                <a href="/user/<%= user._id %>" class="text-decoration-none">
+                                <%= user.username.toUpperCase() %>
+                                </a>
+                            </td>
+                            <td>
+                                <%= user.roll %>
+                            </td>
+                            <td>
+                                <%= user.department %>
+                            </td>
+                            <td class="px-0"><a href="/user/<%=user._id %>/edit "
+                                    class="btn rounded-pill bg-warning">Edit</a>
+                            </td>
+                            <td>
+                                <form class="d-inline" action="/user/<%= user._id %>?_method=DELETE" method="POST">
+                                    <button class="btn rounded-pill bg-danger">Delete</button>
+                                </form>
+                            </td>
+                        </tr>
+                        <% } %>
+                </tbody>
+            </table>
+        </section>
+
+
+        <section>
+            <%- include('../layouts/footer.ejs') %>
+        </section>
+
+    </body>
+
+</html>
