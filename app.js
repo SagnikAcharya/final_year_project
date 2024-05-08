@@ -209,7 +209,7 @@ app.delete('/event/:id',async(req,res)=>{
 
 app.get('/user/:id',async(req,res)=>{
     const newUser=await User.findById(req.params.id);
-    QRCode.toDataURL(newUser.username,(err,src)=>{
+    QRCode.toDataURL(newUser.username+"_"+newUser.roll,(err,src)=>{
         res.render('./templates/userProfile.ejs',{user:newUser,qr_code:src});
     });
 })
@@ -222,6 +222,15 @@ app.post('/addStudent',async(req,res)=>{
     const newUser=await users.save();
     req.flash('success','Successfully added a new user');
     res.redirect(`/user/${newUser._id}`);
+})
+
+app.get('/admin/:id', async(req,res)=>{
+    // const newadmin=await User.findOne({isAdmin:true,_id:req.params.id});
+    const admin=await User.findById(req.params.id);
+    const event=await Event.find({}).lean();
+    // console.dir(event);
+    console.log(event.Name);
+    res.render('./adminSection/adminDashboard.ejs',{admin,event});
 })
 
 app.get('/allStudents', async(req,res)=>{

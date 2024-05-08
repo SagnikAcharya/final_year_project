@@ -18,7 +18,11 @@ const UserSchema=new Schema({
     },
     clubs : [{
             club : String,
-         }]
+         }],
+    isAdmin:{
+        type:Boolean,
+        default:false
+    }
 });
 UserSchema.plugin(passportLocalMongoose);
 

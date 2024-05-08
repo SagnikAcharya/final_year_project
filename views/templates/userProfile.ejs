@@ -105,28 +105,9 @@
                 <%- include('../layouts/footer.ejs') %>
             </section>
         </section>
-        <style>
-            .qrBlur {
-                filter: blur(8px);
-                -webkit-filter: blur(8px);
-                transition: 3s;
-            }
-        
-            .qrNotBlur {
-                filter: none;
-                -webkit-filter: none;
-            }
-        </style>
-        <script>
-            let blur = document.querySelectorAll('.qrBlur');
-            let btn = document.querySelectorAll('.myBtn');
-            btn[0].addEventListener('click', function () {
-                blur[0].classList.remove("qrBlur");
-                blur[0].classList.add("qrNotBLur");
-                btn[0].innerHTML = "Student QR";
-            })
 
-        </script>
+        
+        <script src="/js/script.js"></script>
     </body>
 
 </html>

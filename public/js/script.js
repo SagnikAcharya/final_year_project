@@ -9,3 +9,14 @@ function myCheckbox() {
            inputBox.removeAttribute("disabled");
         }
 }
+
+
+
+let blur = document.querySelectorAll('.qrBlur');
+let btn = document.querySelectorAll('.myBtn');
+btn[0].addEventListener('click', function () {
+      blur[0].classList.remove("qrBlur");
+      blur[0].classList.add("qrNotBLur");
+      btn[0].innerHTML = "Student QR";
+})
+

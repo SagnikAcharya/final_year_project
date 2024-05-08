@@ -91,6 +91,19 @@
     height: max-content;
   }
 
+
+.qrBlur {
+     filter: blur(8px);
+     -webkit-filter: blur(8px);
+     transition: 3s;
+}
+        
+.qrNotBlur {
+     filter: none;
+     -webkit-filter: none;
+}
+
+
   @media(min-width:1200px){
     .navbar .rounded-pill{
       border-radius: none;
