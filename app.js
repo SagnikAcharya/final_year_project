@@ -377,14 +377,14 @@ app.get('/socialClub',(req,res)=>{                                              
 
 ///////////////////////////////////////////////////   404/ERR TEMPLATE      ///////////////////////////////////////////////
 
-// app.get("*", (req, res, next) => {                                                      //404 NOT FOUND PAGE
-//     next(new ExpressError("Not Found", 404));
-//   });
+app.get("*", (req, res, next) => {                                                      //404 NOT FOUND PAGE
+    next(new ExpressError("Not Found", 404));
+  });
   
-//   app.use((err, req, res, next) => {
-//     const { statusCode = 500,message='Something went wrong' } = err;
-//     res.status(statusCode).render("./templates/error_404.ejs", { err });
-//   });
+  app.use((err, req, res, next) => {
+    const { statusCode = 500,message='Something went wrong' } = err;
+    res.status(statusCode).render("./templates/error_404.ejs", { err });
+  });
 
 
 
