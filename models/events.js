@@ -10,23 +10,13 @@ const EventSchema=new Schema({
     Type: String,
     author:{
       type:Schema.Types.ObjectId,
-      ref:"User"
+      ref:"Admin", 
     },
-    // geocodes: {
-    //     type: {
-    //       type: String, 
-    //       enum: ['Point'],
-    //       required: false,
-    //     },
-    //     coordinates: {
-    //       type: [Number],
-    //       required: true
-    //     }
-    //   },
-      // club:{
-      //   type:Schema.Types.ObjectId,
-      //   ref:"clubs"
-      // }
+    registeredUsers:{
+      type:Schema.Types.ObjectId,
+      ref:"User"
+    }
+    
 });
 
 module.exports=mongoose.model('Event',EventSchema);

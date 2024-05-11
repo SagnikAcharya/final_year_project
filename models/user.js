@@ -22,6 +22,10 @@ const UserSchema=new Schema({
         type:Boolean,
         required:true,
         default:true,
+    },
+    QR:{
+        type:String,
+        unique:true
     }
 });
 UserSchema.plugin(passportLocalMongoose);

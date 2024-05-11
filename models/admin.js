@@ -9,12 +9,12 @@ const AdminSchema=new Schema({
     admin_id:{
         type:Number,
         unique:true,
-        default:0
     },
     email:{
         type:String,
         required:true,
         unique:true,
+        sparse:true
     },
     clubs : [{
             club : String,
@@ -23,6 +23,10 @@ const AdminSchema=new Schema({
         type:Boolean,
         required:true,
         default:true,
+    },
+    QR:{
+        type:String,
+        unique:true
     }
 });
 AdminSchema.plugin(passportLocalMongoose);

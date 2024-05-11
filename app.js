@@ -162,11 +162,13 @@ app.get("/",(req,res)=>{
 app.get('/register',(req,res)=>{
     res.render("./templates/register");              //register Admin(GET)
 })
-  
-app.post('/register',async(req,res)=>{                  //Register Admin(POST)
-    const {email,username,password}=req.body;
-    const newadmin=new Admin({email,username});
+
+app.post('/register',async(req,res,next)=>{                  //Register Admin(POST)
+    const {password}=req.body;
+    const newadmin=new Admin(req.body);
     const registeredAdmin=await Admin.register(newadmin,password);
+    newadmin.QR=newadmin.username.trim()+"_"+newadmin.admin_id;
+    await newadmin.save();
     req.login(registeredAdmin, function(err) {
         if (err) { return next(err); }
         return res.redirect(`/admin/${newadmin._id}`);
@@ -178,10 +180,19 @@ app.get('/adminLogin',(req,res)=>{                      //Login Admin(GET)
     res.render("./templates/adminLogin");
 })
 
+app.get('/scanQR',(req,res)=>{                      //Login Admin(GET)
+    res.render("./adminSection/scanQR");
+})
+app.get('/checkQR/:id',async(req,res)=>{   
+    let {id}=req.params;
+    const user=await User.find({QR:`${id}`});
+    res.redirect(`/user/${user[0]._id}`)            
+})  
+
 app.post('/adminLogin',passport.authenticate('admin',{failureFlash: true , failureRedirect:'/adminLogin',keepSessionInfo: true}), (req,res,err)=>{        //Login Admin(POST)
     const redirectUrl=req.session.returnTo || '/';
     delete req.session.returnTo;
-    req.flash('success',`Welcome back ${req}`);
+    req.flash('success',`Welcome back ${req.user.username}`);
     res.redirect(redirectUrl);
 })
 
@@ -197,11 +208,11 @@ app.get('/addStudent',isLoggedIn,isAdmin,async(req,res)=>{                      
 })
 
 
-app.post('/addStudent',isLoggedIn,isAdmin,async(req,res)=>{                        //Register Student(POST)
-    const {email,username,password}=req.body;
-    console.log(password);
+app.post('/addStudent',isAdmin,async(req,res)=>{                        //Register Student(POST)
+    const {password}=req.body;
     const student=new User(req.body); 
     await User.register(student,password);
+    student.QR=student.username.trim()+"_"+student.roll;
     await student.save();
     req.flash('success','Successfully added a new student : '+ student.username);
     res.redirect(`/allStudents`);
@@ -253,6 +264,8 @@ app.get('/addevent',isLoggedIn,isAdmin, (req,res)=>{                            
 
 app.post('/addEvent',isLoggedIn,isAdmin,async(req,res)=>{                          //Add a new Event
     const events=new Event(req.body.event);
+    const newuser=await Admin.find({username:req.user.username});
+    events.author=newuser[0]._id;
     const newEvent=await events.save();
     req.flash('success','Successfully added a new event');
     res.redirect(`/event/${newEvent._id}`);
@@ -294,7 +307,7 @@ app.get('/allStudents',isLoggedIn,isAdmin,async(req,res)=>{                     
 
 app.get('/user/:id',isLoggedIn,async(req,res)=>{                                                    //View Specific User/Student
     const newUser=await User.findById(req.params.id);
-    QRCode.toDataURL(newUser.username+"_"+newUser.roll,(err,src)=>{                       //Send QR
+    QRCode.toDataURL(newUser.QR,(err,src)=>{                       //Send QR
         res.render('./templates/userProfile.ejs',{user:newUser,qr_code:src});
     });
 })
@@ -323,7 +336,7 @@ app.post('/user/:id',isLoggedIn,isAdmin,async(req,res)=>{                       
 app.get('/admin/:id',isAdmin,isLoggedIn, async(req,res)=>{                                                     //View Specific Admin
     const admin=await Admin.findById(req.params.id);
     const event=await Event.find({}).lean();
-    QRCode.toDataURL(admin.username+"_"+admin.admin_id,(err,src)=>{                       //Send QR
+    QRCode.toDataURL(admin.QR,(err,src)=>{                       //Send QR
         res.render('./adminSection/adminDashboard.ejs',{admin,event,qr_code:src});
     });
 })
@@ -336,6 +349,24 @@ app.get('/admin/:id',isAdmin,isLoggedIn, async(req,res)=>{                      
 app.get('/artCLub',(req,res)=>{                                                   //ART Club Get Route      
     res.render('./clubs/artClub.ejs');
 })
+app.get('/photoClub',(req,res)=>{                                                   //Photography Club Get Route      
+    res.render('./clubs/photoClub.ejs');
+})
+app.get('/literaryClub',(req,res)=>{                                                   //Photography Club Get Route      
+    res.render('./clubs/literaryClub.ejs');
+})
+app.get('/flimClub',(req,res)=>{                                                   //Talkies Club Get Route      
+    res.render('./clubs/flimClub.ejs');
+})
+app.get('/hikingClub',(req,res)=>{                                                   //Hiking Club Get Route      
+    res.render('./clubs/hikingClub.ejs');
+})
+app.get('/musicClub',(req,res)=>{                                                   //Hridmajhare Club Get Route      
+    res.render('./clubs/musicClub.ejs');
+})
+app.get('/socialClub',(req,res)=>{                                                   //Hiking Club Get Route      
+    res.render('./clubs/socialClub.ejs');
+})
 
 
 // EKHANE CLUBS RAKH , EI COMMENT TA DELETE KORE DISH
@@ -346,14 +377,14 @@ app.get('/artCLub',(req,res)=>{                                                 
 
 ///////////////////////////////////////////////////   404/ERR TEMPLATE      ///////////////////////////////////////////////
 
-app.get("*", (req, res, next) => {                                                      //404 NOT FOUND PAGE
-    next(new ExpressError("Not Found", 404));
-  });
+// app.get("*", (req, res, next) => {                                                      //404 NOT FOUND PAGE
+//     next(new ExpressError("Not Found", 404));
+//   });
   
-  app.use((err, req, res, next) => {
-    const { statusCode = 500,message='Something went wrong' } = err;
-    res.status(statusCode).render("./templates/error_404.ejs", { err });
-  });
+//   app.use((err, req, res, next) => {
+//     const { statusCode = 500,message='Something went wrong' } = err;
+//     res.status(statusCode).render("./templates/error_404.ejs", { err });
+//   });
 
 
 
