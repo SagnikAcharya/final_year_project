@@ -16,16 +16,21 @@ module.exports.isLoggedIn=(req,res,next)=>{
 module.exports.isAdmin= async(req,res,next)=>{
   try{
     const id=req.session.passport.user.id;
-    const newuser=await User.findById(id);
-    if(newuser.isAdmin==false){
+    const newadmin=await Admin.findById(id);
+    const newuser=await User.findById(id)
+    let news=newuser;
+    if(newadmin){
+      news=newadmin;
+    }
+    if(news.isAdmin==false){
       req.flash('error','You must be an Admin to proceed');
-      // req.session.returnTo=req.originalUrl;
-      return res.redirect(`/user/${id}`);
+      req.session.returnTo=req.originalUrl;
     }
     next();
   }catch(e){
-    req.flash('error','You must be signed in first');
-    return res.redirect('/studentLogin');
+    console.log(e);
+    req.flash('error','You need to login first');
+    res.redirect('/adminLogin');
   }
   
 }

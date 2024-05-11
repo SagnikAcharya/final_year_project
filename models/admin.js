@@ -5,10 +5,11 @@ const passportLocalMongoose=require('passport-local-mongoose');
 const AdminSchema=new Schema({
     department:String,
     mobile:String,
-    experience:String,
-    id:{
-        type:String,
-        unique:true
+    experience:Number,
+    admin_id:{
+        type:Number,
+        unique:true,
+        default:0
     },
     email:{
         type:String,

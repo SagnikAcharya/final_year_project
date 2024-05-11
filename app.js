@@ -304,7 +304,7 @@ app.get('/user/:id/edit',isLoggedIn,isAdmin,async(req,res)=>{                   
     res.render('./adminSection/editUser.ejs',{user:users});
 })
 app.put('/user/:id',isLoggedIn,isAdmin, async(req,res)=>{                                                  //Edit Specific Student(POST)
-    const event=await Event.findByIdAndUpdate(req.params.id,{...req.body.user});
+    await User.findByIdAndUpdate(req.params.id,{...req.body.user});
     req.flash('error','Deleted');
     res.redirect('/allStudents');
 })
@@ -321,12 +321,11 @@ app.post('/user/:id',isLoggedIn,isAdmin,async(req,res)=>{                       
 ///////////////////////////////////////////////////   ADMIN      ///////////////////////////////////////////////
 
 app.get('/admin/:id',isAdmin,isLoggedIn, async(req,res)=>{                                                     //View Specific Admin
-    const admin=await User.findById(req.params.id);
+    const admin=await Admin.findById(req.params.id);
     const event=await Event.find({}).lean();
-    QRCode.toDataURL(newUser.username+"_"+newUser.roll,(err,src)=>{                       //Send QR
+    QRCode.toDataURL(admin.username+"_"+admin.admin_id,(err,src)=>{                       //Send QR
         res.render('./adminSection/adminDashboard.ejs',{admin,event,qr_code:src});
     });
-    res.render('./adminSection/adminDashboard.ejs',{admin,event});
 })
 
 

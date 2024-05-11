@@ -19,14 +19,14 @@
                                         style="height: 10rem; width: 10rem;">
                                     <div class="card-body">
                                         <h5 class="card-title">
-                                            Admin Name
+                                            <%= admin.username %>
                                         </h5>
                                         <p class="card-text text-muted">
-                                            Id : 36589
+                                            <%= admin.admin_id %>
                                         </p>
                                         <button class="btn btn-primary myBtn">Show QR</button>
                                         <div class="">
-                                            <img src="../images/QR.svg" class="m-auto blur qrBlur" alt=""
+                                            <img src="<%= qr_code %>" class="m-auto blur qrBlur" alt=""
                                                 style="height: 15rem; width: 15rem;">
                                         </div>
                                     </div>
@@ -43,13 +43,13 @@
                                             <div class="col-8">
                                                 <h6>Department:</h6>
                                                 <p>
-                                                    Mechanical Engineering(ME)
+                                                    <%= admin.department %>
                                                 </p>
                                             </div>
                                             <div class="col-4">
                                                 <h6>Experience:</h6>
                                                 <p>
-                                                    5 Years
+                                                    <%= admin.experience %>
                                                 </p>
                                             </div>
                                         </div>
@@ -58,13 +58,13 @@
                                             <div class="col-8">
                                                 <h6>Email id:</h6>
                                                 <p>
-                                                    admin_2345@gmail.com
+                                                    <%= admin.email %>
                                                 </p>
                                             </div>
                                             <div class="col-4">
                                                 <h6>Contact No:</h6>
                                                 <p>
-                                                    9836759825
+                                                    <%= admin.mobile %>
                                                 </p>
                                             </div>
                                         </div>
