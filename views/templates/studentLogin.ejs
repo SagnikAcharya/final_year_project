@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<%- include('../layouts/head.ejs') %>
+
+    <body>
+
+        <div class="container-fluid d-flex flex-column px-0" style="height: 100vh;">
+            <!-- navbar -->
+            <%- include('../layouts/navbar.ejs') %>
+
+                <div class="card m-auto mb-5" style="width: 18rem;">
+                    <img src="./images/ales-nesetril-Im7lZjxeLhg-unsplash.jpg" class="card-img-top" alt="...">
+                    <div class="card-body">
+                        <h5 class="card-title">
+                            <form action="/studentLogin" method="POST" class="needs-validation" novalidate>
+                                <div class="mb-3">
+                                    <label for="username01" class="form-label">Username</label>
+                                    <input type="text" class="form-control" id="username01" name="username" required>
+                                    <div class="valid-feedback">
+                                        Looks good!
+                                    </div>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="exampleInputPassword1" class="form-label">Password</label>
+                                    <input type="password" class="form-control" id="exampleInputPassword1"
+                                        name="password" required>
+                                    <div class="valid-feedback">
+                                        Looks good!
+                                    </div>
+                                </div>
+                                <button type="submit" class="btn btn-primary">Submit</button>
+                            </form>
+                        </h5>
+                    </div>
+                </div>
+                <%- include('../layouts/footer.ejs') %>
+        </div>
+
+        <script src="/js/formValidation.js"></script>
+    </body>
+
+</html>
