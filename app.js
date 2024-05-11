@@ -14,11 +14,12 @@ const passport=require('passport');
 const LocalStrategy=require('passport-local');
 const { MongoClient, ServerApiVersion } = require('mongodb');
 const User=require('./models/user');
+const Admin=require('./models/admin');
 const Club=require('./models/clubs');
 const Event=require('./models/events');
 const flatpickr = require("flatpickr");
 const {catchAsync}=require('./middleware.js');
-const {isLoggedIn}=require('./middleware.js');
+const {isLoggedIn,isAdmin}=require('./middleware.js');
 const MongoStore = require('connect-mongo');
 const QRCode = require('qrcode');
 
@@ -61,6 +62,8 @@ app.set("views", path.join(__dirname, "views"));
 
 
 
+///////////////////////////////////////////////////   MONGODB/DATABASE CONNECTION     ///////////////////////////////////////////////
+
 
 mongoose.connect('mongodb://127.0.0.1:27017/fivers');
 
@@ -78,6 +81,9 @@ db.once("open",()=>{
 //   store.on("error",function (e){
 //     console.log("Connection Error");
 //   })
+
+
+///////////////////////////////////////////////////   SESSION CONFIG     ///////////////////////////////////////////////
   
 const sessionConfig={
     secret : 'secret',
@@ -85,7 +91,7 @@ const sessionConfig={
     saveUninitialized: true,
     cookie:{
         httpOnly:true,
-        expires : Date.now() +1000*60*60*24*7,
+        expires : Date.now() +1000*60*60*24*3,
         maxAge : 1000*60*60*24*7
     }
 };
@@ -95,14 +101,39 @@ app.use(flash());
 
 
 
+///////////////////////////////////////////////////   PASSPORT JS FOR LOGIN/REGISTER      ///////////////////////////////////////////////
+
 app.use(passport.initialize());
 app.use(passport.session());
-passport.use(new LocalStrategy(User.authenticate()));
+passport.use('student',new LocalStrategy(User.authenticate()));
+passport.use('admin',new LocalStrategy(Admin.authenticate()));
 
-passport.serializeUser(User.serializeUser());
-passport.deserializeUser(User.deserializeUser());
 
-app.use((req,res,next)=>{
+
+///////////////////////////////////////////////////  SERIALIZE AND DESERIALIZE USER TO SESSION      ///////////////////////////////////////////////
+
+passport.serializeUser((obj, done) => {
+    if (obj instanceof Admin) {
+      done(null, { id: obj._id, type: 'Admin' });
+    } 
+    if (obj instanceof User) {
+      done(null, { id: obj.id, type: 'User' });
+    } 
+  });
+  
+  passport.deserializeUser((obj, done) => {
+    if (obj.type === 'User') {
+      User.findById(obj.id).then((student) => done(null, student));
+    } 
+    if (obj.type === 'Admin') {
+      Admin.findById(obj.id).then((admin) => done(null, admin));
+    } 
+  });
+
+
+  ///////////////////////////////////////////////////   SESSION VARIABLES      ///////////////////////////////////////////////
+  
+  app.use((req,res,next)=>{
     res.locals.currentUser=req.user;
     res.locals.success=req.flash("success");
     res.locals.error=req.flash("error");
@@ -110,38 +141,94 @@ app.use((req,res,next)=>{
   })
 
 
+// passport.serializeUser(Admin.serializeUser());
+// passport.deserializeUser(Admin.deserializeUser());
+
+
+
+
+
+///////////////////////////////////////////////////   HOME ROUTE      ///////////////////////////////////////////////
+
 
 app.get("/",(req,res)=>{
     res.render("./boilerplate");    //rendering boilerplate.ejs on port 8080 for '127.0.0.1:8080' path
-    // res.send("Working Properly");
 })
+
+
+
+///////////////////////////////////////////////////   ADMIN REGISTER AND LOGIN      ///////////////////////////////////////////////
 
 app.get('/register',(req,res)=>{
-    res.render("./templates/register");
+    res.render("./templates/register");              //register Admin(GET)
 })
-
-app.post('/register', async(req,res)=>{
+  
+app.post('/register',async(req,res)=>{                  //Register Admin(POST)
     const {email,username,password}=req.body;
-    const usernew=new User({email,username});
-    const registereduser=await User.register(usernew,password);
-    req.login(registereduser, function(err) {
+    const newadmin=new Admin({email,username});
+    const registeredAdmin=await Admin.register(newadmin,password);
+    req.login(registeredAdmin, function(err) {
         if (err) { return next(err); }
-        return res.redirect('/');
-      });
+        return res.redirect(`/admin/${newadmin._id}`);
+    });
 })
 
-app.get('/login',(req,res)=>{
-    res.render("./templates/login");
+
+app.get('/adminLogin',(req,res)=>{                      //Login Admin(GET)
+    res.render("./templates/adminLogin");
 })
 
-app.post('/login',passport.authenticate('local',{failureMessage: true , failureRedirect:'/',keepSessionInfo: true}), (req,res)=>{
+app.post('/adminLogin',passport.authenticate('admin',{failureFlash: true , failureRedirect:'/adminLogin',keepSessionInfo: true}), (req,res,err)=>{        //Login Admin(POST)
+    const redirectUrl=req.session.returnTo || '/';
+    delete req.session.returnTo;
+    req.flash('success',`Welcome back ${req}`);
+    res.redirect(redirectUrl);
+})
+
+
+
+
+
+///////////////////////////////////////////////////   STUDENT REGISTER AND LOGIN      ///////////////////////////////////////////////
+
+
+app.get('/addStudent',isLoggedIn,isAdmin,async(req,res)=>{                         //Register Student(GET)
+    res.render('./adminSection/addStudent.ejs');
+})
+
+
+app.post('/addStudent',isLoggedIn,isAdmin,async(req,res)=>{                        //Register Student(POST)
+    const {email,username,password}=req.body;
+    console.log(password);
+    const student=new User(req.body); 
+    await User.register(student,password);
+    await student.save();
+    req.flash('success','Successfully added a new student : '+ student.username);
+    res.redirect(`/allStudents`);
+})
+
+
+app.get('/studentLogin',(req,res)=>{                            //Login Student(GET)
+    res.render("./templates/studentLogin");
+})
+
+
+
+//Login Student(POST)
+app.post('/studentLogin',passport.authenticate('student',{failureFlash: true , failureRedirect:'/studentLogin',keepSessionInfo: true}), (req,res,err)=>{         
     const redirectUrl=req.session.returnTo || '/';
     delete req.session.returnTo;
     req.flash('success',`Welcome back ${req.user.username}`);
     res.redirect(redirectUrl);
 })
 
+
+
+
+///////////////////////////////////////////////////   LOGOUT      ///////////////////////////////////////////////
+
 app.get('/logout',(req,res)=>{
+    // delete req.locals.currentUser;
     req.logout(function(err) {
         if (err) { return next(err); }
         req.flash('success',"Logged Out Successfully");
@@ -149,118 +236,128 @@ app.get('/logout',(req,res)=>{
       });
 })
 
-app.get('/dashboard',(req,res)=>{
-    res.render('./dashboard/dashboard.ejs');
-})
-
-app.get('/artCLub',(req,res)=>{
-    res.render('./clubs/artClub.ejs');
-})
 
 
-/////////
-app.post('/artClub', async(req,res)=>{
-    const {memberName,memberId,selectedDate}=req.body;
-    const usernew=new Club({memberName,memberName,selectedDate});
-    const newUser=await usernew.save()
-    console.log(newUser);
-    res.send(req.body);
-    
-})
-////////
 
-app.get('/event', async(req,res)=>{
+///////////////////////////////////////////////////   EVENTS      ///////////////////////////////////////////////
+
+
+app.get('/event',isLoggedIn, async(req,res)=>{                             //All Events Page
     const event=await Event.find({});
     res.render('./templates/allEvents.ejs',{event});
 })
 
-app.get('/addevent',(req,res)=>{
+app.get('/addevent',isLoggedIn,isAdmin, (req,res)=>{                                //Add a new Event
     res.render('./templates/addEvent.ejs');
 })
 
-app.post('/addEvent',async(req,res)=>{
+app.post('/addEvent',isLoggedIn,isAdmin,async(req,res)=>{                          //Add a new Event
     const events=new Event(req.body.event);
     const newEvent=await events.save();
     req.flash('success','Successfully added a new event');
     res.redirect(`/event/${newEvent._id}`);
 })
 
-app.get('/event/:id', async(req,res)=>{
+app.get('/event/:id',isLoggedIn, async(req,res)=>{                          //View Specific Event
     const event=await Event.findById(req.params.id);
     res.render('./templates/eventPage.ejs',{event});
 })
 
-app.get('/event/:id/edit',isLoggedIn,async(req,res)=>{
+app.get('/event/:id/edit',isLoggedIn,isAdmin,async(req,res)=>{             //Edit Specific Event(GET)
     const event=await Event.findById(req.params.id);
     res.render('./templates/editEvent.ejs',{event});
 })
 
-app.put('/event/:id',async(req,res)=>{
-    const event=await Event.findByIdAndUpdate(req.params.id,{...req.body.event});
+app.put('/event/:id',isLoggedIn,isAdmin,async(req,res)=>{
+    const event=await Event.findByIdAndUpdate(req.params.id,{...req.body.event});       //Edit Specific Event(POST)
     req.flash('success','Event details updated successfully');
     res.redirect(`/event/${event._id}`);
 })
 
-app.delete('/event/:id',async(req,res)=>{
+app.delete('/event/:id',isLoggedIn,isAdmin,async(req,res)=>{                           //Delete Specific Event
     await Event.findByIdAndDelete(req.params.id);
     req.flash('error','Event deleted');
     res.redirect('/event');
 })
 
-app.get('/user/:id',async(req,res)=>{
-    const newUser=await User.findById(req.params.id);
-    QRCode.toDataURL(newUser.username+"_"+newUser.roll,(err,src)=>{
-        res.render('./templates/userProfile.ejs',{user:newUser,qr_code:src});
-    });
-})
-app.get('/addStudent',async(req,res)=>{
-    res.render('./adminSection/addStudent.ejs');
-})
 
-app.post('/addStudent',async(req,res)=>{
-    const users=new User(req.body.user); 
-    const newUser=await users.save();
-    req.flash('success','Successfully added a new user');
-    res.redirect(`/user/${newUser._id}`);
-})
 
-app.get('/admin/:id', async(req,res)=>{
-    // const newadmin=await User.findOne({isAdmin:true,_id:req.params.id});
-    const admin=await User.findById(req.params.id);
-    const event=await Event.find({}).lean();
-    // console.dir(event);
-    console.log(event.Name);
-    res.render('./adminSection/adminDashboard.ejs',{admin,event});
-})
 
-app.get('/allStudents', async(req,res)=>{
+///////////////////////////////////////////////////   USER      ///////////////////////////////////////////////
+
+
+app.get('/allStudents',isLoggedIn,isAdmin,async(req,res)=>{                                   // View all Students
     const users=await User.find({});
     let i=1;
     res.render('./adminSection/allStudents.ejs',{users,i});
 })
-app.post('/user/:id', async(req,res)=>{
-    await User.findByIdAndDelete(req.params.id);
-    res.redirect('/allStudents');
+
+app.get('/user/:id',isLoggedIn,async(req,res)=>{                                                    //View Specific User/Student
+    const newUser=await User.findById(req.params.id);
+    QRCode.toDataURL(newUser.username+"_"+newUser.roll,(err,src)=>{                       //Send QR
+        res.render('./templates/userProfile.ejs',{user:newUser,qr_code:src});
+    });
 })
 
-app.get('/user/:id/edit',isLoggedIn,async(req,res)=>{
+app.get('/user/:id/edit',isLoggedIn,isAdmin,async(req,res)=>{                                   //Edit Specific Student
     const users=await User.findById(req.params.id);
     res.render('./adminSection/editUser.ejs',{user:users});
 })
-app.put('/user/:id', async(req,res)=>{
+app.put('/user/:id',isLoggedIn,isAdmin, async(req,res)=>{                                                  //Edit Specific Student(POST)
     const event=await Event.findByIdAndUpdate(req.params.id,{...req.body.user});
     req.flash('error','Deleted');
     res.redirect('/allStudents');
 })
 
-// app.get("*", (req, res, next) => {
-//     next(new ExpressError("Not Found", 404));
-//   });
+app.post('/user/:id',isLoggedIn,isAdmin,async(req,res)=>{                                                     //Delete Specific Student
+    await User.findByIdAndDelete(req.params.id);
+    res.redirect('/allStudents');
+})
+
+
+
+
+
+///////////////////////////////////////////////////   ADMIN      ///////////////////////////////////////////////
+
+app.get('/admin/:id',isAdmin,isLoggedIn, async(req,res)=>{                                                     //View Specific Admin
+    const admin=await User.findById(req.params.id);
+    const event=await Event.find({}).lean();
+    QRCode.toDataURL(newUser.username+"_"+newUser.roll,(err,src)=>{                       //Send QR
+        res.render('./adminSection/adminDashboard.ejs',{admin,event,qr_code:src});
+    });
+    res.render('./adminSection/adminDashboard.ejs',{admin,event});
+})
+
+
+
+
+///////////////////////////////////////////////////   CLUBS      ///////////////////////////////////////////////
+
+app.get('/artCLub',(req,res)=>{                                                   //ART Club Get Route      
+    res.render('./clubs/artClub.ejs');
+})
+
+
+// EKHANE CLUBS RAKH , EI COMMENT TA DELETE KORE DISH
+
+
+
+
+
+///////////////////////////////////////////////////   404/ERR TEMPLATE      ///////////////////////////////////////////////
+
+app.get("*", (req, res, next) => {                                                      //404 NOT FOUND PAGE
+    next(new ExpressError("Not Found", 404));
+  });
   
-//   app.use((err, req, res, next) => {
-//     const { statusCode = 500,message='Something went wrong' } = err;
-//     res.status(statusCode).render("./templates/error_404.ejs", { err });
-//   });
+  app.use((err, req, res, next) => {
+    const { statusCode = 500,message='Something went wrong' } = err;
+    res.status(statusCode).render("./templates/error_404.ejs", { err });
+  });
+
+
+
 
 app.listen(8080,()=>{
     console.log("Server running successfully on port 8080 ....");

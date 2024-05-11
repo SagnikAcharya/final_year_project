@@ -45,10 +45,11 @@
                 </ul>
                 <div class="navbar-nav ">
                     <% if(!currentUser){ %>
-                        <a href="/login" class="nav-link text-dark">Login</a>
+                        <a href="/studentLogin" class="nav-link text-dark">Student Login</a>
+                        <a href="/adminLogin" class="nav-link text-dark">Admin Login</a>
                         <a href="/register" class="nav-link text-dark">Register</a>
                         <% }else{ %>
-                            <a href="/user" class="nav-link text-dark">
+                            <a href="/admin/<%= currentUser._id %>" class="nav-link text-dark">
                                 <%= currentUser.username.toUpperCase() %>
                             </a>
                             <a href="/logout" class="nav-link text-dark">Log Out</a>

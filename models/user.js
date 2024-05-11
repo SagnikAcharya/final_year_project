@@ -4,7 +4,6 @@ const passportLocalMongoose=require('passport-local-mongoose');
 
 const UserSchema=new Schema({
     department:String,
-    qrCode:String,
     mobile:String,
     year:String,
     roll:{
@@ -21,7 +20,8 @@ const UserSchema=new Schema({
          }],
     isAdmin:{
         type:Boolean,
-        default:false
+        required:true,
+        default:true,
     }
 });
 UserSchema.plugin(passportLocalMongoose);

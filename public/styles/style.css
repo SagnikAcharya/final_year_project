@@ -9,6 +9,9 @@
   color: rgb(231, 224, 224);
 }
 
+body{
+  height: 100%;
+}
 
 .waves {
   position:relative;
