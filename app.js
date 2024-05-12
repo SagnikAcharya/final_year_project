@@ -22,6 +22,10 @@ const {catchAsync}=require('./middleware.js');
 const {isLoggedIn,isAdmin}=require('./middleware.js');
 const MongoStore = require('connect-mongo');
 const QRCode = require('qrcode');
+const multer  = require('multer')
+const{ storage }=require('./Cloudinary/cloudinaryIndex.js')
+const upload = multer({ storage });
+
 
 
 // const { Calendar } = require('@fullcalendar/core');
@@ -151,8 +155,9 @@ passport.serializeUser((obj, done) => {
 ///////////////////////////////////////////////////   HOME ROUTE      ///////////////////////////////////////////////
 
 
-app.get("/",(req,res)=>{
-    res.render("./boilerplate");    //rendering boilerplate.ejs on port 8080 for '127.0.0.1:8080' path
+app.get("/",async(req,res)=>{
+    const event=await Event.find({});
+    res.render("./boilerplate",{event});    //rendering boilerplate.ejs on port 8080 for '127.0.0.1:8080' path
 })
 
 
@@ -179,15 +184,6 @@ app.post('/register',async(req,res,next)=>{                  //Register Admin(PO
 app.get('/adminLogin',(req,res)=>{                      //Login Admin(GET)
     res.render("./templates/adminLogin");
 })
-
-app.get('/scanQR',(req,res)=>{                      //Login Admin(GET)
-    res.render("./adminSection/scanQR");
-})
-app.get('/checkQR/:id',async(req,res)=>{   
-    let {id}=req.params;
-    const user=await User.find({QR:`${id}`});
-    res.redirect(`/user/${user[0]._id}`)            
-})  
 
 app.post('/adminLogin',passport.authenticate('admin',{failureFlash: true , failureRedirect:'/adminLogin',keepSessionInfo: true}), (req,res,err)=>{        //Login Admin(POST)
     const redirectUrl=req.session.returnTo || '/';
@@ -247,6 +243,20 @@ app.get('/logout',(req,res)=>{
       });
 })
 
+app.get('/addimage',(req,res)=>{                                //Add a new Event
+    res.render('./addimage.ejs');
+})
+
+app.post('/addimage', upload.single('image'), function (req, res, next) {
+    console.log(req.body,req.file);
+    res.send(req.file);
+  })
+  
+
+
+
+
+
 
 
 
@@ -262,9 +272,10 @@ app.get('/addevent',isLoggedIn,isAdmin, (req,res)=>{                            
     res.render('./templates/addEvent.ejs');
 })
 
-app.post('/addEvent',isLoggedIn,isAdmin,async(req,res)=>{                          //Add a new Event
+app.post('/addEvent',isLoggedIn,isAdmin,upload.array('image'),async(req,res)=>{                          //Add a new Event
     const events=new Event(req.body.event);
     const newuser=await Admin.find({username:req.user.username});
+    events.images=req.files.map(f=>({url:f.path,filename:f.filename}));
     events.author=newuser[0]._id;
     const newEvent=await events.save();
     req.flash('success','Successfully added a new event');
@@ -310,6 +321,31 @@ app.post('/registerEvent/:id',async(req,res)=>{
     req.flash('success','Successfully Registered');
     res.redirect(`/event/${id}`);
 })
+
+app.get('/scanQR/:id',(req,res)=>{  
+    console.log("WORKED")
+    const {id}=req.params;                    
+    res.render("./adminSection/scanQR",{id});
+})
+app.post('/checkQR/:id',async(req,res)=>{   
+    let {id}=req.params;
+    let {eventid}=req.body;
+    const event=await Event.findById(eventid);
+    const user=await User.find({QR:`${id}`});
+    for(let i in event.registeredUsers){
+        console.log(event.registeredUsers[i]._id);
+        console.log(user._id);
+        console.log(event.registeredUsers[i]._id);
+        console.log(event.registeredUsers[i]._id.equals(user._id));
+        if(event.registeredUsers[i]._id==user._id){
+            event.registeredUsers[i].isVerified=2;
+        }
+    }
+    await event.save();
+    console.log(event.registeredUsers[0].isVerified);
+    req.flash('success','User successfully verified');
+    res.redirect(`/allStudents`);      
+})  
 
 
 

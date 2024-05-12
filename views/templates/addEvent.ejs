@@ -38,7 +38,8 @@
                     <h1 id="title" class="text-center">Add a new Event</h1>
                 </header>
                 <div class="form-wrap">
-                    <form id="survey-form" method="POST" action="/addEvent" class="needs-validation" novalidate>
+                    <form id="survey-form" method="POST" action="/addEvent" class="needs-validation" novalidate
+                        enctype="multipart/form-data">
                         <div class="row my-2">
                             <div class="col-md-12">
                                 <div class="form-group">
@@ -93,7 +94,10 @@
                                 </div>
                             </div>
                         </div>
-
+                        <div class="mb-3">
+                            <label for="formFileMultiple" class="form-label">Event Image/Poster</label>
+                            <input class="form-control" type="file" id="formFileMultiple" name="image" multiple>
+                        </div>
                         <div class="row my-2">
                             <div class="col-md-12">
                                 <div class="form-group">

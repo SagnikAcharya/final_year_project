@@ -120,33 +120,34 @@
                                         <div class="col-6">
                                             <h3 class="mb-3">Upcoming Events </h3>
                                         </div>
-                                        <div class="col-6 text-end">
-                                            <a class="btn btn-primary mb-3 mr-1"
-                                                data-bs-target="#carouselExampleControls" data-bs-slide="prev"
-                                                role="button">
-                                                <i class="fa fa-arrow-left"></i>
-                                            </a>
-                                            <a class="btn btn-primary mb-3" data-bs-target="#carouselExampleControls"
-                                                data-bs-slide="next" role="button">
-                                                <i class="fa fa-arrow-right"></i>
-                                            </a>
-                                        </div>
-
+                                        <% if(event.length>1){ %>
+                                            <div class="col-6 text-end">
+                                                <a class="btn btn-primary mb-3 mr-1" data-bs-target="#carouselExampleControls" data-bs-slide="prev" role="button">
+                                                    <i class="fa fa-arrow-left"></i>
+                                                </a>
+                                                <a class="btn btn-primary mb-3" data-bs-target="#carouselExampleControls" data-bs-slide="next" role="button">
+                                                    <i class="fa fa-arrow-right"></i>
+                                                </a>
+                                                </div>
+                                            <% } %>
+                                        
                                         <div id="carouselExampleControls" class="carousel slide"
                                             data-bs-ride="carousel">
                                             <div class="carousel-inner">
-                                                <% for(let e of event){ %>
-                                                    <div class="carousel-item active">
+                                                <% event.forEach((e,i)=> { %>
+                                                    <div class="carousel-item <%= i==0 ? 'active':' ' %> ">
                                                         <div class=" mb-3">
                                                             <div class="row g-0">
                                                                 <div class="col-md-4">
-                                                                    <img src="../images/hero.jpg"
+                                                                    <img src="<%= e.images[0].url %>"
                                                                         class="img-fluid rounded" alt="...">
                                                                 </div>
                                                                 <div class="col-md-8">
                                                                     <div class="card-body">
                                                                         <h5 class="card-title">
-                                                                            <%= e.Name %>
+                                                                            <a href="/event/<%= e._id %>" style="text-decoration: none;">
+                                                                                <%= e.Name %>
+                                                                            </a>
                                                                         </h5>
                                                                         <h6 class="card-text text-muted my-2">
                                                                             <%= e.Location %>
@@ -162,17 +163,17 @@
                                                                             additional content. This content is a little
                                                                             bit
                                                                             longer.</p>
-                                                                        <a href=""
+                                                                        <a href="/event/<%= e._id %>/edit"
                                                                             class="btn rounded btn-primary text-light">Edit
                                                                             Event</a>
-                                                                        <a href="" class="btn rounded btn-danger">Delete
+                                                                        <a href="/event/<%= e._id %>" class="btn rounded btn-danger">Delete
                                                                             Event</a>
                                                                     </div>
                                                                 </div>
                                                             </div>
                                                         </div>
                                                     </div>
-                                                    <% } %>
+                                                    <% }) %>
                                             </div>
                                         </div>
 

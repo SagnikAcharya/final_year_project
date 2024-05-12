@@ -8,6 +8,10 @@ const EventSchema=new Schema({
     Description: String,
     Location: String,
     Type: String,
+    images:[{
+      url:String,
+      filename:String
+    }],
     limit:{
       type:Number,
       require:true,
@@ -18,8 +22,14 @@ const EventSchema=new Schema({
       ref:"Admin", 
     },
     registeredUsers:[{
-      type:Schema.Types.ObjectId,
-      ref:"User"
+      id:{
+          type:Schema.Types.ObjectId,
+          ref:"User",
+      },isVerified:{
+            type:Number,
+            default:1,
+            require:true
+      }
     }],
     count:{
       type:Number,

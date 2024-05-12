@@ -13,6 +13,7 @@
 
 
             <div id="result" class=" justify-content-center"></div>
+            
 
         </section>
 
@@ -45,13 +46,15 @@
                 },
                 fps: 20,
             });
-
             scanner.render(success, error);
 
             function success(result) {
                 document.getElementById('result').innerHTML = `
-        <h2>Check User Registration</h2>
-        <p><a class="btn btn-primary" href="checkQR/${result}">Click Here</a></p>
+        <h2>Check User Registration</h2>`+ `
+        <form action="/checkQR/${result}" method="POST">` + `
+                <input type="text" value="<%= id %>" style="display:none" name="eventid">`+ `
+                <button class="btn" type="submit">Submit</button>`+`
+            </form>
         `;
                 // Prints result as a link inside result element
 

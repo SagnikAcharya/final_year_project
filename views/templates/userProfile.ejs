@@ -95,6 +95,16 @@
                         
                                 </div>
                             </div>
+                            <% if(currentUser && currentUser.isAdmin==true){ %>
+                                <div class="card card-background card-background-mask-primary tilt my-3" data-tilt>
+                                    <div class="card-body">
+                                        <a href="" class="btn rounded btn-primary btn">Edit
+                                            Profile</a>
+                                        <a href="" class="btn rounded btn-danger btn">Delete
+                                            Profile</a>
+                                    </div>
+                                </div>
+                                <% } %>
                         
                         </div>
                         
