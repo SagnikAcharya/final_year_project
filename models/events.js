@@ -8,13 +8,22 @@ const EventSchema=new Schema({
     Description: String,
     Location: String,
     Type: String,
+    limit:{
+      type:Number,
+      require:true,
+      default:2,
+    },
     author:{
       type:Schema.Types.ObjectId,
       ref:"Admin", 
     },
-    registeredUsers:{
+    registeredUsers:[{
       type:Schema.Types.ObjectId,
       ref:"User"
+    }],
+    count:{
+      type:Number,
+      default:1
     }
     
 });

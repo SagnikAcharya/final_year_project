@@ -6,10 +6,7 @@
     <body>
         <%- include('../layouts/navbar.ejs') %>
 
-
-            <%- include('../layouts/flash.ejs') %>
-
-                <section class="container min-vh-100  pt-3">
+                <section class="container  p-3">
                     <div class="row m-auto">
                         <div class="col-6">
                             <div class="card mb-3">
@@ -60,18 +57,19 @@
                                     <li class="list-group-item text-muted">
                                         <%= event.Location %>
                                     </li>
-                                    <li class="list-group-item text-muted">Submitted By <%= event.author %>
+                                    <li class="list-group-item text-muted">Submitted By <%= author.username %>
                                     </li>
                                     <li class="list-group-item">price</li>
                                 </ul>
 
-                                <div class="card-body">
-                                    <a href="/event/<%=event._id %>/edit " class="card-link btn btn-info">Edit</a>
-                                    <form class="d-inline" action="/event/<%= event._id %>?_method=DELETE"
-                                        method="POST">
-                                        <button class="btn btn-danger">Delete</button>
-                                    </form>
-                                </div>
+                                <% if(currentUser && currentUser.isAdmin==true){ %>
+                                    <div class="card-body">
+                                        <a href="/event/<%=event._id %>/edit " class="card-link btn btn-info">Edit</a>
+                                        <form class="d-inline" action="/event/<%= event._id %>?_method=DELETE" method="POST">
+                                            <button class="btn btn-danger">Delete</button>
+                                        </form>
+                                        </div>
+                                        <% } %>
 
                                 <div class="card-footer text-muted">
                                     2days ago
@@ -83,7 +81,40 @@
 
 
                         <div class="col-6">
-                            <div class="map" id="map" style="height: 300px;"></div>
+                            <div class="row">
+                                <div class="map bg-secondary" id="map" style="height: 300px;width: 100%;"></div>
+                            </div>
+                            <% if(currentUser && currentUser.isAdmin==false){ %>
+                                <% if(event.limit<event.count){ %>
+                                    <div class=" row my-4">
+                                        <button class="btn btn-danger" disabled>Sorry, Maximum limit reached</button>
+                                    </div>
+                                    <% }else{ %>
+                                        <% if(event.registeredUsers[0]){let temp=1; %>
+                                            <% for(let e of event.registeredUsers){ %>
+                                                <% if(e.equals(currentUser._id)){ %>
+                                                    <div class=" row my-4">
+                                                        <button class="btn btn-primary" disabled>Already Registered</button>
+                                                    </div>
+                                                    <% temp=0;break;}else{continue;}%>
+                                                        <% } %>
+                                                            <% if(temp==1){ %>
+                                                                <form action="/registerEvent/<%= event._id %>" method="POST">
+                                                                    <div class="row my-4">
+                                                                        <button class="btn btn-primary" type="submit">Register for event</button>
+                                                                    </div>
+                                                                </form>
+                                                                <% } %>
+                                                                    <% }else{ %>
+                                                                        <form action="/registerEvent/<%= event._id %>" method="POST">
+                                                                            <div class="row my-4">
+                                                                                <button class="btn btn-primary" type="submit">Register for
+                                                                                    event</button>
+                                                                            </div>
+                                                                        </form>
+                                                                        <% }%>
+                                                                            <% } %>
+                                                                                <% }%>
                         </div>
                     </div>
                 </section>

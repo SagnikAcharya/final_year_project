@@ -273,7 +273,8 @@ app.post('/addEvent',isLoggedIn,isAdmin,async(req,res)=>{                       
 
 app.get('/event/:id',isLoggedIn, async(req,res)=>{                          //View Specific Event
     const event=await Event.findById(req.params.id);
-    res.render('./templates/eventPage.ejs',{event});
+    const author=await Admin.findById(event.author);
+    res.render('./templates/eventPage.ejs',{event,author});
 })
 
 app.get('/event/:id/edit',isLoggedIn,isAdmin,async(req,res)=>{             //Edit Specific Event(GET)
@@ -293,6 +294,22 @@ app.delete('/event/:id',isLoggedIn,isAdmin,async(req,res)=>{                    
     res.redirect('/event');
 })
 
+
+app.post('/registerEvent/:id',async(req,res)=>{
+    const {id}=req.params;
+    const event=await Event.findById(id);
+    const registerUser=await User.find({username:req.user.username});
+    await event.registeredUsers.push(registerUser[0]._id);
+    if(event.limit>=event.count){
+        event.count++;
+    }else{
+        req.flash('error','Sorry, Maximum limit of registrations reached');
+        res.redirect(`/event/${id}`);
+    }
+    await event.save();
+    req.flash('success','Successfully Registered');
+    res.redirect(`/event/${id}`);
+})
 
 
 
@@ -377,14 +394,14 @@ app.get('/socialClub',(req,res)=>{                                              
 
 ///////////////////////////////////////////////////   404/ERR TEMPLATE      ///////////////////////////////////////////////
 
-app.get("*", (req, res, next) => {                                                      //404 NOT FOUND PAGE
-    next(new ExpressError("Not Found", 404));
-  });
+// app.get("*", (req, res, next) => {                                                      //404 NOT FOUND PAGE
+//     next(new ExpressError("Not Found", 404));
+//   });
   
-  app.use((err, req, res, next) => {
-    const { statusCode = 500,message='Something went wrong' } = err;
-    res.status(statusCode).render("./templates/error_404.ejs", { err });
-  });
+//   app.use((err, req, res, next) => {
+//     const { statusCode = 500,message='Something went wrong' } = err;
+//     res.status(statusCode).render("./templates/error_404.ejs", { err });
+//   });
 
 
 
