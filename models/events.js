@@ -1,6 +1,15 @@
 const mongoose=require('mongoose');
 const {Schema}=mongoose;
 
+const ImageSchema=new Schema({
+      url:String,
+      filename:String
+})
+
+ImageSchema.virtual('thumbnail') .get(function(){
+  this.url.replace('/upload','/upload/w_200');
+});
+
 const EventSchema=new Schema({
     Name: String,
     startDate: Date,
@@ -8,10 +17,8 @@ const EventSchema=new Schema({
     Description: String,
     Location: String,
     Type: String,
-    images:[{
-      url:String,
-      filename:String
-    }],
+    images:[ImageSchema],
+    deleteImages:[],
     limit:{
       type:Number,
       require:true,

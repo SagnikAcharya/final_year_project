@@ -23,7 +23,7 @@ const {isLoggedIn,isAdmin}=require('./middleware.js');
 const MongoStore = require('connect-mongo');
 const QRCode = require('qrcode');
 const multer  = require('multer')
-const{ storage }=require('./Cloudinary/cloudinaryIndex.js')
+const{ storage, cloudinary }=require('./Cloudinary/cloudinaryIndex.js')
 const upload = multer({ storage });
 
 
@@ -243,21 +243,6 @@ app.get('/logout',(req,res)=>{
       });
 })
 
-app.get('/addimage',(req,res)=>{                                //Add a new Event
-    res.render('./addimage.ejs');
-})
-
-app.post('/addimage', upload.single('image'), function (req, res, next) {
-    console.log(req.body,req.file);
-    res.send(req.file);
-  })
-  
-
-
-
-
-
-
 
 
 ///////////////////////////////////////////////////   EVENTS      ///////////////////////////////////////////////
@@ -293,8 +278,17 @@ app.get('/event/:id/edit',isLoggedIn,isAdmin,async(req,res)=>{             //Edi
     res.render('./templates/editEvent.ejs',{event});
 })
 
-app.put('/event/:id',isLoggedIn,isAdmin,async(req,res)=>{
-    const event=await Event.findByIdAndUpdate(req.params.id,{...req.body.event});       //Edit Specific Event(POST)
+app.put('/event/:id',isLoggedIn,isAdmin,upload.array('image'),async(req,res)=>{
+    const event=await Event.findByIdAndUpdate(req.params.id,{...req.body.event});   //Edit Specific Event(POST)
+    const imgs=req.files.map(f=>({url:f.path,filename:f.filename}))
+    event.images.push(...imgs);    
+    await event.save();
+    if(req.body.deleteImages){
+        for(let filename of req.body.filename){
+            await cloudinary.uploader.destroy(filename);
+        }
+        await event.updateOne({$pull:{images:{filename:{$in:req.body.deleteImages}}}})
+    }
     req.flash('success','Event details updated successfully');
     res.redirect(`/event/${event._id}`);
 })

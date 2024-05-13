@@ -15,6 +15,7 @@ module.exports.isLoggedIn=(req,res,next)=>{
 
 module.exports.isAdmin= async(req,res,next)=>{
   try{
+    if(req.session.passport.user.id){
     const id=req.session.passport.user.id;
     const newadmin=await Admin.findById(id);
     const newuser=await User.findById(id)
@@ -27,6 +28,7 @@ module.exports.isAdmin= async(req,res,next)=>{
       req.session.returnTo=req.originalUrl;
     }
     next();
+  }
   }catch(e){
     console.log(e);
     req.flash('error','You need to login first');
