@@ -248,7 +248,7 @@ app.get('/logout',(req,res)=>{
 ///////////////////////////////////////////////////   EVENTS      ///////////////////////////////////////////////
 
 
-app.get('/event',isLoggedIn, async(req,res)=>{                             //All Events Page
+app.get('/event', async(req,res)=>{                             //All Events Page
     const event=await Event.find({});
     res.render('./templates/allEvents.ejs',{event});
 })
@@ -280,7 +280,7 @@ app.get('/event/:id/edit',isLoggedIn,isAdmin,async(req,res)=>{             //Edi
 
 app.put('/event/:id',isLoggedIn,isAdmin,upload.array('image'),async(req,res)=>{
     const event=await Event.findByIdAndUpdate(req.params.id,{...req.body.event});   //Edit Specific Event(POST)
-    const imgs=req.files.map(f=>({url:f.path,filename:f.filename}))
+    const imgs=req.files.map(f=>({url:f.path,filename:f.filename}));
     event.images.push(...imgs);    
     await event.save();
     if(req.body.deleteImages){
@@ -317,7 +317,6 @@ app.post('/registerEvent/:id',async(req,res)=>{
 })
 
 app.get('/scanQR/:id',(req,res)=>{  
-    console.log("WORKED")
     const {id}=req.params;                    
     res.render("./adminSection/scanQR",{id});
 })
@@ -327,20 +326,32 @@ app.post('/checkQR/:id',async(req,res)=>{
     const event=await Event.findById(eventid);
     const user=await User.find({QR:`${id}`});
     for(let i in event.registeredUsers){
-        console.log(event.registeredUsers[i]._id);
-        console.log(user._id);
-        console.log(event.registeredUsers[i]._id);
-        console.log(event.registeredUsers[i]._id.equals(user._id));
-        if(event.registeredUsers[i]._id==user._id){
-            event.registeredUsers[i].isVerified=2;
+        if(event.registeredUsers[i]._id.equals(user[0]._id)){
+            event.registeredUsers[i].isVerified=true;
+            await event.save();
+            req.flash('success','User successfully verified');
+            res.redirect(`/verifiedStudents/${event._id}`);         
         }
     }
-    await event.save();
-    console.log(event.registeredUsers[0].isVerified);
-    req.flash('success','User successfully verified');
-    res.redirect(`/allStudents`);      
 })  
 
+
+app.get('/verifiedStudents/:id',async(req,res)=>{
+    const {id}=req.params;
+    const event=await Event.findById(id);
+    let users=new Array();
+    for(let i in event.registeredUsers){
+        if(event.registeredUsers[i].isVerified==true){
+            let user=await User.findById(event.registeredUsers[i]._id);
+            users.push(user);
+        }else{
+            res.render('./adminSection/verifyStudent.ejs',{users,i});
+            return res.redirect(`/event/${id}`);
+        }
+    }
+    let i=1;
+    res.render('./adminSection/verifyStudent.ejs',{users,i});
+})
 
 
 ///////////////////////////////////////////////////   USER      ///////////////////////////////////////////////

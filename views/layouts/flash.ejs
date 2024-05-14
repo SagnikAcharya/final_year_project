@@ -1,13 +1,26 @@
-<div class="container mt-4 mb-3" style="width: 100%;">
+<!-- <div class="container mt-4 mb-3" style="width: 100%;"> -->
     <% if(success && success.length){ %>
-        <div class="alert alert-success alert-dismissible fade show" role="alert">
+        <div class="alert alert-success flash-div container mt-4 mb-3 alert-dismissible fade show js-alert" style="width: 100%;"
+            role="alert">
             <%= success %>
                 <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
         <%} else if(error.length){%>
-            <div class="alert alert-warning alert-dismissible fade show" role="alert">
+            <div class="alert alert-danger flash-div mt-4 mb-3 alert-dismissible container fade show js-alert" style="width: 100%;"
+                role="alert">
                 <%= error %>
-                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    <button type="button right-0" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
             </div>
             <% } %>
-</div>
+<!-- </div> -->
+<script>
+    if (document.querySelector('.js-alert')) {
+        document.querySelectorAll('.js-alert').forEach(function ($el) {
+            setTimeout(() => {
+                $el.classList.remove('show');
+                document.querySelectorAll('.btn-close').click();
+                document.querySelectorAll('.flash-div').style.display = 'none';
+            }, 3000);
+        });
+    }
+</script>

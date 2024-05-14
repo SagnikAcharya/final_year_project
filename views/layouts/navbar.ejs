@@ -1,6 +1,7 @@
 <div class="container-fluid" style="padding: 0;">
-    <nav class="navbar navbar-expand-lg shadow  px-5 "
-        style=" background-image: radial-gradient( circle farthest-corner at 10% 20%,  rgba(38,51,97,1) 0%, rgba(65,143,222,1) 79% );"">
+    <!-- <nav class="navbar navbar-expand-lg shadow  px-5 "
+                    style=" background-image: radial-gradient( circle farthest-corner at 10% 20%,  rgba(38,51,97,1) 0%, rgba(65,143,222,1) 79% );""> -->
+    <nav class="navbar navbar-expand-lg shadow  px-5 bg-body-tertiary " data-bs-theme="dark">
         <div class=" container-fluid text-white">
         <a class=" navbar-brand" href="/">
             <img src="https://res.cloudinary.com/dwxs377sr/image/upload/v1715537445/EMS/logo_white.svg" alt="" width="80"
@@ -13,14 +14,14 @@
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                 <li class="nav-item">
-                    <a class="nav-link active text-white" aria-current="page" href="/"><span
+                    <a class="nav-link active text-muted" aria-current="page" href="/"><span
                             class="nav-icons">Home</span></a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link text-white " href="#"><span class="nav-icons">About Us</span></a>
+                    <a class="nav-link text-muted " href="#"><span class="nav-icons">About Us</span></a>
                 </li>
                 <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle text-white" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="true">
+                    <a class="nav-link dropdown-toggle text-muted" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="true">
                         Clubs
                     </a>
                     <ul class="dropdown-menu bg-light">
@@ -34,17 +35,17 @@
                     </ul>
                 </li>
                 <li class="nav-item ">
-                    <a class="nav-link text-white" href="/event"><span class="nav-icons">Events</span></a>
+                    <a class="nav-link text-muted" href="/event"><span class="nav-icons">Events</span></a>
                 </li>
                 <% if(currentUser && currentUser.isAdmin==true){ %>
                     <li class="nav-item ">
-                        <a class="nav-link text-white" href="/addEvent" aria-disabled="true">Add Event</a>
+                        <a class="nav-link text-muted" href="/addEvent" aria-disabled="true">Add Event</a>
                     </li>
                     <li class="nav-item ">
-                        <a class="nav-link text-white" href="/addStudent" aria-disabled="true">Add Student</a>
+                        <a class="nav-link text-muted" href="/addStudent" aria-disabled="true">Add Student</a>
                     </li>
                     <li class="nav-item ">
-                        <a class="nav-link text-white" href="/allStudents" aria-disabled="true">All Students</a>
+                        <a class="nav-link text-muted" href="/allStudents" aria-disabled="true">All Students</a>
                     </li>
                     <% } %>
             </ul>

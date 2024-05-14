@@ -5,34 +5,41 @@
 
     <body>
 
-        <div class="container-fluid d-flex flex-column px-0" style="height: 100vh;">
+        <div class="container-fluid d-flex flex-column px-0" style="min-height: 100vh;">
             <!-- navbar -->
             <%- include('../layouts/navbar.ejs') %>
 
-                <div class="card m-auto mb-5" style="width: 18rem;">
-                    <img src="./images/ales-nesetril-Im7lZjxeLhg-unsplash.jpg" class="card-img-top" alt="...">
-                    <div class="card-body">
-                        <h5 class="card-title">
-                            <form action="/studentLogin" method="POST" class="needs-validation" novalidate>
-                                <div class="mb-3">
-                                    <label for="username01" class="form-label">Username</label>
-                                    <input type="text" class="form-control" id="username01" name="username" required>
-                                    <div class="valid-feedback">
-                                        Looks good!
-                                    </div>
-                                </div>
-                                <div class="mb-3">
-                                    <label for="exampleInputPassword1" class="form-label">Password</label>
-                                    <input type="password" class="form-control" id="exampleInputPassword1"
-                                        name="password" required>
-                                    <div class="valid-feedback">
-                                        Looks good!
-                                    </div>
-                                </div>
-                                <button type="submit" class="btn btn-primary">Submit</button>
-                            </form>
-                        </h5>
-                    </div>
+            <div class="position-relative align-items-center d-flex">
+                <div class="container py-5">
+                    <div class="row">
+                        <div class="col-md-6 d-flex align-items-center">
+                            <img src="./images/registerImg.svg" class="img-fluid rounded" alt="...">
+                        </div>
+                        <div class=" card p-0 shadow rounded col-md-6 ">
+                            <div class="card-body d-flex px-5 justify-content-center flex-column">
+                                <h5 class="card-title">Student Login</h5>
+                                <form action="/studentLogin" method="POST" class="needs-validation" novalidate>
+                        <div class="form-floating mb-3">
+                            <input type="username" class="form-control" id="floatingInput" placeholder="name@example.com" name="username">
+                            <label for="floatingInput">Username</label>
+                            <div class="valid-feedback">
+                                Looks good!
+                            </div>
+                        </div>
+                        <div class="form-floating mb-3">
+                            <input type="password" class="form-control" id="floatingPassword" placeholder="Password" name="password">
+                            <label for="floatingPassword">Password</label>
+                            <div class="valid-feedback">
+                                Looks good!
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Submit</button>
+                        </form>
+                </div>
+                </div>
+                </div>
+                
+                </div>
                 </div>
                 <%- include('../layouts/footer.ejs') %>
         </div>

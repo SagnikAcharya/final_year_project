@@ -6,9 +6,22 @@ const ImageSchema=new Schema({
       filename:String
 })
 
+const RegisteredUser=new Schema({
+    id:{
+        type:Schema.Types.ObjectId,
+        ref:"User",
+    },isVerified:{
+      type:Boolean,
+      default:false,
+      require:true
+}}
+)
+
 ImageSchema.virtual('thumbnail') .get(function(){
   this.url.replace('/upload','/upload/w_200');
 });
+
+
 
 const EventSchema=new Schema({
     Name: String,
@@ -28,16 +41,7 @@ const EventSchema=new Schema({
       type:Schema.Types.ObjectId,
       ref:"Admin", 
     },
-    registeredUsers:[{
-      id:{
-          type:Schema.Types.ObjectId,
-          ref:"User",
-      },isVerified:{
-            type:Number,
-            default:1,
-            require:true
-      }
-    }],
+    registeredUsers:[RegisteredUser],
     count:{
       type:Number,
       default:1

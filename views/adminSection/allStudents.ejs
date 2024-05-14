@@ -3,21 +3,19 @@
 
 <%- include('../layouts/head.ejs') %>
 
-    <body>
-        <section>
-            <%- include('../layouts/navbar.ejs') %>
-        </section>
-        <section class="container my-3 position-relative">
-
-            <table class="table table-striped rounded shadow">
+<body>
+    <div class="container-fluid d-flex flex-column px-0" style="min-height: 100vh;">
+        <%- include('../layouts/navbar.ejs') %>
+            <div class="container my-3 position-relative">
+                <div class="container shadow px-5 py-4">
+                    <table class="table table-hover table-bordered text-center">
                 <thead>
                     <tr>
                         <th scope="col">Sl no.</th>
                         <th scope="col">Student Name</th>
                         <th scope="col">Student Roll</th>
                         <th scope="col">Department</th>
-                        <th scope="col"></th>
-                        <th scope="col"></th>
+                        <th scope="col">Action :</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -37,25 +35,30 @@
                             <td>
                                 <%= user.department %>
                             </td>
+                            <% if(currentUser.isAdmin==true){ %>
                             <td class="px-0"><a href="/user/<%=user._id %>/edit "
-                                    class="btn rounded-pill bg-warning">Edit</a>
+                                    class="btn rounded-pill"><i class="fa-solid fa-pen-to-square"></i></a>
+                                    
+                                    <form class="d-inline" action="/user/<%= user._id %>?_method=DELETE" method="POST">
+                                        <button class="btn rounded-pill" type="submit"><i class="fa-solid fa-trash"></i></button>
+                                    </form>
                             </td>
-                            <td>
-                                <form class="d-inline" action="/user/<%= user._id %>?_method=DELETE" method="POST">
-                                    <button class="btn rounded-pill bg-danger">Delete</button>
-                                </form>
-                            </td>
+                            <% }else{%>
+                                <td>
+                                    <a href="#" class="btn rounded-pill"><i class="fa-solid fa-ban"></i></a>
+                                    </td>
+                            <% } %>
                         </tr>
                         <% } %>
                 </tbody>
             </table>
-        </section>
-
-
-        <section>
+            </div>
+            </div>
             <%- include('../layouts/footer.ejs') %>
-        </section>
+                </div>
 
+
+        
     </body>
-
+    
 </html>
