@@ -427,6 +427,11 @@ app.get('/socialClub',(req,res)=>{                                              
 })
 
 
+app.get('/club',(req,res)=>{                                                   //Hiking Club Get Route      
+    res.render('./clubs/clubLayout.ejs');
+})
+
+
 // EKHANE CLUBS RAKH , EI COMMENT TA DELETE KORE DISH
 
 
