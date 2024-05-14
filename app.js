@@ -150,12 +150,18 @@ passport.serializeUser((obj, done) => {
 
 
 
+///////////////////////////////////////////////////   COVER ROUTE      ///////////////////////////////////////////////
 
+
+app.get("/",async(req,res)=>{
+    const event=await Event.find({});
+    res.render("./cover",{event});    //rendering boilerplate.ejs on port 8080 for '127.0.0.1:8080' path
+})
 
 ///////////////////////////////////////////////////   HOME ROUTE      ///////////////////////////////////////////////
 
 
-app.get("/",async(req,res)=>{
+app.get("/home",async(req,res)=>{
     const event=await Event.find({});
     res.render("./boilerplate",{event});    //rendering boilerplate.ejs on port 8080 for '127.0.0.1:8080' path
 })
