@@ -3,6 +3,7 @@ if(process.env.NODE_ENV !=="production"){
 }
 const dbURL=process.env.DB_URL;
 
+const nodemailer = require('nodemailer');
 const express = require("express");
 const path = require("path");
 const methodOverride = require("method-override");    //used for parsing json
@@ -48,6 +49,22 @@ const upload = multer({ storage });
 
 // calendar.render()
 
+///////////NODEMAILER
+
+const transporter = nodemailer.createTransport({
+    host: 'smtp.gmail.com',
+    port: 587,
+    secure: false,
+    requireTLS: true,
+    auth:{
+        user:"unofficialfivers@gmail.com",
+        pass:"ptri mnud tgzs uqfe"
+    }
+});
+
+
+
+//////////////////////////////////
 
 
 const app=express();
@@ -150,6 +167,42 @@ passport.serializeUser((obj, done) => {
 
 
 
+//////////////////////NODEMAILER/////////////
+
+
+app.post('/contact', async (req, res) => {
+    const { fullname, email, phone, subject, message } = req.body;
+    const sendMail = "fivers2024@gmail.com";
+    const mailOptions = {
+        from: "unofficialfivers@gmail.com", // sender address
+        to: "fivers2024@gmail.com", // list of receivers
+        subject: `Contact Form Submission: ${subject}`, // Subject line
+        text: `You have received a new message from your website contact form.\n\n` +
+              `Here are the details:\n\n` +
+              `Name: ${fullname}\n\n` +
+              `Email: ${email}\n\n` +
+              `Phone: ${phone}\n\n` +
+              `Message: ${message}\n\n`,
+        html: `<p>You have received a new message from your website contact form.</p>
+               <h3>Contact Details</h3>
+               <ul>
+                   <li>Name: ${fullname}</li>
+                   <li>Email: ${email}</li>
+                   <li>Phone: ${phone}</li>
+               </ul>
+               <h3>Message</h3>
+               <p>${message}</p>`
+    };
+
+    try {
+        await transporter.sendMail(mailOptions);
+        req.flash('success', 'Your message has been sent successfully.');
+        res.redirect('/home'); // redirect to a thank you page or back to the form
+    } catch (error) {
+        console.log(error);
+    }})
+
+
 ///////////////////////////////////////////////////   COVER ROUTE      ///////////////////////////////////////////////
 
 
@@ -245,7 +298,7 @@ app.get('/logout',(req,res)=>{
     req.logout(function(err) {
         if (err) { return next(err); }
         req.flash('success',"Logged Out Successfully");
-        res.redirect('/');
+        res.redirect('/home');
       });
 })
 

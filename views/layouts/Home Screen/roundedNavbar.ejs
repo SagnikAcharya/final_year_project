@@ -1,77 +1,183 @@
-<div class="container-fluid position-sticky z-index-sticky top-0" style="z-index: 1; ">
-
-    <nav class="navbar rounded-navbar navbar-expand-lg rounded-pill blur d-inline top-0 z-index-fixed shadow-lg position-absolute px-5 my-xl-3 start-0 end-0 mx-xl-4 bg-white mb-5"
-        style="padding: 0;" data-bs-theme="dark">
-        <div class="container-fluid ">
-            <a class="navbar-brand" href="/">
-                <img src="https://res.cloudinary.com/dwxs377sr/image/upload/v1715537446/EMS/logo_black.svg" alt="" width="80"
-                    height="60">
+<div
+  class="container-fluid position-sticky z-index-sticky top-0"
+  style="z-index: 1"
+>
+  <nav
+    class="navbar rounded-navbar navbar-expand-lg rounded-pill blur d-inline top-0 z-index-fixed shadow-lg position-absolute px-5 my-xl-3 start-0 end-0 mx-xl-4 bg-white mb-5"
+    style="padding: 0"
+    data-bs-theme="dark"
+  >
+    <div class="container-fluid">
+      <a class="navbar-brand" href="/">
+        <img
+          src="https://res.cloudinary.com/dwxs377sr/image/upload/v1715537446/EMS/logo_black.svg"
+          alt=""
+          width="80"
+          height="60"
+        />
+      </a>
+      <button
+        class="navbar-toggler"
+        type="button"
+        data-bs-toggle="collapse"
+        data-bs-target="#navbarSupportedContent"
+        aria-controls="navbarSupportedContent"
+        aria-expanded="false"
+        aria-label="Toggle navigation"
+      >
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+          <li class="nav-item">
+            <a class="nav-link active text-dark" aria-current="page" href="/"
+              >Home</a
+            >
+          </li>
+          <li class="nav-item">
+            <a class="nav-link text-dark" href="#">About Us</a>
+          </li>
+          <li class="nav-item dropdown">
+            <a
+              class="nav-link dropdown-toggle text-dark"
+              href="#"
+              role="button"
+              data-bs-toggle="dropdown"
+              aria-expanded="true"
+            >
+              Clubs
             </a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
-                data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
-                aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                    <li class="nav-item">
-                        <a class="nav-link active text-dark" aria-current="page" href="/">Home</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link text-dark" href="#">About Us</a>
-                    </li>
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle text-dark" href="#" role="button" data-bs-toggle="dropdown"
-                            aria-expanded="true">
-                            Clubs
-                        </a>
-                        <ul class="dropdown-menu bg-light">
-                            <li><a class="dropdown-item text-dark" href="/photoClub"><i class="fa-solid fa-camera"></i> Photography Club</a></li>
-                            <li><a class="dropdown-item text-dark" href="/literaryClub">Literary Club</a></li>
-                            <li><a class="dropdown-item text-dark" href="/artClub">Art Club</a></li>
-                            <li><a class="dropdown-item text-dark" href="/musicClub">Music Club</a></li>
-                            <li><a class="dropdown-item text-dark" href="/flimClub">Flim Club</a></li>
-                            <li><a class="dropdown-item text-dark" href="/hikingClub">Hiking Club</a></li>
-                            <li><a class="dropdown-item text-dark" href="/socialClub">Tint Covid Group</a></li>
-                        </ul>
-                    </li>
-                    
+            <ul class="dropdown-menu bg-light">
+              <li>
+                <a class="dropdown-item text-dark" href="/photoClub"
+                  ><i class="fa-solid fa-camera"></i> Photography Club</a
+                >
+              </li>
+              <li>
+                <a class="dropdown-item text-dark" href="/literaryClub"
+                  >Literary Club</a
+                >
+              </li>
+              <li>
+                <a class="dropdown-item text-dark" href="/artClub">Art Club</a>
+              </li>
+              <li>
+                <a class="dropdown-item text-dark" href="/musicClub"
+                  >Music Club</a
+                >
+              </li>
+              <li>
+                <a class="dropdown-item text-dark" href="/flimClub"
+                  >Flim Club</a
+                >
+              </li>
+              <li>
+                <a class="dropdown-item text-dark" href="/hikingClub"
+                  >Hiking Club</a
+                >
+              </li>
+              <li>
+                <a class="dropdown-item text-dark" href="/socialClub"
+                  >Tint Covid Group</a
+                >
+              </li>
+            </ul>
+          </li>
 
-                    <li class="nav-item ">
-                        <a class="nav-link text-dark" href="/event" aria-disabled="true">All Events</a>
-                    </li>
-                    <% if(currentUser && currentUser.isAdmin==true){ %>
-                        <li class="nav-item ">
-                            <a class="nav-link text-dark" href="/addEvent" aria-disabled="true">Add Event</a>
-                        </li>
-                        <li class="nav-item ">
-                            <a class="nav-link text-dark" href="/addStudent" aria-disabled="true">Add Student</a>
-                        </li>
-                        <li class="nav-item ">
-                            <a class="nav-link text-dark" href="/allStudents" aria-disabled="true">All Students</a>
-                        </li>
-                        <% } %>
-                </ul>
-                <div class="navbar-nav ">
-                    <% if(!currentUser){ %>
-                        <a href="/studentLogin" class="nav-link text-dark">Student Login</a>
-                        <a href="/adminLogin" class="nav-link text-dark">Admin Login</a>
-                        <a href="/register" class="nav-link text-dark">Register</a>
-                        <% }else{ %>
-                            <% if(currentUser.isAdmin==false){ %>
-                                <a href="/user/<%= currentUser._id %>" class="nav-link text-dark">
-                                    <%= currentUser.username.toUpperCase() %>
-                                </a>
-                                <% }else{ %>
-                            <a href="/admin/<%= currentUser._id %>" class="nav-link text-dark">
-                                <%= currentUser.username.toUpperCase() %>
-                            </a>
-                            <% } %>
-                            <a href="/logout" class="nav-link text-dark">Log Out</a>
-                            <% } %>
-                </div>
-            </div>
+          <li class="nav-item">
+            <a class="nav-link text-dark" href="/event" aria-disabled="true"
+              >All Events</a
+            >
+          </li>
+          <% if(currentUser && currentUser.isAdmin==true){ %>
+          <li class="nav-item">
+            <a class="nav-link text-dark" href="/addEvent" aria-disabled="true"
+              >Add Event</a
+            >
+          </li>
+          <li class="nav-item">
+            <a
+              class="nav-link text-dark"
+              href="/addStudent"
+              aria-disabled="true"
+              >Add Student</a
+            >
+          </li>
+          <li class="nav-item">
+            <a
+              class="nav-link text-dark"
+              href="/allStudents"
+              aria-disabled="true"
+              >All Students</a
+            >
+          </li>
+          <% } %>
+        </ul>
+        <div class="navbar-nav">
+          <% if(!currentUser){ %>
+          <a href="/studentLogin" class="nav-link text-dark">Student Login</a>
+          <a href="/adminLogin" class="nav-link text-dark">Admin Login</a>
+          <a href="/register" class="nav-link text-dark">Register</a>
+          <% }else{ %> <% if(currentUser.isAdmin==false){ %>
+          <a href="/user/<%= currentUser._id %>" class="nav-link text-dark">
+            <%= currentUser.username.toUpperCase() %>
+          </a>
+          <% }else{ %>
+          <a href="/admin/<%= currentUser._id %>" class="nav-link text-dark">
+            <%= currentUser.username.toUpperCase() %>
+          </a>
+          <% } %>
+          <a href="/logout" class="nav-link text-dark">Log Out</a>
+          <% } %>
         </div>
-    </nav>
+      </div>
+    </div>
+  </nav>
 
+  <!-- <div class="container mt-4 mb-3" style="width: 100%;"> -->
+  <% if(success && success.length){ %>
+  <div
+    class="alert position-absolute px-3 alert-success flash-div container mt-4 mb-3 alert-dismissible fade show js-alert"
+    style="    width: 100%;
+    top: 80px;
+    left: 15%;"
+    role="alert"
+  >
+    <%= success %>
+    <button
+      type="button"
+      class="btn-close"
+      data-bs-dismiss="alert"
+      aria-label="Close"
+    ></button>
+  </div>
+  <%} else if(error.length){%>
+  <div
+    class="alert position-absolute rounded-pill px-3 alert-danger flash-div mt-4 mb-3 alert-dismissible container fade show js-alert"
+    style="width: 100%;
+    top: 80px;
+    left: 15%;"
+    role="alert"
+  >
+    <%= error %>
+    <button
+      type="button right-0"
+      class="btn-close"
+      data-bs-dismiss="alert"
+      aria-label="Close"
+    ></button>
+  </div>
+  <% } %>
+  <!-- </div> -->
+  <script>
+    if (document.querySelector(".js-alert")) {
+      document.querySelectorAll(".js-alert").forEach(function ($el) {
+        setTimeout(() => {
+          $el.classList.remove("show");
+          document.querySelectorAll(".btn-close").click();
+          document.querySelectorAll(".flash-div").style.display = "none";
+        }, 3000);
+      });
+    }
+  </script>
 </div>
