@@ -2,6 +2,43 @@
 <html lang="en">
 <%- include('../layouts/head.ejs') %>
     <style>
+    
+        .tablesection {
+        border-collapse: collapse;
+        margin: 25px 0;
+        font-size: 0.9em;
+        font-family: sans-serif;
+        min-width: 400px;
+        box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
+        }
+
+        .tablesection thead tr {
+        background-color: #009879;
+        color: #ffffff;
+        text-align: left;
+        }
+
+        .tablesection th,
+        .tablesection td {
+        padding: 12px 15px;
+        }
+
+        .tablesection tbody tr {
+        border-bottom: 1px solid #dddddd;
+        }
+
+        .tablesection tbody tr:nth-of-type(even) {
+        background-color: #f3f3f3;
+        }
+
+        .tablesection tbody tr:last-of-type {
+        border-bottom: 2px solid #009879;
+        }
+
+        .tablesection tbody tr.active-row {
+        font-weight: bold;
+        color: #009879;
+        }
         .bd-placeholder-img {
             font-size: 1.125rem;
             text-anchor: middle;
@@ -9,6 +46,16 @@
             -moz-user-select: none;
             user-select: none;
         }
+        
+            .featurette-heading {
+            display: flex;
+            align-items: center;
+            height: 250px; /* You can adjust this value to fit your needs */
+            }
+
+            .featurette-heading p {
+            margin: 0;
+            }
 
         @media (min-width: 768px) {
             .bd-placeholder-img-lg {
@@ -43,8 +90,8 @@
 
                             <div class="container">
                                 <div class="carousel-caption text-start">
-                                    <h1>Example headline.</h1>
-                                    <p>Some representative placeholder content for the first slide of the carousel.</p>
+                                    <h1>TINT Photography Club</h1>
+                                    <p>TINT Photography Club is the official photography club of Techno International New Town, where the photo enthusiasts of the college try to nurture their creativity and disclose the subtle richness of reality through their images.</p>
                                     <p><a class="btn btn-lg btn-primary" href="#">Sign up today</a></p>
                                 </div>
                             </div>
@@ -56,8 +103,8 @@
 
                             <div class="container">
                                 <div class="carousel-caption">
-                                    <h1>Another example headline.</h1>
-                                    <p>Some representative placeholder content for the second slide of the carousel.</p>
+                                    <h1>TINT Photography Club</h1>
+                                    <p>It is one of the most popular clubs of the college and acts as a mantle to voice the feelings and ideas of students through photography, which is amongst the most modern visual art forms.</p>
                                     <p><a class="btn btn-lg btn-primary" href="#">Learn more</a></p>
                                 </div>
                             </div>
@@ -68,8 +115,8 @@
                                 style="height: 600px;width: 80%; opacity: 0.4; z-index: 10;">
                             <div class="container">
                                 <div class="carousel-caption text-end">
-                                    <h1>One more for good measure.</h1>
-                                    <p>Some representative placeholder content for the third slide of this carousel.</p>
+                                    <h1>TINT Photography Club</h1>
+                                    <p>Manifest the artist within.</p>
                                     <p><a class="btn btn-lg btn-primary" href="#">Browse gallery</a></p>
                                 </div>
                             </div>
@@ -167,33 +214,99 @@
                 <!-- Three columns of text below the carousel -->
                 <div class="row">
                     <div class="col-lg-4">
-                        <img src="" alt="" class="bd-placeholder-img mb-2 rounded-circle bg-secondary"
+                        <img src="../images/prof anindita ray.jpg" alt="" class="bd-placeholder-img mb-2 rounded-circle bg-secondary"
                             style="width:140px ; height: 140px;">
 
-                        <h2>Heading</h2>
-                        <p>Some representative placeholder content for the three columns of text below the carousel.
-                            This is
-                            the first column.</p>
+                        <h2>Prof. Anindita Ray</h2>
+                        <p> Assistant Professor (BSH)</p>
                         <p><a class="btn btn-secondary" href="#">View details &raquo;</a></p>
                     </div><!-- /.col-lg-4 -->
                     <div class="col-lg-4">
-                        <img src="" alt="" class="bd-placeholder-img mb-2 rounded-circle bg-secondary"
+                        <img src="../images/prof anindita ray.jpg" alt="" class="bd-placeholder-img mb-2 rounded-circle bg-secondary"
                             style="width:140px ; height: 140px;">
 
-                        <h2>Heading</h2>
-                        <p>Another exciting bit of representative placeholder content. This time, we've moved on to the
-                            second column.</p>
+                        <h2>Prof. Debashis Bhattacharyya</h2>
+                        <p>Assistant HOD (BBA)</p>
                         <p><a class="btn btn-secondary" href="#">View details &raquo;</a></p>
                     </div><!-- /.col-lg-4 -->
                     <div class="col-lg-4">
-                        <img src="" alt="" class="bd-placeholder-img mb-2 rounded-circle bg-secondary"
+                        <img src="../images/prof anindita ray.jpg" alt="" class="bd-placeholder-img mb-2 rounded-circle bg-secondary"
                             style="width:140px ; height: 140px;">
 
-                        <h2>Heading</h2>
-                        <p>And lastly this, the third column of representative placeholder content.</p>
+                        <h2>Prof. Averi Banerjee</h2>
+                        <p>Assistant Professor (BSH)</p>
                         <p><a class="btn btn-secondary" href="#">View details &raquo;</a></p>
                     </div><!-- /.col-lg-4 -->
                 </div><!-- /.row -->
+                <section class="align-items-center d-flex">
+                    <div class="container ">
+                        <div class="row">
+                            <div class="col-6">
+                                <h3 class="mb-3">Upcoming Events </h3>
+                            </div>
+                                <div class="col-6 text-end">
+                                    <a class="btn btn-primary mb-3 mr-1" data-bs-target="#carouselExampleControls" data-bs-slide="prev" role="button">
+                                        <i class="fa fa-arrow-left"></i>
+                                    </a>
+                                        <a class="btn btn-primary mb-3" data-bs-target="#carouselExampleControls" data-bs-slide="next" role="button">
+                                            <i class="fa fa-arrow-right"></i>
+                                        </a>
+                                        </div>
+                                        </div>
+                                        <div class="row">
+                                        <div class="col-12 card card-background card-background-mask-primary tilt my-3" data-tilt>
+                                            <div class="card-body">
+                                        <div class="container d-flex align-items-center " style="height: 20rem;">
+                                        
+                                            
+                                            <div id="carouselExampleControls" class="carousel slide" data-bs-ride="carousel">
+                                                <div class="carousel-inner">
+                                                    <% for(let i=0;i<10;i++){ %>
+                                                        <div class="carousel-item active">
+                                                            <div class=" mb-3">
+                                                                <div class="row g-0">
+                                                                    <div class="col-md-4">
+                                                                        <img src="https://plus.unsplash.com/premium_photo-1666277012792-08955a43e51c?q=80&w=2069&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" class="img-fluid rounded" alt="..." style="position:absolute; line-height:32 px; padding-top: 10 px;">
+                                                                    </div>
+                                                        <% } %>            
+                                                        <div class="col-md-8">
+                                                            <div class="card-body">
+                                                                <h5 class="card-title">
+                                                                    <a href="#" style="text-decoration: none;">
+                                                                        Event Name
+                                                                    </a>
+                                                                </h5>
+                                                                <h6 class="card-text text-muted my-2">
+                                                                    Location
+                                                                </h6>
+                                                                <p class="card-subtitle  my-2">12:00 AM - 2:00
+                                                                    PM
+                                                                </p>
+                                                                <p class="card-text  my-2 mb-4">This is a wider
+                                                                    card
+                                                                    with
+                                                                    supporting text below as a natural lead-in
+                                                                    to
+                                                                    additional content. This content is a little
+                                                                    bit
+                                                                    longer.</p>
+                                                                
+                                                                </div>
+                                                                </div>
+                                                                </div>
+                                                                </div>
+                                                                </div>
+                                            
+                                                </div>
+                                                </div>
+                                                </div>
+                                                </div>
+                                                </div>
+                                                </div>
+                                            
+                
+                </div>
+                </section>
 
 
                 <!-- START THE FEATURETTES -->
@@ -201,16 +314,12 @@
                 <hr class="featurette-divider">
 
                 <div class="row featurette">
-                    <div class="col-md-7">
-                        <h2 class="featurette-heading">First featurette heading. <span class="text-muted">It’ll blow
-                                your
-                                mind.</span></h2>
-                        <p class="lead">Some great placeholder content for the first featurette here. Imagine some
-                            exciting
-                            prose here.</p>
+                    <div class="col-md-7" >
+                        <h2 class="featurette-heading">To enable students to nurture the 3D’s (discover, develop, deploy) of creative skills<span class="text-muted"></span></h2>
+                        <p class="lead">Improve the techniques associated with the art of photography through various events, photo walks and workshops.</p>
                     </div>
                     <div class="col-md-5">
-                        <img src="" alt="" class="bd-placeholder-img mb-2 rounded bg-secondary"
+                        <img src="../images/photo.png" alt="" class="bd-placeholder-img mb-2 rounded bg-secondary"
                             style="width:450px ; height: 450px;">
                     </div>
                 </div>
@@ -219,14 +328,11 @@
 
                 <div class="row featurette">
                     <div class="col-md-7 order-md-2">
-                        <h2 class="featurette-heading">Oh yeah, it’s that good. <span class="text-muted">See for
-                                yourself.</span></h2>
-                        <p class="lead">Another featurette? Of course. More placeholder content here to give you an idea
-                            of
-                            how this layout would work with some actual real-world content in place.</p>
+                        <h2 class="featurette-heading">Photo Exhibition cum Intra-college photography competition, DRISTI </span></h2>
+                        <p class="lead">(Organised by the CSE Department in association with the Photography Club)</p>
                     </div>
                     <div class="col-md-5 order-md-1">
-                        <img src="" alt="" class="bd-placeholder-img mb-2 rounded bg-secondary"
+                        <img src="../images/photo.png" alt="" class="bd-placeholder-img mb-2 rounded bg-secondary"
                             style="width:450px ; height: 450px;">
 
                     </div>
@@ -236,16 +342,12 @@
 
                 <div class="row featurette">
                     <div class="col-md-7">
-                        <h2 class="featurette-heading">And lastly, this one. <span class="text-muted">Checkmate.</span>
+                        <h2 class="featurette-heading">Intra-club photography competition  on various themes<span class="text-muted"></span>
                         </h2>
-                        <p class="lead">And yes, this is the last block of representative placeholder content. Again,
-                            not
-                            really intended to be actually read, simply here to give you a better view of what this
-                            would
-                            look like with some actual content. Your content.</p>
+                        <p class="lead">like "Monsoon Moments", "Autumn Symphony, "Nature" and many others.</p>
                     </div>
                     <div class="col-md-5">
-                        <img src="" alt="" class="bd-placeholder-img mb-2 rounded bg-secondary"
+                        <img src="../images/photo1.jpeg" alt="" class="bd-placeholder-img mb-2 rounded bg-secondary"
                             style="width:450px ; height: 450px;">
 
                     </div>
@@ -272,18 +374,18 @@
                                     <% for(let i=0;i<10;i++){ %>
                                         <tr>
                                             <th scope="row">
-                                                0
+                                                1
                                             </th>
                                             <td>
                                                 <a href="#" class="text-decoration-none text-dark">
-                                                    Username
+                                                    Ayush
                                                 </a>
                                             </td>
                                             <td>
-                                                Roll
+                                                33
                                             </td>
                                             <td>
-                                                Department
+                                                ECE
                                             </td>
                                             <td class="px-0"><a href="" class="btn rounded-pill"><i
                                                         class="fa-solid fa-pen-to-square"></i></a>
