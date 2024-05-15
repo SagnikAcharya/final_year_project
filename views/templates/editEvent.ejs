@@ -144,9 +144,29 @@
             }
         </style>
 
+        <script>
+            let selectedDate = "";
+            flatpickr("#startDate", {
+                minDate: "today",
+                maxDate: new Date().fp_incr(14),
+                enableTime: true,
+                defaultDate: "<%= event.startDate %>",
+                minTime: "08:00",
+                maxTime: "23:00",
+                time_24hr: true,
+            });
+            flatpickr("#endDate", {
+                minDate: "today",
+                maxDate: new Date().fp_incr(14),
+                defaultDate: "<%= event.endDate %>",
+                enableTime: true,
+                minTime: "08:00",
+                maxTime: "23:00",
+                time_24hr: true,
+            });
+        </script>
         <script src="/js/mapSearch.js"></script>
         <script src="/js/script.js"></script>
-        <script src="/js/flatpickr.js"></script>
         <script src="/js/formValidation.js"></script>
 
 

@@ -1,9 +1,9 @@
 
 flatpickr("input[type=datetime-local]",{
     minDate: "today",
-    // dateFormat: "d-m-Y",
+    maxDate: new Date().fp_incr(14),
     enableTime: true,
     minTime: "08:00",
     maxTime: "23:00",
-    time_24hr: true
+    time_24hr: true,    
 });
