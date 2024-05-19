@@ -12,7 +12,7 @@
 
                     <div class="container shadow px-5 py-4">
                         <table class="table table-hover table-bordered text-center">
-                            <thead>
+                            <thead class="table-secondary">
                                 <tr>
                                     <th scope="col">Sl no.</th>
                                     <th scope="col">Student Name</th>
@@ -33,12 +33,16 @@
                                             </a>
                                         </td>
                                         <td>
-                                            <%= user.roll %>
+                                            <% if(currentUser && currentUser.isAdmin==true){ %>
+                                                <%= user.roll %>
+                                            <% }else{ %>
+                                                <a href="#" class="btn rounded-pill"><i class="fa-solid fa-ban"></i></a>
+                                                <% } %>
                                         </td>
                                         <td>
                                             <%= user.department %>
                                         </td>
-                                        <% if(currentUser.isAdmin==true){ %>
+                                        <% if(currentUser && currentUser.isAdmin==true){ %>
                                             <td class="px-0"><a href="/user/<%=user._id %>/edit "
                                                     class="btn rounded-pill"><i
                                                         class="fa-solid fa-pen-to-square"></i></a>
@@ -59,13 +63,12 @@
                                     <% } %>
                             </tbody>
                         </table>
+                        <a href="/event/<%= event._id %>" class="btn btn-primary rounded-pill">Back To Event</a>
                     </div>
                 </div>
                 <%- include('../layouts/footer.ejs') %>
 
         </div>
-
-
 
 
 

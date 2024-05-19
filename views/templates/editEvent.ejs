@@ -30,7 +30,7 @@
                         <div class="row my-2 ">
                             <div class="col-md-12">
                                 <div class="form-group mb-2">
-                                    <label id="name-label" for="name" class="my-1 fw-bold">Event Location</label>
+                                    <label id="name-label" for="auto" class="my-1 fw-bold">Event Location</label>
                                     <input type="text" id="auto" name="event[Location]"
                                         class="search-outer form-control " placeholder="Search places"
                                         value="<%= event.Location %>">
@@ -43,16 +43,16 @@
                         <div class="row my-2">
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label id="number-label" for="number" class="my-1 fw-bold">Event Start Date </label>
-                                    <input id="startDate" class="form-control" type="datetime-local"
-                                        name="event[startDate]" value="<%= event.startDate %>" />
+                                    <label for="startDate" class="my-1 fw-bold">Event Start Date </label>
+                                    <input id="startDate" class="form-control" type="datetime-local" name="event[startDate]"
+                                        placeholder="Enter event date" />
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label id="number-label" for="number" class="my-1 fw-bold">Event End Date </label>
-                                    <input id="endDate" class="form-control" type="datetime-local" name="event[endDate]"
-                                        value="<%= event.endDate %>" />
+                                    <label class="my-1 fw-bold" for="limit">Registration Limit</label>
+                                    <input id="limit" class="form-control" type="number" name="event[limit]" min="0" max="100"
+                                        placeholder="Enter Student limit" />
                                 </div>
                             </div>
                         </div>
@@ -60,37 +60,27 @@
                         <div class="row my-2">
                             <div class="col-md-12">
                                 <div class="form-group">
-                                    <label class="my-1 fw-bold">Event Description</label>
-                                    <textarea id="comments" class="form-control" name="event[Description]"
-                                        value="<%= event.Description %>"></textarea>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="row my-2">
-                            <div class="col-md-12">
-                                <div class="form-group">
-                                    <label class="my-1 fw-bold">Event Type</label>
-                                    <select id="dropdown" name="event[Type]" class="form-control" required
-                                        value="<%= event.Type %>">
-                                        <option disabled selected>Select</option>
+                                    <label for="dropdown" class="my-1 fw-bold">Event Type</label>
+                                    <select id="dropdown" name="event[Type]" class="form-control" required>
+                                        <option disabled selected value>Select Event Type</option>
                                         <option value="Webinar">Webinar</option>
                                         <option value="Seminar">Seminar</option>
                                         <option value="Fest">Fest</option>
-                                        <option value="No">Prefer not to say</option>
-                                        <option value="other">Other</option>
                                     </select>
                                 </div>
                             </div>
                         </div>
+
                         <div class="mb-3">
                             <label for="formFileMultiple" class="form-label fw-bold">Add more Images..</label>
                             <input class="form-control" type="file" id="formFileMultiple" name="image" multiple>
                         </div>
-                        <div class="row mb-3 text-muted">
+                        <div class="row mt-3 text-muted">
                             <h6>Select Images to delete :</h6>
                         </div>
-                        <div class="row row-cols-1 row-cols-md-4 g-4 mb-3 d-flex flex-row">
+                        <div class="card p-2 align-items-center d-flex">
+                            <!-- <div class="row row-cols-1 row-cols-md-4 g-4 mb-3 d-flex flex-row"> -->
+                            <div class="row row-cols-md-3 g-4 d-flex flex-row align-items-center">
                             <% event.images.forEach((image, i)=> { %>
                                 <div class="col">
                                     <div class="card">
@@ -104,11 +94,11 @@
                                     </div>
                                 <% }) %>
                         </div>
-
+                    </div>
 
                         <div class="row my-3">
                             <div class="d-grid gap-2">
-                                <button type="submit" id="submit" class="btn btn-primary btn-block my-1 fw-bold">Update
+                                <button type="submit" id="submit" class="btn btn-primary btn-block my-2 py-2 fw-bold">Update
                                     Event</button>
                             </div>
                         </div>
@@ -121,7 +111,7 @@
         <section>
             <%- include('../layouts/footer.ejs') %>
         </section>
-
+        
         <style>
             body {
                 margin: 0
@@ -149,16 +139,6 @@
             flatpickr("#startDate", {
                 minDate: "today",
                 maxDate: new Date().fp_incr(14),
-                enableTime: true,
-                defaultDate: "<%= event.startDate %>",
-                minTime: "08:00",
-                maxTime: "23:00",
-                time_24hr: true,
-            });
-            flatpickr("#endDate", {
-                minDate: "today",
-                maxDate: new Date().fp_incr(14),
-                defaultDate: "<%= event.endDate %>",
                 enableTime: true,
                 minTime: "08:00",
                 maxTime: "23:00",

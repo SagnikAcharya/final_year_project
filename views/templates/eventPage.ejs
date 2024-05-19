@@ -8,9 +8,8 @@
 
                 <section class="container  p-3">
                     <div class="row m-auto">
-                        <div class="col-6">
-                            <div class="card mb-3">
-
+                        <div class="col-8">
+                            <div class="carousel mb-3">
                                 <div id="carouselExampleControls" class="carousel slide" data-bs-ride="carousel">
                                     <div class="carousel-inner">
                                         <% event.images.forEach((img,i)=> { %>
@@ -18,7 +17,7 @@
                                                 <img src="<%= img.url %>" class="d-block w-100" alt="...">
                                         </div>
                                         <% }) %>
-                                            </div>
+                                </div>
                                 <% if(event.images.length>1){ %>
                                     <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="prev">
                                         <span class="carousel-control-prev-icon" aria-hidden="true"></span>
@@ -29,91 +28,160 @@
                                         <span class="visually-hidden">Next</span>
                                     </button>
                                     <% } %>
-                                </div>
-
-
-                                <div class="card-body">
-                                    <h5 class="card-title">
-                                        <%= event.Name %>
-                                    </h5>
-                                    <p class="card-text">
-                                        <%= event.Description %>
-                                    </p>
-                                </div>
-                                <ul class="list-group list-group-flush">
-                                    <li class="list-group-item text-muted">
-                                        <%= event.Location %>
-                                    </li>
-                                    <li class="list-group-item text-muted">Submitted By <%= author.username %>
-                                    </li>
-                                    <li class="list-group-item">price</li>
-                                </ul>
-
-                                <% if(currentUser && currentUser.isAdmin==true){ %>
-                                    <div class="card-body">
-                                        <a href="/event/<%=event._id %>/edit " class="card-link btn btn-info">Edit</a>
-                                        <form class="d-inline" action="/event/<%= event._id %>?_method=DELETE" method="POST">
-                                            <button class="btn btn-danger">Delete</button>
-                                        </form>
-                                        </div>
-                                        <% } %>
-
-                                <div class="card-footer text-muted">
-                                    2days ago
-                                </div>
                             </div>
+                        </div>
 
+                            <div class="body-content">
+
+                            <h5 class="display-6">
+                                <%= event.Name %>
+                            </h5>
+                            <h5 class="text-muted fs-5">Lorem ipsum dolor sit, amet consectetur adipisicing elit. Impedit veniam iusto beatae
+                                reprehenderit, quo veritatis omnis nulla. Alias sed corrupti dolor ab delectus, ipsam nemo tempore laborum
+                                consectetur incidunt quos.
+                                <%= event.Description %>
+                            </h5>
+                            <div class="event-details my-3">
+                                <h5 class="fs-4">
+                                    Event Details
+                                </h5>
+                                <table class="table text-center table-bordered">
+                                    <tbody>
+                                        <tr>
+                                            <td class="col-4 fw-bold">Event Name</td>
+                                            <td class="col-8">
+                                                <%= event.Name %>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="col-4 fw-bold">Event Category</td>
+                                            <td class="col-8">
+                                                <%= event.Type %>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="col-4 fw-bold">Event Location :</td>
+                                            <td class="col-8">
+                                                <%= event.Location %>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="col-4 fw-bold">Event Date :</td>
+                                            <td class="col-8">
+                                                <%= event.moment_Date %>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="col-4 fw-bold">Event Time :</td>
+                                            <td class="col-8">
+                                                <%= event.moment_Time %>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="col-4 fw-bold">Registration Fee :</td>
+                                            <td class="col-8">
+                                                Free
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="col-4 fw-bold">Organised By :</td>
+                                            <td class="col-8">
+                                                Music Club
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="col-4 fw-bold">Event Moderator :</td>
+                                            <td class="col-8">
+                                                <%= author.username %>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="col-4 fw-bold">Total Students Registered :</td>
+                                            <td class="col-8">
+                                                <%= event.count-1 %>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="col-4 fw-bold">Seats Remaining :</td>
+                                            <td class="col-8">
+                                                <%= event.limit-event.count<0?'0':event.limit-event.count+1 %>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            </div>
+                            <% if(currentUser && currentUser.isAdmin==true){ %>
+                            <div class="rounded-3 flex-start">
+                                <div class="row mb-4 ">
+                                    <div class="">
+                                        <a href="/event/<%=event._id %>/edit " class="btn btn-warning l px-3 py-2 me-1">Edit Event</a>
+                                        <form class="d-inline" action="/event/<%= event._id %>?_method=DELETE" method="POST">
+                                                <button class="btn btn-danger px-3 py-2">Delete Event</button>
+                                                </form>
+                                        </div>
+                                    </div>
+                            </div>
+                            <% } %>
 
                         </div>
 
 
-                        <div class="col-6">
+                        <div class="col-4">
                             <div class="row">
                                 <div class="map rounded " id="map" style="height: 300px;width: 100%;"></div>
                             </div>
                             <% if(currentUser && currentUser.isAdmin==true){ %>
-                                <div class="row my-4">
+                            <div class="row card rounded-3 mb-3 mx-2 ">
+                                <div class="row mb-4 mx-auto text-center">
+                                    <p class="fs-5 mb-0 mt-3 text-muted">View/Verify Registered Students</p>
                                     <div class="card-body">
-                                        <a href="/scanQR/<%= event._id %>" class=" card-link btn btn-info" style="width: 100%;">Scan QR to Verify
-                                            Student</a>
-                                    </div>
-                                </div>
-                                <% } %>
-                            <% if(currentUser && currentUser.isAdmin==false){ %>
-                                <% if(event.limit<event.count){ %>
-                                    <div class=" row my-4">
-                                        <button class="btn btn-danger" disabled>Sorry, Maximum limit reached</button>
-                                    </div>
-                                    <% }else{ %>
-                                        <% if(event.registeredUsers[0]){let temp=1; %>
-                                            <% for(let e of event.registeredUsers){ %>
-                                                <% if(e.equals(currentUser._id)){ %>
-                                                    <div class=" row my-4">
-                                                        <button class="btn btn-primary" disabled>Already Registered</button>
-                                                    </div>
-                                                    <% temp=0;break;}else{continue;}%>
-                                                        <% } %>
-                                                            <% if(temp==1){ %>
-                                                                <form action="/registerEvent/<%= event._id %>" method="POST">
-                                                                    <div class="row my-4">
-                                                                        <button class="btn btn-primary" type="submit">Register for event</button>
-                                                                    </div>
-                                                                </form>
-                                                                <% } %>
-                                                                    <% }else{ %>
-                                                                        <form action="/registerEvent/<%= event._id %>" method="POST">
-                                                                            <div class="row my-4">
-                                                                                <button class="btn btn-primary" type="submit">Register for
-                                                                                    event</button>
-                                                                            </div>
-                                                                        </form>
-                                                                        <% }%>
-                                                                            <% } %>
-                                                                                <% }%>
+                                            <a href="/verifiedStudents/<%= event._id %>" class="  btn btn-secondary rounded-pill mb-2" style="width: 100%;">View
+                                                Registered
+                                                Students</a>
+                                            <a href="/scanQR/<%= event._id %>" class="btn btn-info rounded-pill mb-2" style="width: 100%;">Scan QR
+                                                to Verify
+                                                Student</a>
+                                            </div>
+                                            </div>
+                                        </div>
+                                        <% } %>
+                                            <% if(currentUser && currentUser.isAdmin==false){ %>
+                            <div class="row card px-3 mx-auto ">
+                                    <% if(event.limit<event.count){ %>
+                                        <div class=" row my-4 mx-auto text-center">
+                                            <button class="btn btn-danger rounded-pill" disabled>Sorry, Maximum limit reached</button>
+                                        </div>
+                                        <% }else{ %>
+                                            <% if(event.registeredUsers[0]){let temp=1; %>
+                                                <% for(let e of event.registeredUsers){ %>
+                                                    <% if(e.equals(currentUser._id)){ %>
+                                                        <div class=" row my-4 mx-auto text-center">
+                                                            <button class="btn btn-primary rounded-pill" disabled>Already Registered</button>
+                                                        </div>
+                                                        <% temp=0;break;}else{continue;}%>
+                                                            <% } %>
+                                                                <% if(temp==1){ %>
+                                                                    <form action="/registerEvent/<%= event._id %>" method="POST">
+                                                                        <div class="row my-4">
+                                                                                <button class="btn btn-primary rounded-pill mx-auto" type="submit">Register for event</button>
+                                                                                </div>
+                                                                                </form>
+                                                                                <% } %>
+                                                                                    <% }else{ %>
+                                                                                        <form action="/registerEvent/<%= event._id %>" method="POST">
+                                                                                            <div class="row my-4">
+                                                                                                <button class="btn btn-primary rounded-pill mx-auto" type="submit">Register for
+                                                                                                    event</button>
+                                                                                                </div>
+                                                                                                </form>
+                                                                                                <% }%>
+                                                                                                    <% } %>
+                                                                                                </div>
+                                                                                                <% }%>
                         </div>
                     </div>
-                </section>
-
+            </section>
 
 <%- include('../layouts/footer.ejs') %>
     <script>

@@ -4,6 +4,7 @@
   "description": "Final Year project on Event and student dashboard website for FIVERS",
   "main": "app.js",
   "dependencies": {
+    "@fullcalendar/bootstrap5": "^6.1.11",
     "@fullcalendar/core": "^6.1.11",
     "@fullcalendar/daygrid": "^6.1.11",
     "@fullcalendar/interaction": "^6.1.11",
@@ -19,6 +20,7 @@
     "fullcalendar": "^6.1.11",
     "html5-qrcode": "^2.1.5",
     "method-override": "^3.0.0",
+    "moment": "^2.30.1",
     "mongo-store": "^0.0.2",
     "mongodb": "^6.5.0",
     "mongoose": "^8.3.3",
