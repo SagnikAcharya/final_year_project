@@ -20,6 +20,15 @@ body{
   margin-top: auto;
 }
 
+.card-text ,.cut-text{
+  overflow: hidden;
+   display: -webkit-box;
+   -webkit-line-clamp: 3; /* number of lines to show */
+           line-clamp: 3; 
+   -webkit-box-orient: vertical;
+}
+
+
 .nav-icons:hover{
   
 }
