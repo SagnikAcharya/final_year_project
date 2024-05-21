@@ -29,8 +29,16 @@ body{
 }
 
 
-.nav-icons:hover{
-  
+.navlink2{
+  color: rgba(255, 255, 255, 0.705)!important;
+  font-size: 1.2rem;
+}
+
+
+.navlink2:hover{
+    color:rgb(255, 255, 255)!important ;
+    border-bottom: 2px solid rgb(255, 255, 255);
+    border-bottom-width:medium ;
 }
 
 .dropdown-item:hover{
@@ -128,7 +136,6 @@ body{
 
 .event-card{
   width: 49%;
-  border:5px solid red;
 }
 
 

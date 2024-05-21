@@ -5,16 +5,18 @@
 
     <body>
         <%- include('../layouts/navbar.ejs') %>
-
+        <header class="d-flex mb-5 justify-content-center align-items-center"
+            style="background-image: linear-gradient( 259deg,  rgba(222,95,95,0.7) -5%, rgba(53,88,218,0.7) 133.7% ),url('/images/eventbg.jpg'); height: 350px;width: 100%;">
+        </header>
                 <section class="container  p-3">
                     <div class="row m-auto">
                         <div class="col-8">
-                            <div class="carousel mb-3">
+                            <div class="carousel  mb-3">
                                 <div id="carouselExampleControls" class="carousel slide" data-bs-ride="carousel">
                                     <div class="carousel-inner">
                                         <% event.images.forEach((img,i)=> { %>
                                             <div class="carousel-item <%= i==0 ? 'active':' ' %>">
-                                                <img src="<%= img.url %>" class="d-block w-100" alt="...">
+                                                <img src="<%= img.url %>" class="d-block w-100 rounded-3" alt="...">
                                         </div>
                                         <% }) %>
                                 </div>
@@ -129,7 +131,7 @@
 
                         <div class="col-4">
                             <div class="row">
-                                <div class="map rounded " id="map" style="height: 300px;width: 100%;"></div>
+                                <div class="map rounded-3 " id="map" style="height: 300px;width: 100%;"></div>
                             </div>
                             <% if(currentUser && currentUser.isAdmin==true){ %>
                             <div class="row card rounded-3 mb-3 mx-2 ">
