@@ -30,7 +30,7 @@
                         <div class="row my-2 ">
                             <div class="col-md-12">
                                 <div class="form-group mb-2">
-                                    <label id="name-label" for="name" class="my-1 fw-bold">Event Location</label>
+                                    <label id="name-label" for="auto" class="my-1 fw-bold">Event Location</label>
                                     <input type="text" id="auto" name="event[Location]"
                                         class="search-outer form-control " placeholder="Search places">
 
@@ -42,16 +42,16 @@
                         <div class="row my-2">
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label id="number-label" for="number" class="my-1 fw-bold">Event Start Date </label>
-                                    <input id="startDate" class="form-control" type="datetime-local"
-                                        name="event[startDate]" />
+                                    <label for="startDate" class="my-1 fw-bold">Event Start Date </label>
+                                    <input id="startDate" class="form-control" type="datetime-local" name="event[EventDate]"
+                                        placeholder="Enter event date" />
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label id="number-label" for="number" class="my-1 fw-bold">Event End Date </label>
-                                    <input id="endDate" class="form-control" type="datetime-local"
-                                        name="event[endDate]" />
+                                    <label class="my-1 fw-bold" for="limit">Registration Limit</label>
+                                    <input id="limit" class="form-control" type="number" name="event[limit]" min="0" max="100"
+                                        placeholder="Enter Student limit" />
                                 </div>
                             </div>
                         </div>
@@ -59,18 +59,17 @@
                         <div class="row my-2">
                             <div class="col-md-12">
                                 <div class="form-group">
-                                    <label class="my-1 fw-bold">Event Type</label>
+                                    <label for="dropdown" class="my-1 fw-bold">Event Type</label>
                                     <select id="dropdown" name="event[Type]" class="form-control" required>
-                                        <option disabled selected value>Select</option>
+                                        <option disabled selected value>Select Event Type</option>
                                         <option value="Webinar">Webinar</option>
                                         <option value="Seminar">Seminar</option>
                                         <option value="Fest">Fest</option>
-                                        <option value="No">Prefer not to say</option>
-                                        <option value="other">Other</option>
                                     </select>
                                 </div>
                             </div>
                         </div>
+
                         <div class="mb-3">
                             <label for="formFileMultiple" class="form-label">Event Image/Poster</label>
                             <input class="form-control" type="file" id="formFileMultiple" name="image" multiple>
@@ -79,27 +78,14 @@
                             <div class="col-md-12">
                                 <div class="form-group">
                                     <label class="my-1 fw-bold">Event Description</label>
-                                    <textarea id="comments" class="form-control" name="event[Description]"></textarea>
+                                    <textarea id="comments" class="form-control" name="event[Description]" placeholder="Enter event description"></textarea>
                                 </div>
                             </div>
                         </div>
 
-
-                        <!-- <div class="row my-2">
-                        <div class="col-md-12">
-                            <div class="form-group">
-                                <label for="formFileMultiple" class="form-label" class="my-1 fw-bold">Upload Event
-                                    Posters/Banners</label>
-                                <input class="form-control" type="file" id="formFileMultiple" id="input-id" type="file"
-                                    accept=".jpg,.gif,.png" name="eventPoster" multiple>
-                            </div>
-
-                        </div>
-                    </div> -->
-
                         <div class="row my-3">
                             <div class="d-grid gap-2">
-                                <button type="submit" id="submit" class="btn btn-primary btn-block my-1 fw-bold">Add New
+                                <button type="submit" id="submit" class="btn btn-primary btn-block my-2 py-2 fw-bold">Add New
                                     Event</button>
                             </div>
                         </div>

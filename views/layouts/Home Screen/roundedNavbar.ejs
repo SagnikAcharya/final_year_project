@@ -1,6 +1,6 @@
 <div class="container-fluid position-sticky z-index-sticky top-0" style="z-index: 1">
-    <nav class="navbar rounded-navbar navbar-expand-lg rounded-pill blur d-inline top-0 z-index-fixed shadow-lg position-absolute px-5 my-xl-3 start-0 end-0 mx-xl-4 bg-white mb-5"
-        style="padding: 0" data-bs-theme="dark">
+<nav class="navbar navbar-expand-md rounded-pill shadow-lg position-absolute px-5 my-xl-3 start-0 end-0 mx-xl-4 bg-white mb-5"
+    style="padding: 0; background-color: rgba(226, 183, 183, 0.5);z-index: 1" data-bs-theme="dark">
         <div class="container-fluid">
             <a class="navbar-brand" href="/">
                 <img src="https://res.cloudinary.com/dwxs377sr/image/upload/v1715537446/EMS/logo_black.svg" alt=""
@@ -14,39 +14,28 @@
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                     <li class="nav-item">
-                        <a class="nav-link active text-dark" aria-current="page" href="/">Home</a>
+                        <a class="nav-link active text-dark" aria-current="page" href="/home">Home</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link text-dark" href="#">About Us</a>
                     </li>
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle text-dark" href="#" role="button" data-bs-toggle="dropdown"
-                            aria-expanded="true">
+                            aria-expanded="flase">
                             Clubs
                         </a>
-                        <ul class="dropdown-menu bg-light">
-                            <li>
-                                <a class="dropdown-item text-dark" href="/photoClub"><i class="fa-solid fa-camera"></i>
-                                    Photography Club</a>
+                        <ul class="dropdown-menu bg-light" aria-labelledby="navbarDropdown">
+                            <li><a class="dropdown-item text-dark" href="/photoClub"><i class="fa-solid fa-camera me-2"></i>Photography Club</a>
                             </li>
-                            <li>
-                                <a class="dropdown-item text-dark" href="/literaryClub">Literary Club</a>
+                            <li><a class="dropdown-item text-dark" href="/literaryClub"><i class="fa-solid fa-book me-2"></i></i>Literary Club</a>
                             </li>
-                            <li>
-                                <a class="dropdown-item text-dark" href="/artClub">Art Club</a>
+                            <li><a class="dropdown-item text-dark" href="/artClub"><i class="fa-solid fa-palette me-2"></i>Art Club</a></li>
+                            <li><a class="dropdown-item text-dark" href="/musicClub"><i class="fa-solid fa-music me-2"></i>Music Club</a></li>
+                            <li><a class="dropdown-item text-dark" href="/flimClub"><i class="fa-solid fa-video me-2"></i>Film Club</a></li>
+                            <li><a class="dropdown-item text-dark" href="/hikingClub"><i class="fa-solid fa-person-hiking me-2"></i>Hiking Club</a>
                             </li>
-                            <li>
-                                <a class="dropdown-item text-dark" href="/musicClub">Music Club</a>
-                            </li>
-                            <li>
-                                <a class="dropdown-item text-dark" href="/flimClub">Flim Club</a>
-                            </li>
-                            <li>
-                                <a class="dropdown-item text-dark" href="/hikingClub">Hiking Club</a>
-                            </li>
-                            <li>
-                                <a class="dropdown-item text-dark" href="/socialClub">Tint Covid Group</a>
-                            </li>
+                            <li><a class="dropdown-item text-dark" href="/socialClub"><i class="fa-solid fa-virus-covid me-2"></i>Tint Covid
+                                    Group</a></li>
                         </ul>
                     </li>
 
@@ -116,5 +105,78 @@
                             }, 3000);
                         });
                     }
+
+                    // Generate series of `.navbar-expand-*` responsive classes for configuring
+// where your navbar collapses.
+.navbar - expand {
+        @each $breakpoint in map - keys($grid - breakpoints) {
+            $next: breakpoint - next($breakpoint, $grid - breakpoints);
+            $infix: breakpoint - infix($next, $grid - breakpoints);
+
+    // stylelint-disable-next-line scss/selector-no-union-class-name
+    &#{ $infix } {
+                @include media - breakpoint - up($next) {
+                    flex - wrap: nowrap;
+                    justify - content: flex - start;
+
+        .navbar - nav {
+                        flex - direction: row;
+
+          .dropdown - menu {
+                            position: absolute;
+                        }
+
+          .nav - link {
+                            padding - right: $navbar - nav - link - padding - x;
+                            padding - left: $navbar - nav - link - padding - x;
+                        }
+                    }
+
+        .navbar - nav - scroll {
+                        overflow: visible;
+                    }
+
+        .navbar - collapse {
+                        display: flex!important; // stylelint-disable-line declaration-no-important
+                        flex - basis: auto;
+                    }
+
+        .navbar - toggler {
+                        display: none;
+                    }
+
+        .offcanvas - header {
+                        display: none;
+                    }
+
+        .offcanvas {
+                        position: inherit;
+                        bottom: 0;
+                        z - index: 1000;
+                        flex - grow: 1;
+                        visibility: visible!important; // stylelint-disable-line declaration-no-important
+                        background - color: transparent;
+                        border - right: 0;
+                        border - left: 0;
+                        @include transition(none);
+                        transform: none;
+                    }
+        .offcanvas - top,
+        .offcanvas - bottom {
+                        height: auto;
+                        border - top: 0;
+                        border - bottom: 0;
+                    }
+
+        .offcanvas - body {
+                        display: flex;
+                        flex - grow: 0;
+                        padding: 0;
+                        overflow - y: visible;
+                    }
+                }
+            }
+        }
+    }
                 </script>
 </div>

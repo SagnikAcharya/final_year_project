@@ -8,7 +8,7 @@ module.exports.isLoggedIn=(req,res,next)=>{
   if(!req.isAuthenticated()){
     req.session.returnTo=req.originalUrl;
     req.flash('error','You must be signed in first');
-    return res.redirect('/studentLogin');
+    return res.redirect('/adminLogin');
   }
   next();
 }
@@ -16,19 +16,20 @@ module.exports.isLoggedIn=(req,res,next)=>{
 module.exports.isAdmin= async(req,res,next)=>{
   try{
     if(req.session.passport.user.id){
-    const id=req.session.passport.user.id;
-    const newadmin=await Admin.findById(id);
-    const newuser=await User.findById(id)
-    let news=newuser;
-    if(newadmin){
-      news=newadmin;
-    }
-    if(news.isAdmin==false){
-      req.flash('error','You must be an Admin to proceed');
+      const id=req.session.passport.user.id;
+      const newadmin=await Admin.findById(id);
+      const newuser=await User.findById(id)
+      let news=newuser;
+      if(newadmin){
+        news=newadmin;
+      }
+      if(news.isAdmin==false){
+        req.flash('error','You must be an Admin to proceed');
+        req.session.returnTo=req.originalUrl;
+      }
       req.session.returnTo=req.originalUrl;
+      next();
     }
-    next();
-  }
   }catch(e){
     console.log(e);
     req.flash('error','You need to login first');

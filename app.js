@@ -26,6 +26,8 @@ const QRCode = require('qrcode');
 const multer  = require('multer')
 const{ storage, cloudinary }=require('./Cloudinary/cloudinaryIndex.js')
 const upload = multer({ storage });
+const moment = require('moment');
+
 
 
 
@@ -245,7 +247,7 @@ app.get('/adminLogin',(req,res)=>{                      //Login Admin(GET)
 })
 
 app.post('/adminLogin',passport.authenticate('admin',{failureFlash: true , failureRedirect:'/adminLogin',keepSessionInfo: true}), (req,res,err)=>{        //Login Admin(POST)
-    const redirectUrl=req.session.returnTo || '/';
+    const redirectUrl=req.session.returnTo || '/home';
     delete req.session.returnTo;
     req.flash('success',`Welcome back ${req.user.username}`);
     res.redirect(redirectUrl);
@@ -282,7 +284,7 @@ app.get('/studentLogin',(req,res)=>{                            //Login Student(
 
 //Login Student(POST)
 app.post('/studentLogin',passport.authenticate('student',{failureFlash: true , failureRedirect:'/studentLogin',keepSessionInfo: true}), (req,res,err)=>{         
-    const redirectUrl=req.session.returnTo || '/';
+    const redirectUrl=req.session.returnTo || '/home';
     delete req.session.returnTo;
     req.flash('success',`Welcome back ${req.user.username}`);
     res.redirect(redirectUrl);
@@ -322,11 +324,14 @@ app.post('/addEvent',isLoggedIn,isAdmin,upload.array('image'),async(req,res)=>{ 
     events.images=req.files.map(f=>({url:f.path,filename:f.filename}));
     events.author=newuser[0]._id;
     const newEvent=await events.save();
+    newEvent.moment_Date=moment(newEvent.EventDate).format('Do MMMM YYYY');
+    newEvent.moment_Time=moment(newEvent.EventDate).format('h:mm a');
+    await newEvent.save();
     req.flash('success','Successfully added a new event');
     res.redirect(`/event/${newEvent._id}`);
 })
 
-app.get('/event/:id',isLoggedIn, async(req,res)=>{                          //View Specific Event
+app.get('/event/:id', async(req,res)=>{                          //View Specific Event
     const event=await Event.findById(req.params.id);
     const author=await Admin.findById(event.author);
     res.render('./templates/eventPage.ejs',{event,author});
@@ -334,6 +339,7 @@ app.get('/event/:id',isLoggedIn, async(req,res)=>{                          //Vi
 
 app.get('/event/:id/edit',isLoggedIn,isAdmin,async(req,res)=>{             //Edit Specific Event(GET)
     const event=await Event.findById(req.params.id);
+    // const date=moment(`${event.startDate}`).utc().format('MMMM Do YYYY, h:mm:ss a');
     res.render('./templates/editEvent.ejs',{event});
 })
 
@@ -342,8 +348,12 @@ app.put('/event/:id',isLoggedIn,isAdmin,upload.array('image'),async(req,res)=>{
     const imgs=req.files.map(f=>({url:f.path,filename:f.filename}));
     event.images.push(...imgs);    
     await event.save();
+    event.moment_Date=moment(event.EventDate).format('Do MMMM YYYY');
+    event.moment_Time=moment(event.EventDate).format('h:mm a');
+    await event.save();
+    console.log(req.body);
     if(req.body.deleteImages){
-        for(let filename of req.body.filename){
+        for(let filename of req.body.deleteImages){
             await cloudinary.uploader.destroy(filename);
         }
         await event.updateOne({$pull:{images:{filename:{$in:req.body.deleteImages}}}})
@@ -404,12 +414,12 @@ app.get('/verifiedStudents/:id',async(req,res)=>{
             let user=await User.findById(event.registeredUsers[i]._id);
             users.push(user);
         }else{
-            res.render('./adminSection/verifyStudent.ejs',{users,i});
+            res.render('./adminSection/verifyStudent.ejs',{users,i,event});
             return res.redirect(`/event/${id}`);
         }
     }
     let i=1;
-    res.render('./adminSection/verifyStudent.ejs',{users,i});
+    res.render('./adminSection/verifyStudent.ejs',{users,i,event});
 })
 
 

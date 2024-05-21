@@ -1,7 +1,19 @@
 <!DOCTYPE html>
 <html lang="en">
-    
 <%- include('../layouts/head.ejs') %>
+
+<style>
+    .event-card {
+        width: 49%;
+    }
+
+    @media (max-width: 768px) {
+        .event-card {
+            width: 100%;
+            margin-bottom: 1.5rem;
+        }
+    }
+</style>
 
     <body style="display: flex;
                     flex-direction: column;
@@ -10,36 +22,118 @@
             <%- include('../layouts/navbar.ejs') %>
         </section>
         
-<section class="container my-3">
-    <% for(let e of event){ %>
-        <div class="card mb-3 shadow-sm">
-            <div class="row g-0">
-                <div class="col-md-4">
-                    <img src="<%= e.images[0].url %>" style="height: 250px;" class="img-fluid rounded-start" alt="...">
+<header class="d-flex justify-content-center align-items-center"
+    style="background-image: linear-gradient( 259deg,  rgba(222,95,95,0.7) -5%, rgba(53,88,218,0.7) 133.7% ),url('/images/eventbg.jpg'); height: 500px;width: 100%;">
+
+    <h1 class="text-white display-2">ALL EVENTS</h1>
+
+</header>
+
+<section class="container my-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="upper-content mb-4">
+                <h2>Event Registration</h2>
+                <div class="card ">
+                    <div class="card-header">
+                        Past Events
+                    </div>
+                    <div class="card-body">
+                        <h5 class="card-title">Explore our Past Events</h5>
+                        <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
+                        <a href="#" class="btn btn-primary rounded-pill p-2 ">View gallery</a>
+                    </div>
                 </div>
-                <div class="col-md-8">
+            </div>
+            
+            
+            <h4>Ongoing/Upcoming Events</h4>
+            <div class="row row-cols-md-1 row-cols-1 g-md-4 d-flex p-2 flex-md-row flex-column justify-content-center">
+                <% for(let e of event){ %>
+                    <div class="card event-card rounded-3 shadow-sm mx-auto p-0">
+                        <img src="<%= e.images[0].url %>" class="card-img-top rounded-3" alt="..." style="height:max-content;">
                     <div class="card-body">
                         <h5 class="card-title">
                             <%= e.Name %>
                         </h5>
-                        <h6 class="card-subtitle mb-2 text-muted">
-                            <%= e.startDate %>
-                        </h6>
-                        <p class="card-text">
-                            <%= e.Location %>
+                        <p class="card-text text-muted">
+                            <%= e.moment_Date %>
                         </p>
-                        <a href="/event/<%= e._id %>" class="btn btn-primary">View Event</a>
-                    </div>
-                </div>
-            </div>
-            </div>
-        <% } %>
-            </section>
+                        <p class="card-text text-muted">
+                            <%= e.moment_Time %>
+                        </p>
+                        <div class="">
+                            <p class="card-text text-muted">Location : <%= e.Location %>
+                            </p>
+                        </div>
+                        <p class="card-text" style="display:flex; flex-wrap: wrap;max-height: 100px;overflow:hidden;text-overflow: ellipsis;">
+                            <%=e.Description %>
+                        </p>
+                        <div class="">
+                            <p><span>Event Capacity : <%= e.limit %> </span> , <span>Seats Left : <%= e.limit-e.count<0?'0':e.limit-e.count+1 %>
+                                </span></p>
+                            <p></p>
+                        </div>
+                        <a href="/event/<%= e._id %>" class="btn btn-sm btn-secondary rounded-pill py-2 px-3">Details</a>
+                        <a href="/verifiedStudents/<%= e._id %>" class="btn btn-sm btn-warning rounded-pill py-2 px-3">Attendees</a>
+                        <% if((e.limit-e.count)<=0){ %>
+                            <a href="#" class="btn btn-sm btn-danger rounded-pill py-2 px-3">Closed</a>
+                            <% }else{%>
+                                <% if(currentUser && currentUser.isAdmin==false){ %>
+                                    <a href="#" class="btn btn-sm btn-primary rounded-pill py-2 px-3">Register</a>
+                                    <% } %>
+                                        <% } %>
+                                            </div>
+                                            </div>
+                                            <% } %>
+                                                </div>
+                                                </div>
+                                                <div class="col-md-3 mx-3 d-flex text-center flex-column mt-5">
+                                                    <div class="card mb-4">
+                                                        <h4 class="card-header">Insights From Our Mentors</h4>
+                                                        <img src="https://img.freepik.com/premium-photo/bearded-man-illustration_665280-67047.jpg"
+                                                            class="" alt="...">
+                                                        <div class="card-body">
+                                                            <p class="card-text">Some quick example text to build on the card title and make up
+                                                                the bulk of the card's content.</p>
+                                                        </div>
+                                                    </div>
+                                <h4 class="mb-3">LATEST ARTICLES</h4>
+                                <% for(var i=0;i<2;i++){ %>
+                                    <div class="card rounded-3 shadow-sm mb-3 mx-auto">
+                                        <img src="./images/hero.jpg " class="card-img-top rounded-3" alt="...">
+                                        <div class="card-body">
+                                            <h5 class="card-title">Card title</h5>
+                                            <p class="card-text">Some quick example text to build on the card title and make up the bulk of the
+                                                card's content.</p>
+                                            <a href="#" class="btn btn-primary">Go somewhere</a>
+                                        </div>
+                                        </div>
+                                        <% } %>
+</div>
+</div>
 
+            </section>
 
             <section style=" margin-top: auto;">
                 <%- include('../layouts/footer.ejs') %>
             </section>
+
+            <script src='fullcalendar/dist/index.global.js'></script>
+            
+            
+            <script>
+                document.addEventListener('DOMContentLoaded', function () {
+                    var calendarEl = document.getElementById('calendar');
+                    var calendar = new FullCalendar.Calendar(calendarEl, {
+
+                        themeSystem: 'bootstrap5', // important!
+                        initialView: 'dayGridMonth'
+                    });
+                    calendar.render();
+                });
+
+            </script>
 
     </body>
 

@@ -25,8 +25,14 @@ ImageSchema.virtual('thumbnail') .get(function(){
 
 const EventSchema=new Schema({
     Name: String,
-    startDate: Date,
-    endDate: Date,
+    EventDate:Date,
+    moment_Date:String,
+    moment_Time:String,
+    isActive:{
+      type:Boolean,
+      default:true,
+      required:true
+    },
     Description: String,
     Location: String,
     Type: String,
