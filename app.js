@@ -20,7 +20,7 @@ const Club=require('./models/clubs');
 const Event=require('./models/events');
 const flatpickr = require("flatpickr");
 const {catchAsync}=require('./middleware.js');
-const {isLoggedIn,isAdmin}=require('./middleware.js');
+const {isLoggedIn,isAdmin,validateEvent,validateUser}=require('./middleware.js');
 const MongoStore = require('connect-mongo');
 const QRCode = require('qrcode');
 const multer  = require('multer')
@@ -31,25 +31,6 @@ const moment = require('moment');
 
 
 
-// const { Calendar } = require('@fullcalendar/core');
-// const interactionPlugin = require('@fullcalendar/interaction');
-// const dayGridPlugin = require('@fullcalendar/daygrid');
-
-// const calendarEl = document.getElementById('calendar');
-// const calendar = new Calendar( {
-//   plugins: [
-//     interactionPlugin,
-//     dayGridPlugin
-//   ],
-//   initialView: 'dayGridMonth',
-//   editable: true, // important for activating event interactions!
-//   selectable: true, // important for activating date selectability!
-//   events: [
-//     { title: 'Meeting', start: new Date() }
-//   ]
-// })
-
-// calendar.render()
 
 ///////////NODEMAILER
 
@@ -229,7 +210,7 @@ app.get('/register',(req,res)=>{
     res.render("./templates/register");              //register Admin(GET)
 })
 
-app.post('/register',async(req,res,next)=>{                  //Register Admin(POST)
+app.post('/register',validateUser,async(req,res,next)=>{                  //Register Admin(POST)
     const {password}=req.body;
     const newadmin=new Admin(req.body);
     const registeredAdmin=await Admin.register(newadmin,password);
@@ -318,7 +299,7 @@ app.get('/addevent',isLoggedIn,isAdmin, (req,res)=>{                            
     res.render('./templates/addEvent.ejs');
 })
 
-app.post('/addEvent',isLoggedIn,isAdmin,upload.array('image'),async(req,res)=>{                          //Add a new Event
+app.post('/addEvent',isLoggedIn,isAdmin,validateEvent,upload.array('image'),async(req,res)=>{                          //Add a new Event
     const events=new Event(req.body.event);
     const newuser=await Admin.find({username:req.user.username});
     events.images=req.files.map(f=>({url:f.path,filename:f.filename}));
@@ -343,7 +324,7 @@ app.get('/event/:id/edit',isLoggedIn,isAdmin,async(req,res)=>{             //Edi
     res.render('./templates/editEvent.ejs',{event});
 })
 
-app.put('/event/:id',isLoggedIn,isAdmin,upload.array('image'),async(req,res)=>{
+app.put('/event/:id',isLoggedIn,isAdmin,validateEvent,upload.array('image'),async(req,res)=>{
     const event=await Event.findByIdAndUpdate(req.params.id,{...req.body.event});   //Edit Specific Event(POST)
     const imgs=req.files.map(f=>({url:f.path,filename:f.filename}));
     event.images.push(...imgs);    

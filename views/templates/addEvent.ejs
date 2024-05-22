@@ -32,7 +32,7 @@
                                 <div class="form-group mb-2">
                                     <label id="name-label" for="auto" class="my-1 fw-bold">Event Location</label>
                                     <input type="text" id="auto" name="event[Location]"
-                                        class="search-outer form-control " placeholder="Search places">
+                                        class="search-outer form-control " placeholder="Search places" required>
 
                                 </div>
                                 <div id="map" class="rounded-3" style="max-height: 250px;"></div>
@@ -44,14 +44,14 @@
                                 <div class="form-group">
                                     <label for="startDate" class="my-1 fw-bold">Event Start Date </label>
                                     <input id="startDate" class="form-control" type="datetime-local" name="event[EventDate]"
-                                        placeholder="Enter event date" />
+                                        placeholder="Enter event date" required/>
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label class="my-1 fw-bold" for="limit">Registration Limit</label>
                                     <input id="limit" class="form-control" type="number" name="event[limit]" min="0" max="100"
-                                        placeholder="Enter Student limit" />
+                                        placeholder="Enter Student limit" required />
                                 </div>
                             </div>
                         </div>
@@ -78,7 +78,8 @@
                             <div class="col-md-12">
                                 <div class="form-group">
                                     <label class="my-1 fw-bold">Event Description</label>
-                                    <textarea id="comments" class="form-control" name="event[Description]" placeholder="Enter event description"></textarea>
+                                    <textarea id="comments" class="form-control" name="event[Description]" placeholder="Enter event description"
+                                        required></textarea>
                                 </div>
                             </div>
                         </div>

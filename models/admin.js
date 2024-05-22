@@ -9,6 +9,7 @@ const AdminSchema=new Schema({
     admin_id:{
         type:Number,
         unique:true,
+        required:true,
     },
     email:{
         type:String,

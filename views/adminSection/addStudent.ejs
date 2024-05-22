@@ -33,7 +33,11 @@
                                         <div class="form-group mb-2">
                                             <label id="name-label" for="name" class="my-1 fw-bold">Enter Student Roll
                                                 No.</label>
-                                            <input type="text" id="roll" name="roll" class="search-outer form-control " placeholder="Enter Roll No">
+                                            <input type="text" id="roll" name="roll" class="search-outer form-control " placeholder="Enter Roll No"
+                                                pattern="[187]{3}[0-9]{8}" required>
+                                            <div class="invalid-feedback">
+                                                Please enter a valid Roll No.
+                                            </div>
                                             <input type="text" id="password" name="password" placeholder="Enter Roll No" style="display: none;">
                                         </div>
                                         <div id="map" class="rounded-3" style="max-height: 250px;"></div>
@@ -91,7 +95,10 @@
                                             <label id="name-label" for="name" class="my-1 fw-bold">Student Mobile
                                                 No.:</label>
                                             <input class="form-control" type="text" name="mobile"
-                                                placeholder="Mobile No." />
+                                                placeholder="Mobile No." pattern="[6789]{1}[0-9]{9}" required />
+                                                <div class="invalid-feedback">
+                                                    Please enter a valid Mobile No.
+                                                </div>
                                         </div>
                                     </div>
                                     <div class="col-md-6">
@@ -99,7 +106,10 @@
                                             <label id="name-label" for="name" class="my-1 fw-bold">Student
                                                 Email:</label>
                                             <input class="form-control" type="text" name="email"
-                                                placeholder="Email Id" />
+                                                placeholder="Email Id" pattern="^([a-zA-Z0-9_\-\.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([a-zA-Z0-9\-]+\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)$" required/>
+                                                <div class="invalid-feedback">
+                                                    Please enter a valid Email Id.
+                                                </div>
                                         </div>
                                     </div>
                                 </div>

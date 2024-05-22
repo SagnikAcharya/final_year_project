@@ -1,6 +1,8 @@
 const express=require("express");
 const User=require("./models/user");
 const Admin=require("./models/admin");
+const Event=require("./models/events");
+const Joi=require("joi")
 // const baseJoi = require("joi");
 
 
@@ -52,3 +54,39 @@ module.exports.catchAsync=function (fn){
     }
   }
 
+  module.exports.validateEvent = (req, res, next) => {
+    const eventSchema = Joi.object({
+        Name: Joi.string().escapeHTML().alphanum().min(3).max(30).required(),
+        // password:Joi.string().pattern(new RegExp('^[a-zA-Z0-9]{3,30}$')),
+        // email: Joi.string().email({ minDomainSegments: 2, tlds: { allow: ['com', 'net'] } }),
+        Description: Joi.string().required().escapeHTML().required(),
+        Location: Joi.string().required().escapeHTML().required(),
+        Type: Joi.string().required().escapeHTML().required(),
+        EventDate:Joi.date().required(),
+        moment_Date:Joi.string().required().escapeHTML().required(),
+        moment_Time:Joi.string().required().escapeHTML().required(),
+        deleteImages: Joi.array()
+    });
+    const { error } = eventSchema.validate(req.body);
+    if (error) {
+      const msg = error.details.map((er) => er.message).join(",");
+      throw new ExpressError(msg, 400);
+    } else {
+      next();
+    }
+  };
+
+  module.exports.validateUser = (req, res, next) => {
+    const userSchema = Joi.object({
+        username: Joi.string().escapeHTML().alphanum().min(3).max(30).required(),
+        password:Joi.string().pattern(new RegExp('^[a-zA-Z0-9]{3,30}$')),
+        email: Joi.string().email({ minDomainSegments: 2, tlds: { allow: ['com', 'net'] } }),
+    });
+    const { error } = userSchema.validate(req.body);
+    if (error) {
+      const msg = error.details.map((er) => er.message).join(",");
+      throw new ExpressError(msg, 400);
+    } else {
+      next();
+    }
+  };

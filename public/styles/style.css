@@ -29,6 +29,8 @@ body{
 }
 
 
+
+
 .navlink2{
   color: rgba(255, 255, 255, 0.705)!important;
   font-size: 1.2rem;
@@ -143,6 +145,9 @@ body{
 @media(min-width:1200px){
     .navbar .rounded-pill{
       border-radius: none;
+    }
+    .roundednav{
+      border-radius: 0;
     }
     
   }
