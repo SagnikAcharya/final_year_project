@@ -2,7 +2,8 @@ const express=require("express");
 const User=require("./models/user");
 const Admin=require("./models/admin");
 const Event=require("./models/events");
-const Joi=require("joi")
+const baseJoi=require("joi");
+const sanitizeHtml = require('sanitize-html');
 // const baseJoi = require("joi");
 
 
@@ -48,19 +49,43 @@ class ExpressError extends Error {
     }
   }
   
+
 module.exports.catchAsync=function (fn){
     return (req, res, next) => {
         fn(req, res, next).catch(next);
     }
   }
 
+
+  const extension = (Joi) => ({
+    type: "string",
+    base: Joi.string(),
+    messages: {
+      "string.escapeHTML": "{{#label}} must not include HTML!",
+    },
+    rules: {
+      escapeHTML: {
+        validate(value, helpers) {
+          const clean = sanitizeHtml(value, {
+              allowedTags: [],
+              allowedAttributes: {},
+          });
+          if(clean !== value) return helpers.error('string.escapeHTML',{value})
+          return clean;
+        },
+      },
+    },
+  });
+
+ const Joi=baseJoi.extend(extension);
+
   module.exports.validateEvent = (req, res, next) => {
     const eventSchema = Joi.object({
-        Name: Joi.string().escapeHTML().alphanum().min(3).max(30).required(),
+        Name: Joi.string().escapeHTML().alphanum().min(3).max(30).required().escapeHTML(),
         // password:Joi.string().pattern(new RegExp('^[a-zA-Z0-9]{3,30}$')),
         // email: Joi.string().email({ minDomainSegments: 2, tlds: { allow: ['com', 'net'] } }),
-        Description: Joi.string().required().escapeHTML().required(),
-        Location: Joi.string().required().escapeHTML().required(),
+        Description: Joi.string().required().escapeHTML().required().escapeHTML(),
+        Location: Joi.string().required().escapeHTML().required().escapeHTML(),
         Type: Joi.string().required().escapeHTML().required(),
         EventDate:Joi.date().required(),
         moment_Date:Joi.string().required().escapeHTML().required(),
@@ -78,9 +103,9 @@ module.exports.catchAsync=function (fn){
 
   module.exports.validateUser = (req, res, next) => {
     const userSchema = Joi.object({
-        username: Joi.string().escapeHTML().alphanum().min(3).max(30).required(),
-        password:Joi.string().pattern(new RegExp('^[a-zA-Z0-9]{3,30}$')),
-        email: Joi.string().email({ minDomainSegments: 2, tlds: { allow: ['com', 'net'] } }),
+        username: Joi.string().escapeHTML().alphanum().min(3).max(30).required().escapeHTML(),
+        password:Joi.string().pattern(new RegExp('^[a-zA-Z0-9]{3,30}$')).escapeHTML(),
+        email: Joi.string().email({ minDomainSegments: 2, tlds: { allow: ['com', 'net'] } }).escapeHTML(),
     });
     const { error } = userSchema.validate(req.body);
     if (error) {

@@ -27,6 +27,8 @@ const multer  = require('multer')
 const{ storage, cloudinary }=require('./Cloudinary/cloudinaryIndex.js')
 const upload = multer({ storage });
 const moment = require('moment');
+const mongoSanitize = require('express-mongo-sanitize');
+
 
 
 
@@ -56,7 +58,7 @@ app.use(express.urlencoded({ extended: true }));  //data converted from urlencod
 
 app.use(methodOverride("_method"));                 // used for Put/Patch(Update) on html forms
 app.use(express.static(path.join(__dirname, "public")));
-
+app.use(mongoSanitize());
 
 app.engine("ejs", ejsMate);   //templating engine 
 app.set("view engine", "ejs");
@@ -77,19 +79,21 @@ db.once("open",()=>{
     console.log("Database Connected");
 });
 
-//   const store = new MongoStore({
-//     mongoUrl: dbURL,
-//     secret:'secret',
-//     touchAfter : 24*3600,
-//   })
-//   store.on("error",function (e){
-//     console.log("Connection Error");
-//   })
+  const store = new MongoStore({
+    mongoUrl: dbURL,
+    secret:'secret',
+    touchAfter : 24*3600,
+  })
+  store.on("error",function (e){
+    console.log("Connection Error");
+  })
 
 
 ///////////////////////////////////////////////////   SESSION CONFIG     ///////////////////////////////////////////////
   
 const sessionConfig={
+    store : store,
+    name :'ems2K24',
     secret : 'secret',
     resave: true,
     saveUninitialized: true,
@@ -454,25 +458,31 @@ app.get('/admin/:id',isAdmin,isLoggedIn, async(req,res)=>{                      
 
 ///////////////////////////////////////////////////   CLUBS      ///////////////////////////////////////////////
 
-app.get('/artCLub',(req,res)=>{                                                   //ART Club Get Route      
-    res.render('./clubs/artClub.ejs');
+app.get('/artCLub',async(req,res)=>{     
+    const event=await Event.find({});                                              //ART Club Get Route      
+    res.render('./clubs/artClub.ejs',{event});
 })
-app.get('/photoClub',(req,res)=>{                                                   //Photography Club Get Route      
+app.get('/photoClub',async(req,res)=>{    
+    const event=await Event.find({});                                               //Photography Club Get Route      
     res.render('./clubs/photoClub.ejs');
 })
-app.get('/literaryClub',(req,res)=>{                                                   //Photography Club Get Route      
+app.get('/literaryClub',async(req,res)=>{   
+    const event=await Event.find({});                                                //Photography Club Get Route      
     res.render('./clubs/literaryClub.ejs');
 })
-app.get('/flimClub',(req,res)=>{                                                   //Talkies Club Get Route      
+app.get('/flimClub',async(req,res)=>{     
+    const event=await Event.find({});                                              //Talkies Club Get Route      
     res.render('./clubs/flimClub.ejs');
 })
-app.get('/hikingClub',(req,res)=>{                                                   //Hiking Club Get Route      
+app.get('/hikingClub',async(req,res)=>{     
+    const event=await Event.find({});                                              //Hiking Club Get Route      
     res.render('./clubs/hikingClub.ejs');
 })
-app.get('/musicClub',(req,res)=>{                                                   //Hridmajhare Club Get Route      
+app.get('/musicClub',async(req,res)=>{     
+    const event=await Event.find({});                                              //Hridmajhare Club Get Route      
     res.render('./clubs/musicClub.ejs');
 })
-app.get('/socialClub',(req,res)=>{                                                   //Hiking Club Get Route      
+app.get('/socialClub',async(req,res)=>{                                                   //Hiking Club Get Route      
     res.render('./clubs/socialClub.ejs');
 })
 
