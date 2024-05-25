@@ -167,9 +167,10 @@
                         <section class="align-items-center d-flex">
                             <div class="container ">
                                 <div class="row">
-                                    <div class="col-6">
+                                    <div class="col-12">
                                         <h3 class="mb-3">Upcoming Events </h3>
                                     </div>
+<<<<<<< HEAD
                                     <div class="col-6 text-end">
                                         <a class="btn btn-primary mb-3 mr-1" data-bs-target="#carouselExampleControls" data-bs-slide="prev"
                                             role="button">
@@ -229,13 +230,69 @@
                         
                                                     </div>
                                                 </div>
+=======
+                                    <% if(event.length>1){ %>
+                                        <div class="col-2 text-end">
+                                            <a class="btn btn-primary mb-3 mr-1" data-bs-target="#carouselExampleControls" data-bs-slide="prev"
+                                                role="button">
+                                                <i class="fa-solid fa-arrow-left"></i>
+                                            </a>
+                                            <a class="btn btn-primary mb-3" data-bs-target="#carouselExampleControls" data-bs-slide="next" role="button">
+                                                <i class="fa-solid fa-arrow-right"></i>
+                                            </a>
+>>>>>>> 8dbfe3917407025986f6ccbd0263e203cc11d237
                                             </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                            
-                </div>
-                </section>
+                                            <% } %>
+                                                </div>
+                                                <div class="row">
+                                                <div class="col-8 card card-background card-background-mask-primary tilt my-3 shadow-sm" data-tilt>
+                                                    <div class="card-body p-0">
+                                                        <div class="container d-flex align-items-center " style="height: 20rem;">
+                                                    <div id="carouselExampleControls" class="carousel slide" data-bs-ride="carousel">
+                                                        <div class="carousel-inner">
+                                                            <% event.forEach((e,i)=> { %>
+                                                                <div class="carousel-item <%= i==0 ? 'active':' ' %> ">
+                                                                    <div class=" mb-3">
+                                                                        <div class="row g-0 align-items-center">
+                                                                            <div class="col-md-5">
+                                                                                <img src="<%= e.images[0].url %>" class="img-fluid rounded" alt="...">
+                                                                            </div>
+                                                                <div class="col-md-7">
+                                                                    <div class="card-body">
+                                                                        <h5 class="card-title">
+                                                                            <a href="/event/<%= e._id %>" style="text-decoration: none;">
+                                                                                <%= e.Name %>
+                                                                            </a>
+                                                                            </h5>
+                                                                            <h6 class="card-text text-muted my-2">
+                                                                            <%= e.Location %>
+                                                                                </h6>
+                                                                        <p class="card-subtitle  my-2">
+                                                                            <%= e.moment_Date %>
+                                                                        </p>
+                                                                        <p class="card-subtitle  my-2">
+                                                                            <%= e.moment_Time %>
+                                                                        </p>
+                                                                        <p class="card-text cut-text my-2 mb-4">
+                                                                            <%= e.Description %>
+                                                                        </p>
+                                                                        
+                                                                        </div>
+                                                                        </div>
+                                                                        </div>
+                                                                        </div>
+                                                                        </div>
+                                                    <% }) %>
+                                                        </div>
+                                                        </div>
+                                                        </div>
+                                                        </div>
+                                                        </div>
+                                                                                    
+                                                        </div>
+                                                        
+                                                        </div>
+                                                        </section>
                 
                 
                 <!-- START THE FEATURETTES -->
