@@ -10,6 +10,7 @@ const methodOverride = require("method-override");    //used for parsing json
 const ejsMate = require("ejs-mate");   //templating engine
 const mongoose = require("mongoose");
 const session = require('express-session');
+const MongoStore = require("connect-mongo");
 const flash = require("connect-flash");
 const passport=require('passport');
 const LocalStrategy=require('passport-local');
@@ -21,7 +22,6 @@ const Event=require('./models/events');
 const flatpickr = require("flatpickr");
 const {catchAsync}=require('./middleware.js');
 const {isLoggedIn,isAdmin,validateEvent,validateUser}=require('./middleware.js');
-const MongoStore = require("connect-mongo");
 const QRCode = require("qrcode");
 const multer = require("multer");
 const { storage, cloudinary } = require("./Cloudinary/cloudinaryIndex.js");
@@ -57,23 +57,27 @@ app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
 
 ///////////////////////////////////////////////////   MONGODB/DATABASE CONNECTION     ///////////////////////////////////////////////
-mongoose.connect(dbURL);
+mongoose.connect(dbURL, { useNewUrlParser: true, 
+  useUnifiedTopology: true,  });
 const db = mongoose.connection;
 db.on("error", console.error.bind(console, "connection error"));
 db.once("open", () => {
   console.log("Database Connected");
 });
-const store = new MongoStore({
-  mongoUrl: dbURL,
-  secret: "secret",
-  touchAfter: 24 * 3600,
-});
-store.on("error", function (e) {
-  console.log("Connection Error");
-});
+// const store = new MongoStore({
+//   mongoUrl: dbURL,
+//   secret: "secret",
+//   touchAfter: 24 * 3600,
+// });
+// store.on("error", function (e) {
+//   console.log("Connection Error");
+// });
 ///////////////////////////////////////////////////   SESSION CONFIG     ///////////////////////////////////////////////
 
-
+let store = new MongoStore({
+  mongoUrl: dbURL,
+  collection: "sessions"
+});
 
 const sessionConfig = {
   store: store,
