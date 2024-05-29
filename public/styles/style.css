@@ -162,6 +162,9 @@ body{
     .event-card{
       /* width: 100%; */
     }
+    .cut-text{
+      display: none;
+    }
 }
     
   

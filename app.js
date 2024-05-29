@@ -21,156 +21,137 @@ const Event=require('./models/events');
 const flatpickr = require("flatpickr");
 const {catchAsync}=require('./middleware.js');
 const {isLoggedIn,isAdmin,validateEvent,validateUser}=require('./middleware.js');
-const MongoStore = require('connect-mongo');
-const QRCode = require('qrcode');
-const multer  = require('multer')
-const{ storage, cloudinary }=require('./Cloudinary/cloudinaryIndex.js')
+const MongoStore = require("connect-mongo");
+const QRCode = require("qrcode");
+const multer = require("multer");
+const { storage, cloudinary } = require("./Cloudinary/cloudinaryIndex.js");
 const upload = multer({ storage });
-const moment = require('moment');
-const mongoSanitize = require('express-mongo-sanitize');
-
-
-
-
-
+const moment = require("moment");
+const mongoSanitize = require("express-mongo-sanitize");
 
 ///////////NODEMAILER
 
 const transporter = nodemailer.createTransport({
-    host: 'smtp.gmail.com',
-    port: 587,
-    secure: false,
-    requireTLS: true,
-    auth:{
-        user:"unofficialfivers@gmail.com",
-        pass:"ptri mnud tgzs uqfe"
-    }
+  host: "smtp.gmail.com",
+  port: 587,
+  secure: false,
+  requireTLS: true,
+  auth: {
+    user: "unofficialfivers@gmail.com",
+    pass: "ptri mnud tgzs uqfe",
+  },
 });
-
-
 
 //////////////////////////////////
 
+const app = express();
 
-const app=express();
+app.use(express.urlencoded({ extended: true })); //data converted from urlencoded to json
 
-app.use(express.urlencoded({ extended: true }));  //data converted from urlencoded to json
-
-app.use(methodOverride("_method"));                 // used for Put/Patch(Update) on html forms
+app.use(methodOverride("_method")); // used for Put/Patch(Update) on html forms
 app.use(express.static(path.join(__dirname, "public")));
 app.use(mongoSanitize());
 
-app.engine("ejs", ejsMate);   //templating engine 
+app.engine("ejs", ejsMate); //templating engine
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
 
-
-
-
-
 ///////////////////////////////////////////////////   MONGODB/DATABASE CONNECTION     ///////////////////////////////////////////////
 
-
-mongoose.connect('mongodb://127.0.0.1:27017/fivers');
-
-const db=mongoose.connection;
-db.on("error",console.error.bind(console,'connection error'));
-db.once("open",()=>{
-    console.log("Database Connected");
+mongoose.connect(dbURL, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
 });
 
-//   const store = new MongoStore({
-//     mongoUrl: dbURL,
-//     secret:'secret',
-//     touchAfter : 24*3600,
-//   })
-//   store.on("error",function (e){
-//     console.log("Connection Error");
-//   })
+const db = mongoose.connection;
+db.on("error", console.error.bind(console, "connection error"));
+db.once("open", () => {
+  console.log("Database Connected");
+});
 
+const store = new MongoStore({
+  mongoUrl: dbURL,
+  secret: "secret",
+  touchAfter: 24 * 3600,
+});
+store.on("error", function (e) {
+  console.log("Connection Error");
+});
 
 ///////////////////////////////////////////////////   SESSION CONFIG     ///////////////////////////////////////////////
-  
-const sessionConfig={
-    // store : store,
-    name :'ems2K24',
-    secret : 'secret',
-    resave: true,
-    saveUninitialized: true,
-    cookie:{
-        httpOnly:true,
-        expires : Date.now() +1000*60*60*24*3,
-        maxAge : 1000*60*60*24*7
-    }
+
+const sessionConfig = {
+  store: store,
+  name: "ems2K24",
+  secret: "secret",
+  resave: true,
+  saveUninitialized: true,
+  cookie: {
+    httpOnly: true,
+    expires: Date.now() + 1000 * 60 * 60 * 24 * 3,
+    maxAge: 1000 * 60 * 60 * 24 * 7,
+  },
 };
 
 app.use(session(sessionConfig));
 app.use(flash());
 
-
-
 ///////////////////////////////////////////////////   PASSPORT JS FOR LOGIN/REGISTER      ///////////////////////////////////////////////
 
 app.use(passport.initialize());
 app.use(passport.session());
-passport.use('student',new LocalStrategy(User.authenticate()));
-passport.use('admin',new LocalStrategy(Admin.authenticate()));
-
-
+passport.use("student", new LocalStrategy(User.authenticate()));
+passport.use("admin", new LocalStrategy(Admin.authenticate()));
 
 ///////////////////////////////////////////////////  SERIALIZE AND DESERIALIZE USER TO SESSION      ///////////////////////////////////////////////
 
 passport.serializeUser((obj, done) => {
-    if (obj instanceof Admin) {
-      done(null, { id: obj._id, type: 'Admin' });
-    } 
-    if (obj instanceof User) {
-      done(null, { id: obj.id, type: 'User' });
-    } 
-  });
-  
-  passport.deserializeUser((obj, done) => {
-    if (obj.type === 'User') {
-      User.findById(obj.id).then((student) => done(null, student));
-    } 
-    if (obj.type === 'Admin') {
-      Admin.findById(obj.id).then((admin) => done(null, admin));
-    } 
-  });
+  if (obj instanceof Admin) {
+    done(null, { id: obj._id, type: "Admin" });
+  }
+  if (obj instanceof User) {
+    done(null, { id: obj.id, type: "User" });
+  }
+});
 
+passport.deserializeUser((obj, done) => {
+  if (obj.type === "User") {
+    User.findById(obj.id).then((student) => done(null, student));
+  }
+  if (obj.type === "Admin") {
+    Admin.findById(obj.id).then((admin) => done(null, admin));
+  }
+});
 
-  ///////////////////////////////////////////////////   SESSION VARIABLES      ///////////////////////////////////////////////
-  
-  app.use((req,res,next)=>{
-    res.locals.currentUser=req.user;
-    res.locals.success=req.flash("success");
-    res.locals.error=req.flash("error");
-    next();
-  })
+///////////////////////////////////////////////////   SESSION VARIABLES      ///////////////////////////////////////////////
 
+app.use((req, res, next) => {
+  res.locals.currentUser = req.user;
+  res.locals.success = req.flash("success");
+  res.locals.error = req.flash("error");
+  next();
+});
 
 // passport.serializeUser(Admin.serializeUser());
 // passport.deserializeUser(Admin.deserializeUser());
 
-
-
 //////////////////////NODEMAILER/////////////
 
-
-app.post('/contact', async (req, res) => {
-    const { fullname, email, phone, subject, message } = req.body;
-    const sendMail = "fivers2024@gmail.com";
-    const mailOptions = {
-        from: "unofficialfivers@gmail.com", // sender address
-        to: "fivers2024@gmail.com", // list of receivers
-        subject: `Contact Form Submission: ${subject}`, // Subject line
-        text: `You have received a new message from your website contact form.\n\n` +
-              `Here are the details:\n\n` +
-              `Name: ${fullname}\n\n` +
-              `Email: ${email}\n\n` +
-              `Phone: ${phone}\n\n` +
-              `Message: ${message}\n\n`,
-        html: `<p>You have received a new message from your website contact form.</p>
+app.post("/contact", async (req, res) => {
+  const { fullname, email, phone, subject, message } = req.body;
+  const sendMail = "fivers2024@gmail.com";
+  const mailOptions = {
+    from: "unofficialfivers@gmail.com", // sender address
+    to: "fivers2024@gmail.com", // list of receivers
+    subject: `Contact Form Submission: ${subject}`, // Subject line
+    text:
+      `You have received a new message from your website contact form.\n\n` +
+      `Here are the details:\n\n` +
+      `Name: ${fullname}\n\n` +
+      `Email: ${email}\n\n` +
+      `Phone: ${phone}\n\n` +
+      `Message: ${message}\n\n`,
+    html: `<p>You have received a new message from your website contact form.</p>
                <h3>Contact Details</h3>
                <ul>
                    <li>Name: ${fullname}</li>
@@ -178,143 +159,164 @@ app.post('/contact', async (req, res) => {
                    <li>Phone: ${phone}</li>
                </ul>
                <h3>Message</h3>
-               <p>${message}</p>`
-    };
+               <p>${message}</p>`,
+  };
 
-    try {
-        await transporter.sendMail(mailOptions);
-        req.flash('success', 'Your message has been sent successfully.');
-        res.redirect('/home'); // redirect to a thank you page or back to the form
-    } catch (error) {
-        console.log(error);
-    }})
-
+  try {
+    await transporter.sendMail(mailOptions);
+    req.flash("success", "Your message has been sent successfully.");
+    res.redirect("/home"); // redirect to a thank you page or back to the form
+  } catch (error) {
+    console.log(error);
+  }
+});
 
 ///////////////////////////////////////////////////   COVER ROUTE      ///////////////////////////////////////////////
 
-
-app.get("/",async(req,res)=>{
-    const event=await Event.find({});
-    res.render("./cover",{event});    //rendering boilerplate.ejs on port 8080 for '127.0.0.1:8080' path
-})
+app.get("/", async (req, res) => {
+  const event = await Event.find({});
+  res.render("./cover", { event }); //rendering boilerplate.ejs on port 8080 for '127.0.0.1:8080' path
+});
 
 ///////////////////////////////////////////////////   HOME ROUTE      ///////////////////////////////////////////////
 
-
-app.get("/home",async(req,res)=>{
-    const event=await Event.find({});
-    res.render("./boilerplate",{event});    //rendering boilerplate.ejs on port 8080 for '127.0.0.1:8080' path
-})
-
-
+app.get("/home", async (req, res) => {
+  const event = await Event.find({});
+  res.render("./boilerplate", { event }); //rendering boilerplate.ejs on port 8080 for '127.0.0.1:8080' path
+});
 
 ///////////////////////////////////////////////////   ADMIN REGISTER AND LOGIN      ///////////////////////////////////////////////
 
-app.get('/register',(req,res)=>{
-    res.render("./templates/register");              //register Admin(GET)
-})
+app.get("/register", (req, res) => {
+  res.render("./templates/register"); //register Admin(GET)
+});
 
-app.post('/register',validateUser,async(req,res,next)=>{                  //Register Admin(POST)
-    const {password}=req.body;
-    const newadmin=new Admin(req.body);
-    const registeredAdmin=await Admin.register(newadmin,password);
-    newadmin.QR=newadmin.username.trim()+"_"+newadmin.admin_id;
-    await newadmin.save();
-    req.login(registeredAdmin, function(err) {
-        if (err) { return next(err); }
-        return res.redirect(`/admin/${newadmin._id}`);
-    });
-})
+app.post("/register", validateUser, async (req, res, next) => {
+  //Register Admin(POST)
+  const { password } = req.body;
+  const newadmin = new Admin(req.body);
+  const registeredAdmin = await Admin.register(newadmin, password);
+  newadmin.QR = newadmin.username.trim() + "_" + newadmin.admin_id;
+  await newadmin.save();
+  req.login(registeredAdmin, function (err) {
+    if (err) {
+      return next(err);
+    }
+    return res.redirect(`/admin/${newadmin._id}`);
+  });
+});
 
+app.get("/adminLogin", (req, res) => {
+  //Login Admin(GET)
+  res.render("./templates/adminLogin");
+});
 
-app.get('/adminLogin',(req,res)=>{                      //Login Admin(GET)
-    res.render("./templates/adminLogin");
-})
-
-app.post('/adminLogin',passport.authenticate('admin',{failureFlash: true , failureRedirect:'/adminLogin',keepSessionInfo: true}), (req,res,err)=>{        //Login Admin(POST)
-    const redirectUrl=req.session.returnTo || '/home';
+app.post(
+  "/adminLogin",
+  passport.authenticate("admin", {
+    failureFlash: true,
+    failureRedirect: "/adminLogin",
+    keepSessionInfo: true,
+  }),
+  (req, res, err) => {
+    //Login Admin(POST)
+    const redirectUrl = req.session.returnTo || "/home";
     delete req.session.returnTo;
-    req.flash('success',`Welcome back ${req.user.username}`);
+    req.flash("success", `Welcome back ${req.user.username}`);
     res.redirect(redirectUrl);
-})
-
-
-
-
+  }
+);
 
 ///////////////////////////////////////////////////   STUDENT REGISTER AND LOGIN      ///////////////////////////////////////////////
 
+app.get("/addStudent", isLoggedIn, isAdmin, async (req, res) => {
+  //Register Student(GET)
+  res.render("./adminSection/addStudent.ejs");
+});
 
-app.get('/addStudent',isLoggedIn,isAdmin,async(req,res)=>{                         //Register Student(GET)
-    res.render('./adminSection/addStudent.ejs');
-})
+app.post("/addStudent", isAdmin, async (req, res) => {
+  //Register Student(POST)
+  const { password } = req.body;
+  const student = new User(req.body);
+  await User.register(student, password);
+  student.QR = student.username.trim() + "_" + student.roll;
+  await student.save();
+  req.flash(
+    "success",
+    "Successfully added a new student : " + student.username
+  );
+  res.redirect(`/allStudents`);
+});
 
-
-app.post('/addStudent',isAdmin,async(req,res)=>{                        //Register Student(POST)
-    const {password}=req.body;
-    const student=new User(req.body); 
-    await User.register(student,password);
-    student.QR=student.username.trim()+"_"+student.roll;
-    await student.save();
-    req.flash('success','Successfully added a new student : '+ student.username);
-    res.redirect(`/allStudents`);
-})
-
-
-app.get('/studentLogin',(req,res)=>{                            //Login Student(GET)
-    res.render("./templates/studentLogin");
-})
-
-
+app.get("/studentLogin", (req, res) => {
+  //Login Student(GET)
+  res.render("./templates/studentLogin");
+});
 
 //Login Student(POST)
-app.post('/studentLogin',passport.authenticate('student',{failureFlash: true , failureRedirect:'/studentLogin',keepSessionInfo: true}), (req,res,err)=>{         
-    const redirectUrl=req.session.returnTo || '/home';
+app.post(
+  "/studentLogin",
+  passport.authenticate("student", {
+    failureFlash: true,
+    failureRedirect: "/studentLogin",
+    keepSessionInfo: true,
+  }),
+  (req, res, err) => {
+    const redirectUrl = req.session.returnTo || "/home";
     delete req.session.returnTo;
-    req.flash('success',`Welcome back ${req.user.username}`);
+    req.flash("success", `Welcome back ${req.user.username}`);
     res.redirect(redirectUrl);
-})
-
-
-
+  }
+);
 
 ///////////////////////////////////////////////////   LOGOUT      ///////////////////////////////////////////////
 
-app.get('/logout',(req,res)=>{
-    // delete req.locals.currentUser;
-    req.logout(function(err) {
-        if (err) { return next(err); }
-        req.flash('success',"Logged Out Successfully");
-        res.redirect('/home');
-      });
-})
-
-
+app.get("/logout", (req, res) => {
+  // delete req.locals.currentUser;
+  req.logout(function (err) {
+    if (err) {
+      return next(err);
+    }
+    req.flash("success", "Logged Out Successfully");
+    res.redirect("/home");
+  });
+});
 
 ///////////////////////////////////////////////////   EVENTS      ///////////////////////////////////////////////
 
+app.get("/event", async (req, res) => {
+  //All Events Page
+  const event = await Event.find({});
+  res.render("./templates/allEvents.ejs", { event });
+});
 
-app.get('/event', async(req,res)=>{                             //All Events Page
-    const event=await Event.find({});
-    res.render('./templates/allEvents.ejs',{event});
-})
+app.get("/addevent", isLoggedIn, isAdmin, (req, res) => {
+  //Add a new Event
+  res.render("./templates/addEvent.ejs");
+});
 
-app.get('/addevent',isLoggedIn,isAdmin, (req,res)=>{                                //Add a new Event
-    res.render('./templates/addEvent.ejs');
-})
-
-app.post('/addEvent',isLoggedIn,isAdmin,validateEvent,upload.array('image'),async(req,res)=>{                          //Add a new Event
-    const events=new Event(req.body.event);
-    const newuser=await Admin.find({username:req.user.username});
-    events.images=req.files.map(f=>({url:f.path,filename:f.filename}));
-    events.author=newuser[0]._id;
-    const newEvent=await events.save();
-    newEvent.moment_Date=moment(newEvent.EventDate).format('Do MMMM YYYY');
-    newEvent.moment_Time=moment(newEvent.EventDate).format('h:mm a');
+app.post(
+  "/addEvent",
+  isLoggedIn,
+  isAdmin,
+  upload.array("image"),
+  async (req, res) => {
+    //Add a new Event
+    const events = new Event(req.body.event);
+    const newuser = await Admin.find({ username: req.user.username });
+    events.images = req.files.map((f) => ({
+      url: f.path,
+      filename: f.filename,
+    }));
+    events.author = newuser[0]._id;
+    const newEvent = await events.save();
+    newEvent.moment_Date = moment(newEvent.EventDate).format("Do MMMM YYYY");
+    newEvent.moment_Time = moment(newEvent.EventDate).format("h:mm a");
     await newEvent.save();
-    req.flash('success','Successfully added a new event');
+    req.flash("success", "Successfully added a new event");
     res.redirect(`/event/${newEvent._id}`);
-})
+  }
+);
 
 app.get('/event/:id', async(req,res)=>{                          //View Specific Event
     const event=await Event.findById(req.params.id);

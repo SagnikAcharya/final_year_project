@@ -81,16 +81,14 @@ module.exports.catchAsync=function (fn){
 
   module.exports.validateEvent = (req, res, next) => {
     const eventSchema = Joi.object({
-        Name: Joi.string().escapeHTML().alphanum().min(3).max(30).required().escapeHTML(),
-        // password:Joi.string().pattern(new RegExp('^[a-zA-Z0-9]{3,30}$')),
-        // email: Joi.string().email({ minDomainSegments: 2, tlds: { allow: ['com', 'net'] } }),
-        Description: Joi.string().required().escapeHTML().required().escapeHTML(),
-        Location: Joi.string().required().escapeHTML().required().escapeHTML(),
-        Type: Joi.string().required().escapeHTML().required(),
-        EventDate:Joi.date().required(),
-        moment_Date:Joi.string().required().escapeHTML().required(),
-        moment_Time:Joi.string().required().escapeHTML().required(),
-        deleteImages: Joi.array()
+      Name: Joi.string().required().escapeHTML(),
+      Description: Joi.string().required().escapeHTML(),
+      Location: Joi.string().required().escapeHTML(),
+      Type: Joi.string().required(),
+      EventDate: Joi.date().required(),
+      moment_Date: Joi.string().required(),
+      moment_Time: Joi.string().required(),
+      deleteImages: Joi.array(),
     });
     const { error } = eventSchema.validate(req.body);
     if (error) {
@@ -103,15 +101,8 @@ module.exports.catchAsync=function (fn){
 
   module.exports.validateUser = (req, res, next) => {
     const userSchema = Joi.object({
-      username: Joi.string()
-        .escapeHTML()
-        .alphanum()
-        .min(3)
-        .max(30)
-        .required()
-        .escapeHTML(),
+      username: Joi.string().alphanum().min(3).max(30).required().escapeHTML(),
       department: Joi.string()
-        .escapeHTML()
         .alphanum()
         .min(3)
         .max(30)
