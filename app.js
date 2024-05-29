@@ -10,7 +10,7 @@ const methodOverride = require("method-override");    //used for parsing json
 const ejsMate = require("ejs-mate");   //templating engine
 const mongoose = require("mongoose");
 const session = require('express-session');
-const MongoStore = require("connect-mongo");
+const MongoStore = require('connect-mongo');
 const flash = require("connect-flash");
 const passport=require('passport');
 const LocalStrategy=require('passport-local');
@@ -57,33 +57,31 @@ app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
 
 ///////////////////////////////////////////////////   MONGODB/DATABASE CONNECTION     ///////////////////////////////////////////////
-mongoose.connect(dbURL, { useNewUrlParser: true, 
-  useUnifiedTopology: true,  });
-const db = mongoose.connection;
-db.on("error", console.error.bind(console, "connection error"));
-db.once("open", () => {
-  console.log("Database Connected");
-});
-// const store = new MongoStore({
-//   mongoUrl: dbURL,
-//   secret: "secret",
-//   touchAfter: 24 * 3600,
+const connection = mongoose.createConnection(dbURL)
+// const db = mongoose.connection;
+// db.on("error", console.error.bind(console, "connection error"));
+// db.once("open", () => {
+//   console.log("Database Connected");
 // });
-// store.on("error", function (e) {
-//   console.log("Connection Error");
-// });
+
+
+const sessionStore = MongoStore.create({
+  mongoUrl:dbURL,
+  client: connection.getClient(),
+  collection: 'session'
+})
 ///////////////////////////////////////////////////   SESSION CONFIG     ///////////////////////////////////////////////
 
-let store = new MongoStore({
-  mongoUrl: dbURL,
-  collection: "sessions"
-});
+// let store = new MongoStore({
+//   mongoUrl: dbURL,
+//   collection: "sessions"
+// });
 
 const sessionConfig = {
-  store: store,
+  store: sessionStore,
   name: "ems2K24",
   secret: "secret",
-  resave: true,
+  resave: false,
   saveUninitialized: true,
   cookie: {
     httpOnly: true,
