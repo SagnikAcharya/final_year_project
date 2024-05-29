@@ -79,20 +79,20 @@ db.once("open",()=>{
     console.log("Database Connected");
 });
 
-  const store = new MongoStore({
-    mongoUrl: dbURL,
-    secret:'secret',
-    touchAfter : 24*3600,
-  })
-  store.on("error",function (e){
-    console.log("Connection Error");
-  })
+//   const store = new MongoStore({
+//     mongoUrl: dbURL,
+//     secret:'secret',
+//     touchAfter : 24*3600,
+//   })
+//   store.on("error",function (e){
+//     console.log("Connection Error");
+//   })
 
 
 ///////////////////////////////////////////////////   SESSION CONFIG     ///////////////////////////////////////////////
   
 const sessionConfig={
-    store : store,
+    // store : store,
     name :'ems2K24',
     secret : 'secret',
     resave: true,
@@ -464,26 +464,26 @@ app.get('/artCLub',async(req,res)=>{
 })
 app.get('/photoClub',async(req,res)=>{    
     const event=await Event.find({});                                               //Photography Club Get Route      
-    res.render('./clubs/photoClub.ejs');
+    res.render('./clubs/photoClub.ejs',{event});
 })
 app.get('/literaryClub',async(req,res)=>{   
     const event=await Event.find({});                                                //Photography Club Get Route      
-    res.render('./clubs/literaryClub.ejs');
+    res.render('./clubs/literaryClub.ejs',{event});
 })
 app.get('/flimClub',async(req,res)=>{     
     const event=await Event.find({});                                              //Talkies Club Get Route      
-    res.render('./clubs/flimClub.ejs');
+    res.render('./clubs/flimClub.ejs',{event});
 })
 app.get('/hikingClub',async(req,res)=>{     
     const event=await Event.find({});                                              //Hiking Club Get Route      
-    res.render('./clubs/hikingClub.ejs');
+    res.render('./clubs/hikingClub.ejs',{event});
 })
 app.get('/musicClub',async(req,res)=>{     
     const event=await Event.find({});                                              //Hridmajhare Club Get Route      
-    res.render('./clubs/musicClub.ejs');
+    res.render('./clubs/musicClub.ejs',{event});
 })
 app.get('/socialClub',async(req,res)=>{                                                   //Hiking Club Get Route      
-    res.render('./clubs/socialClub.ejs');
+    res.render('./clubs/socialClub.ejs',{event});
 })
 
 
