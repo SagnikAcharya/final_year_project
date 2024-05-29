@@ -303,7 +303,7 @@ app.get('/addevent',isLoggedIn,isAdmin, (req,res)=>{                            
     res.render('./templates/addEvent.ejs');
 })
 
-app.post('/addEvent',isLoggedIn,isAdmin,validateEvent,upload.array('image'),async(req,res)=>{                          //Add a new Event
+app.post('/addEvent',isLoggedIn,isAdmin,upload.array('image'),async(req,res)=>{                          //Add a new Event
     const events=new Event(req.body.event);
     const newuser=await Admin.find({username:req.user.username});
     events.images=req.files.map(f=>({url:f.path,filename:f.filename}));
