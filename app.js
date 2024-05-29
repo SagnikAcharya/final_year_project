@@ -28,7 +28,7 @@ const { storage, cloudinary } = require("./Cloudinary/cloudinaryIndex.js");
 const upload = multer({ storage });
 const moment = require("moment");
 const mongoSanitize = require("express-mongo-sanitize");
-const connection = mongoose.createConnection(dbURL)
+const connection = mongoose.createConnection(dbURL);
 
 ///////////NODEMAILER
 
@@ -58,7 +58,7 @@ app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
 
 ///////////////////////////////////////////////////   MONGODB/DATABASE CONNECTION     ///////////////////////////////////////////////
-
+mongoose.connect(dbURL);
 connection.on("error", console.error.bind(console, "connection error"));
 connection.once("open", () => {
   console.log("Database Connected");
