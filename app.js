@@ -10,7 +10,7 @@ const methodOverride = require("method-override");    //used for parsing json
 const ejsMate = require("ejs-mate");   //templating engine
 const mongoose = require("mongoose");
 const session = require('express-session');
-const MongoStore = require("connect-mongo");
+const MongoStore = require('connect-mongo');
 const flash = require("connect-flash");
 const passport=require('passport');
 const LocalStrategy=require('passport-local');
@@ -74,13 +74,13 @@ db.once("open", () => {
 // });
 ///////////////////////////////////////////////////   SESSION CONFIG     ///////////////////////////////////////////////
 
-let store = new MongoStore({
-  mongoUrl: dbURL,
-  collection: "sessions"
-});
+// let store = new MongoStore({
+//   mongoUrl: dbURL,
+//   collection: "sessions"
+// });
 
 const sessionConfig = {
-  store: store,
+  store: MongoStore.create({ mongoUrl: dbURL }),
   name: "ems2K24",
   secret: "secret",
   resave: false,
