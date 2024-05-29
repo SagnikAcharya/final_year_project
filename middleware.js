@@ -103,9 +103,32 @@ module.exports.catchAsync=function (fn){
 
   module.exports.validateUser = (req, res, next) => {
     const userSchema = Joi.object({
-        username: Joi.string().escapeHTML().alphanum().min(3).max(30).required().escapeHTML(),
-        password:Joi.string().pattern(new RegExp('^[a-zA-Z0-9]{3,30}$')).escapeHTML(),
-        email: Joi.string().email({ minDomainSegments: 2, tlds: { allow: ['com', 'net'] } }).escapeHTML(),
+      username: Joi.string()
+        .escapeHTML()
+        .alphanum()
+        .min(3)
+        .max(30)
+        .required()
+        .escapeHTML(),
+      department: Joi.string()
+        .escapeHTML()
+        .alphanum()
+        .min(3)
+        .max(30)
+        .required()
+        .escapeHTML(),
+      mobile: Joi.number()
+        .integer()
+        .min(10 ** 9)
+        .max(10 ** 10 - 1)
+        .required(),
+      admin_id: Joi.number().integer().required(),
+      password: Joi.string()
+        .pattern(new RegExp("^[a-zA-Z0-9]{3,30}$"))
+        .escapeHTML(),
+      email: Joi.string()
+        .email({ minDomainSegments: 2, tlds: { allow: ["com", "net"] } })
+        .escapeHTML(),
     });
     const { error } = userSchema.validate(req.body);
     if (error) {
