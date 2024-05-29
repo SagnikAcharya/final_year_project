@@ -58,27 +58,25 @@ app.set("views", path.join(__dirname, "views"));
 
 ///////////////////////////////////////////////////   MONGODB/DATABASE CONNECTION     ///////////////////////////////////////////////
 mongoose.connect(dbURL);
-const connection=mongoose.connection;
-connection.on("error", console.error.bind(console, "connection error"));
-connection.once("open", () => {
+const db = mongoose.connection;
+db.on("error", console.error.bind(console, "connection error"));
+db.once("open", () => {
   console.log("Database Connected");
 });
-
-const sessionStore = new MongoStore({
+const store = new MongoStore({
   mongoUrl: dbURL,
-  secret: 'thisshouldbeabettersecret!',
-  touchAfter: 24 * 60 * 60
-}); 
-sessionStore.on("error", function (e) {
+  secret: "secret",
+  touchAfter: 24 * 3600,
+});
+store.on("error", function (e) {
   console.log("Connection Error");
 });
-
 ///////////////////////////////////////////////////   SESSION CONFIG     ///////////////////////////////////////////////
 
 
 
 const sessionConfig = {
-  store: sessionStore,
+  store: store,
   name: "ems2K24",
   secret: "secret",
   resave: true,
