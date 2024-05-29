@@ -28,7 +28,6 @@ const { storage, cloudinary } = require("./Cloudinary/cloudinaryIndex.js");
 const upload = multer({ storage });
 const moment = require("moment");
 const mongoSanitize = require("express-mongo-sanitize");
-const connection = mongoose.createConnection(dbURL);
 
 ///////////NODEMAILER
 
@@ -65,7 +64,7 @@ connection.once("open", () => {
 });
 
 const sessionStore = new MongoStore({
-  mongoUrl: dbUrl,
+  mongoUrl: dbURL,
   secret: 'thisshouldbeabettersecret!',
   touchAfter: 24 * 60 * 60
 }); 
