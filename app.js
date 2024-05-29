@@ -28,6 +28,7 @@ const { storage, cloudinary } = require("./Cloudinary/cloudinaryIndex.js");
 const upload = multer({ storage });
 const moment = require("moment");
 const mongoSanitize = require("express-mongo-sanitize");
+const connection = mongoose.createConnection(dbURL)
 
 ///////////NODEMAILER
 
@@ -58,22 +59,15 @@ app.set("views", path.join(__dirname, "views"));
 
 ///////////////////////////////////////////////////   MONGODB/DATABASE CONNECTION     ///////////////////////////////////////////////
 
-mongoose.connect(dbURL, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-});
-
-const db = mongoose.connection;
-db.on("error", console.error.bind(console, "connection error"));
-db.once("open", () => {
+connection.on("error", console.error.bind(console, "connection error"));
+connection.once("open", () => {
   console.log("Database Connected");
 });
 
 const sessionStore = MongoStore.create({
-  mongoUrl: dbURL,
-  secret: "secret",
-  touchAfter: 24 * 3600,
-});
+  client: connection.getClient(),
+  collection: 'session'
+})
 sessionStore.on("error", function (e) {
   console.log("Connection Error");
 });
