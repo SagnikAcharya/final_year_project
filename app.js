@@ -64,21 +64,21 @@ connection.once("open", () => {
   console.log("Database Connected");
 });
 
-const sessionStore = MongoStore.create({
-  client: connection.getClient(),
-  collection: 'session'
-})
+const sessionStore = new MongoStore({
+  mongoUrl: dbUrl,
+  secret: 'thisshouldbeabettersecret!',
+  touchAfter: 24 * 60 * 60
+}); 
 sessionStore.on("error", function (e) {
   console.log("Connection Error");
 });
 
 ///////////////////////////////////////////////////   SESSION CONFIG     ///////////////////////////////////////////////
 
+
+
 const sessionConfig = {
-  store: MongoStore.create( {
-    mongoUrl: dbURL,
-    touchAfter: 24 * 3600 
-  }) ,
+  store: sessionStore,
   name: "ems2K24",
   secret: "secret",
   resave: true,
