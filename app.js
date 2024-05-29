@@ -57,7 +57,7 @@ app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
 
 ///////////////////////////////////////////////////   MONGODB/DATABASE CONNECTION     ///////////////////////////////////////////////
-mongoose.connect(dbURL);
+const connection=mongoose.connect(dbURL);
 connection.on("error", console.error.bind(console, "connection error"));
 connection.once("open", () => {
   console.log("Database Connected");
