@@ -83,7 +83,7 @@ const sessionConfig = {
   store: store,
   name: "ems2K24",
   secret: "secret",
-  resave: true,
+  resave: false,
   saveUninitialized: true,
   cookie: {
     httpOnly: true,
