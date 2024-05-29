@@ -21,7 +21,7 @@ const Event=require('./models/events');
 const flatpickr = require("flatpickr");
 const {catchAsync}=require('./middleware.js');
 const {isLoggedIn,isAdmin,validateEvent,validateUser}=require('./middleware.js');
-const MongoStore = require("connect-mongo").default;
+const MongoStore = require("connect-mongo");
 const QRCode = require("qrcode");
 const multer = require("multer");
 const { storage, cloudinary } = require("./Cloudinary/cloudinaryIndex.js");
@@ -69,10 +69,19 @@ db.once("open", () => {
   console.log("Database Connected");
 });
 
+const sessionStore = MongoStore.create({
+  mongoUrl: dbURL,
+  secret: "secret",
+  touchAfter: 24 * 3600,
+});
+sessionStore.on("error", function (e) {
+  console.log("Connection Error");
+});
+
 ///////////////////////////////////////////////////   SESSION CONFIG     ///////////////////////////////////////////////
 
 const sessionConfig = {
-  store: MongoStore.create({mongoUrl:dbURL}),
+  store: sessionStore,
   name: "ems2K24",
   secret: "secret",
   resave: true,
