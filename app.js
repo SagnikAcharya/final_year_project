@@ -57,21 +57,19 @@ app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
 
 ///////////////////////////////////////////////////   MONGODB/DATABASE CONNECTION     ///////////////////////////////////////////////
-mongoose.connect(dbURL, { useNewUrlParser: true, 
-  useUnifiedTopology: true,  });
-const db = mongoose.connection;
-db.on("error", console.error.bind(console, "connection error"));
-db.once("open", () => {
-  console.log("Database Connected");
-});
-// const store = new MongoStore({
-//   mongoUrl: dbURL,
-//   secret: "secret",
-//   touchAfter: 24 * 3600,
+const connection = mongoose.createConnection(dbURL)
+// const db = mongoose.connection;
+// db.on("error", console.error.bind(console, "connection error"));
+// db.once("open", () => {
+//   console.log("Database Connected");
 // });
-// store.on("error", function (e) {
-//   console.log("Connection Error");
-// });
+
+
+const sessionStore = MongoStore.create({
+  mongoUrl:dbURL,
+  client: connection.getClient(),
+  collection: 'session'
+})
 ///////////////////////////////////////////////////   SESSION CONFIG     ///////////////////////////////////////////////
 
 // let store = new MongoStore({
@@ -80,7 +78,7 @@ db.once("open", () => {
 // });
 
 const sessionConfig = {
-  store: MongoStore.create({ mongoUrl: dbURL }),
+  store: sessionStore,
   name: "ems2K24",
   secret: "secret",
   resave: false,

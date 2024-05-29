@@ -101,7 +101,7 @@ module.exports.catchAsync=function (fn){
 
   module.exports.validateUser = (req, res, next) => {
     const userSchema = Joi.object({
-      username: Joi.string().alphanum().min(3).max(30).required().escapeHTML(),
+      username: Joi.string().min(3).max(30).required().escapeHTML(),
       department: Joi.string()
         .alphanum()
         .min(3)
