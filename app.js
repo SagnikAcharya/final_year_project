@@ -75,7 +75,10 @@ sessionStore.on("error", function (e) {
 ///////////////////////////////////////////////////   SESSION CONFIG     ///////////////////////////////////////////////
 
 const sessionConfig = {
-  store: sessionStore,
+  store: MongoStore.create( {
+    mongoUrl: dbURL,
+    touchAfter: 24 * 3600 
+  }) ,
   name: "ems2K24",
   secret: "secret",
   resave: true,
