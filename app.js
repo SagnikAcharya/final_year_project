@@ -69,19 +69,10 @@ db.once("open", () => {
   console.log("Database Connected");
 });
 
-const store = new MongoStore({
-  mongoUrl: dbURL,
-  secret: "secret",
-  touchAfter: 24 * 3600,
-});
-store.on("error", function (e) {
-  console.log("Connection Error");
-});
-
 ///////////////////////////////////////////////////   SESSION CONFIG     ///////////////////////////////////////////////
 
 const sessionConfig = {
-  store: store,
+  store: MongoStore.create({mongoUrl:dbURL}),
   name: "ems2K24",
   secret: "secret",
   resave: true,
