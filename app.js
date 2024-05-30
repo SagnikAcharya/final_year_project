@@ -73,18 +73,19 @@ app.set("views", path.join(__dirname, "views"));
 
 ///////////////////////////////////////////////////   SESSION CONFIG     ///////////////////////////////////////////////
 
-// const mongoClientPromise = new Promise((resolve) => {
-//   mongoose.connection.on("connected", async() => {
-//       const client = await mongoose.connection.getClient();
-//       resolve(client);
-//   });
-// });
+const mongoClientPromise = new Promise ((resolve) => {
+  mongoose.connection.on("connected", async() => {
+      const client = await mongoose.connection.getClient();
+      resolve(client);
+  });
+});
 
-// const sessionStore = MongoStore.create({
-//   clientPromise: mongoClientPromise,
-//   dbName: "myDb",
-//   collection: "sessions"
-// });
+const sessionStore = MongoStore.create({
+  mongoUrl:dbURL,
+  clientPromise: mongoClientPromise,
+  dbName: "myDb",
+  collection: "sessions"
+});
 
 mongoose.connect(dbURL,{useNewUrlParser: true, useUnifiedTopology: true}).catch(error => console.log("App.js mongoose.connect error",error));
 
@@ -93,16 +94,17 @@ db.on('error', console.error);
 db.once('open', function(){
     console.log("App is connected to DB", db.name)
 });
-mongoose.Promise = global.Promise;
+// mongoose.Promise = global.Promise;
 
 
 const sessionConfig = {
   secret: "secret",
-  store: MongoStore.create({
-    client: mongoose.connection.getClient(),
-    ttl: 1 * 6 * 60 * 60,  
-    autoRemove: 'native'
-  }),
+  store:sessionStore,
+  // store: MongoStore.create({
+  //   client: mongoose.connection.getClient(),
+  //   ttl: 1 * 6 * 60 * 60,  
+  //   autoRemove: 'native'
+  // }),
   name: "ems2K24",
   resave: true,
   saveUninitialized: true,
