@@ -29,6 +29,12 @@ const upload = multer({ storage });
 const moment = require("moment");
 const mongoSanitize = require("express-mongo-sanitize");
 
+
+
+
+
+
+
 ///////////NODEMAILER
 
 const transporter = nodemailer.createTransport({
@@ -56,26 +62,21 @@ app.engine("ejs", ejsMate); //templating engine
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
 
+
 ///////////////////////////////////////////////////   MONGODB/DATABASE CONNECTION     ///////////////////////////////////////////////
-const connection = mongoose.createConnection(dbURL)
-// const db = mongoose.connection;
-// db.on("error", console.error.bind(console, "connection error"));
-// db.once("open", () => {
-//   console.log("Database Connected");
-// });
+mongoose.connect(dbURL);
+const db = mongoose.connection;
+db.on("error", console.error.bind(console, "connection error"));
+db.once("open", () => {
+  console.log("Database Connected");
+});
 
 
-const sessionStore = MongoStore.create({
-  mongoUrl:dbURL,
-  client: connection.getClient(),
-  collection: 'session'
+const sessionStore =new MongoStore({
+  mongoUrl:dbURL
 })
 ///////////////////////////////////////////////////   SESSION CONFIG     ///////////////////////////////////////////////
 
-// let store = new MongoStore({
-//   mongoUrl: dbURL,
-//   collection: "sessions"
-// });
 
 const sessionConfig = {
   store: sessionStore,
@@ -92,6 +93,21 @@ const sessionConfig = {
 
 app.use(session(sessionConfig));
 app.use(flash());
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 ///////////////////////////////////////////////////   PASSPORT JS FOR LOGIN/REGISTER      ///////////////////////////////////////////////
 
