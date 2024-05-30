@@ -6,6 +6,7 @@ const AdminSchema=new Schema({
     department:String,
     mobile:String,
     experience:Number,
+    about:String,
     admin_id:{
         type:Number,
         unique:true,

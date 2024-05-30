@@ -8,9 +8,9 @@
         <header class="d-flex mb-5 justify-content-center align-items-center"
             style="background-image: linear-gradient( 259deg,  rgba(222,95,95,0.7) -5%, rgba(53,88,218,0.7) 133.7% ),url('/images/eventbg.jpg'); height: 350px;width: 100%;">
         </header>
-                <section class="container  p-3">
-                    <div class="row m-auto">
-                        <div class="col-8">
+                <section class="container p-3">
+                    <div class="row m-auto event-page-flex">
+                        <div class="col-8 width-adjust">
                             <div class="carousel  mb-3">
                                 <div id="carouselExampleControls" class="carousel slide" data-bs-ride="carousel">
                                     <div class="carousel-inner">
@@ -38,9 +38,7 @@
                             <h5 class="display-6">
                                 <%= event.Name %>
                             </h5>
-                            <h5 class="text-muted fs-5">Lorem ipsum dolor sit, amet consectetur adipisicing elit. Impedit veniam iusto beatae
-                                reprehenderit, quo veritatis omnis nulla. Alias sed corrupti dolor ab delectus, ipsam nemo tempore laborum
-                                consectetur incidunt quos.
+                            <h5 class="text-muted fs-5">
                                 <%= event.Description %>
                             </h5>
                             <div class="event-details my-3">
@@ -129,12 +127,12 @@
                         </div>
 
 
-                        <div class="col-4">
+                        <div class="col-4 width-adjust">
                             <div class="row">
                                 <div class="map rounded-3 " id="map" style="height: 300px;width: 100%;"></div>
                             </div>
                             <% if(currentUser && currentUser.isAdmin==true){ %>
-                            <div class="row card rounded-3 mb-3 mx-2 ">
+                            <div class="row card rounded-3 my-3 mx-2 ">
                                 <div class="row mb-4 mx-auto text-center">
                                     <p class="fs-5 mb-0 mt-3 text-muted">View/Verify Registered Students</p>
                                     <div class="card-body">

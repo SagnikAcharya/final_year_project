@@ -1,7 +1,5 @@
 require('dotenv').config();
 
-const dbURL=process.env.db_URL;
-
 const nodemailer = require('nodemailer');
 const express = require("express");
 const path = require("path");
@@ -13,7 +11,6 @@ const MongoStore = require('connect-mongo');
 const flash = require("connect-flash");
 const passport=require('passport');
 const LocalStrategy=require('passport-local');
-const { MongoClient, ServerApiVersion } = require('mongodb');
 const User=require('./models/user');
 const Admin=require('./models/admin');
 const Club=require('./models/clubs');
@@ -27,11 +24,15 @@ const { storage, cloudinary } = require("./Cloudinary/cloudinaryIndex.js");
 const upload = multer({ storage });
 const moment = require("moment");
 const mongoSanitize = require("express-mongo-sanitize");
+const { MongoClient, ServerApiVersion } = require('mongodb');
 
 
 
-
-
+const dbURL = process.env.db_URL || 'mongodb://127.0.0.1:27017/fivers';
+const options={
+  useUnifiedTopology:true,
+  useNewUrlParser:true
+}
 
 
 ///////////NODEMAILER
@@ -63,14 +64,6 @@ app.set("views", path.join(__dirname, "views"));
 
 
 ///////////////////////////////////////////////////   MONGODB/DATABASE CONNECTION     ///////////////////////////////////////////////
-// mongoose.connect(dbURL, {});
-// const db = mongoose.connection;
-// db.on("error", console.error.bind(console, "connection error"));
-// db.once("open", () => {
-//   console.log("Database Connected");
-// });
-
-///////////////////////////////////////////////////   SESSION CONFIG     ///////////////////////////////////////////////
 
 const connectDb =async ()=>{
   try{
@@ -83,63 +76,17 @@ const connectDb =async ()=>{
 
 connectDb();
 
-var db = mongoose.connection;
-db.on('error', console.error);
-db.once('open', function(){
-    console.log("App is connected to DB", db.name)
-});
-mongoose.Promise = global.Promise;
-
-// const mongoClientPromise = new Promise ((resolve) => {
-//   mongoose.connection.on("connected", async() => {
-//       const client = await mongoose.connection.getClient();
-//       resolve(client);
-//   });
-// });
 
 
-const { MongoClient, ServerApiVersion } = require('mongodb');
-const uri = "mongodb+srv://unofficialfivers:khsFE01qJLxi3Kz8@cluster0.eeocskc.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0";
+///////////////////////////////////////////////////   SESSION CONFIG     ///////////////////////////////////////////////
 
-// Create a MongoClient with a MongoClientOptions object to set the Stable API version
-const client = new MongoClient(uri, {
-  serverApi: {
-    version: ServerApiVersion.v1,
-    strict: true,
-    deprecationErrors: true,
-  }
-});
-
-async function run() {
-  try {
-    // Connect the client to the server	(optional starting in v4.7)
-    await client.connect();
-    // Send a ping to confirm a successful connection
-    await client.db("admin").command({ ping: 1 });
-    console.log("Pinged your deployment. You successfully connected to MongoDB!");
-  } finally {
-    // Ensures that the client will close when you finish/error
-    await client.close();
-  }
-}
-run().catch(console.dir);
-
-const sessionStore = MongoStore.create({
+const sessionStore=MongoStore.create({
   mongoUrl:dbURL,
-  client: mongoose.connection.getClient(),
-  dbName: "myDb",
-  ttl: 1 * 6 * 60 * 60,  
-  autoRemove: 'native' 
-});
+})
 
 const sessionConfig = {
   secret: "secret",
   store:sessionStore,
-  // store: MongoStore.create({
-  //   client: mongoose.connection.getClient(),
-  //   ttl: 1 * 6 * 60 * 60,  
-  //   autoRemove: 'native'
-  // }),
   name: "ems2K24",
   resave: false,
   saveUninitialized: false,
@@ -459,6 +406,9 @@ app.post('/checkQR/:id',async(req,res)=>{
             await event.save();
             req.flash('success','User successfully verified');
             res.redirect(`/verifiedStudents/${event._id}`);         
+        }else{
+          req.flash('error','Sorry, user is not registered for this event');
+          res.redirect(`/event/${event._id}`);
         }
     }
 })  
@@ -503,13 +453,14 @@ app.get('/user/:id/edit',isLoggedIn,isAdmin,async(req,res)=>{                   
     res.render('./adminSection/editUser.ejs',{user:users});
 })
 app.put('/user/:id',isLoggedIn,isAdmin, async(req,res)=>{                                                  //Edit Specific Student(POST)
-    await User.findByIdAndUpdate(req.params.id,{...req.body.user});
-    req.flash('error','Deleted');
-    res.redirect('/allStudents');
+    const newuser=await User.findByIdAndUpdate(req.params.id,{...req.body.user});
+    req.flash('success','Successfully updated student details');
+    res.redirect(`/user/${newuser._id}`);
 })
 
 app.post('/user/:id',isLoggedIn,isAdmin,async(req,res)=>{                                                     //Delete Specific Student
     await User.findByIdAndDelete(req.params.id);
+    req.flash('error','Successfully Deleted Student');
     res.redirect('/allStudents');
 })
 
@@ -527,7 +478,21 @@ app.get('/admin/:id',isAdmin,isLoggedIn, async(req,res)=>{                      
     });
 })
 
-
+app.get('/admin/:id/edit',isLoggedIn,isAdmin,async(req,res)=>{                                   //Edit Specific Student
+  const newadmin=await Admin.findById(req.params.id);
+  res.render('./adminSection/editAdmin.ejs',{admin:newadmin});
+})
+app.put('/admin/:id',isLoggedIn,isAdmin, async(req,res)=>{          
+  console.log(req.body);                                        //Edit Specific Student(POST)
+  const newadmin=await Admin.findByIdAndUpdate(req.params.id,{...req.body});
+  req.flash('success','Successfully updated details');
+  res.redirect(`/admin/${newadmin._id}`);
+})
+app.post('/admin/:id',isLoggedIn,isAdmin,async(req,res)=>{                                                     //Delete Specific Student
+  await Admin.findByIdAndDelete(req.params.id);
+  req.flash('error','Successfully Deleted Admin');
+  res.redirect('/home');
+})
 
 
 ///////////////////////////////////////////////////   CLUBS      ///////////////////////////////////////////////
