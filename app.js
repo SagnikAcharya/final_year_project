@@ -79,7 +79,7 @@ db.once("open", () => {
 
 
 const sessionConfig = {
-  store: MongoStore.create({ mongoUrl: dbURL }),
+  store: MongoStore.create({ mongoUrl: dbURL ,touchAfter: 24 * 3600 ,dbName: 'ems-app',mongoOptions:{useUnifiedTopology: true}}),
   name: "ems2K24",
   secret: "secret",
   resave: false,
