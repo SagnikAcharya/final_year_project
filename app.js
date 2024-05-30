@@ -1,7 +1,5 @@
 require('dotenv').config();
 
-const dbURL=process.env.db_URL;
-
 const nodemailer = require('nodemailer');
 const express = require("express");
 const path = require("path");
@@ -13,7 +11,6 @@ const MongoStore = require('connect-mongo');
 const flash = require("connect-flash");
 const passport=require('passport');
 const LocalStrategy=require('passport-local');
-const { MongoClient, ServerApiVersion } = require('mongodb');
 const User=require('./models/user');
 const Admin=require('./models/admin');
 const Club=require('./models/clubs');
@@ -27,11 +24,15 @@ const { storage, cloudinary } = require("./Cloudinary/cloudinaryIndex.js");
 const upload = multer({ storage });
 const moment = require("moment");
 const mongoSanitize = require("express-mongo-sanitize");
+const { MongoClient, ServerApiVersion } = require('mongodb');
 
 
 
-
-
+const dbURL = process.env.db_URL || 'mongodb://127.0.0.1:27017/fivers';
+const options={
+  useUnifiedTopology:true,
+  useNewUrlParser:true
+}
 
 
 ///////////NODEMAILER
@@ -69,13 +70,11 @@ app.set("views", path.join(__dirname, "views"));
 // db.once("open", () => {
 //   console.log("Database Connected");
 // });
-
-///////////////////////////////////////////////////   SESSION CONFIG     ///////////////////////////////////////////////
-
 const connectDb =async ()=>{
   try{
       await mongoose.connect(dbURL,{useNewUrlParser: true, useUnifiedTopology: true}).catch(error => console.log("App.js mongoose.connect error",error));
       console.log("Database Connected");
+      console.log(mongoose.connection.host);
   }catch(e){
     console.log("Connection issue: "+e);
   }
@@ -83,12 +82,20 @@ const connectDb =async ()=>{
 
 connectDb();
 
-var db = mongoose.connection;
-db.on('error', console.error);
-db.once('open', function(){
-    console.log("App is connected to DB", db.name)
-});
-mongoose.Promise = global.Promise;
+
+
+///////////////////////////////////////////////////   SESSION CONFIG     ///////////////////////////////////////////////
+
+const sessionStore=MongoStore.create({
+  mongoUrl:dbURL,
+})
+
+// var db = mongoose.connection;
+// db.on('error', console.error);
+// db.once('open', function(){
+//     console.log("App is connected to DB", db.name)
+// });
+// mongoose.Promise = global.Promise;
 
 // const mongoClientPromise = new Promise ((resolve) => {
 //   mongoose.connection.on("connected", async() => {
@@ -97,48 +104,25 @@ mongoose.Promise = global.Promise;
 //   });
 // });
 
-
-const { MongoClient, ServerApiVersion } = require('mongodb');
-const uri = "mongodb+srv://unofficialfivers:khsFE01qJLxi3Kz8@cluster0.eeocskc.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0";
-
-// Create a MongoClient with a MongoClientOptions object to set the Stable API version
-const client = new MongoClient(uri, {
-  serverApi: {
-    version: ServerApiVersion.v1,
-    strict: true,
-    deprecationErrors: true,
-  }
-});
-
-async function run() {
-  try {
-    // Connect the client to the server	(optional starting in v4.7)
-    await client.connect();
-    // Send a ping to confirm a successful connection
-    await client.db("admin").command({ ping: 1 });
-    console.log("Pinged your deployment. You successfully connected to MongoDB!");
-  } finally {
-    // Ensures that the client will close when you finish/error
-    await client.close();
-  }
-}
-run().catch(console.dir);
-
-const sessionStore = MongoStore.create({
-  mongoUrl:dbURL,
-  client: mongoose.connection.getClient(),
-  dbName: "myDb",
-  ttl: 1 * 6 * 60 * 60,  
-  autoRemove: 'native' 
-});
+// const client = new MongoClient(dbURL,options);
+// async function run() {
+//   console.log(dbURL);
+//   try {
+//     let res=await client.connect();
+//     res.db('ems');
+//     console.log("Pinged your deployment. You successfully connected to MongoDB!");
+//   }catch(e){
+//     console.log("Connection error "+e);
+//   } 
+// }
+// run();
 
 const sessionConfig = {
   secret: "secret",
   store:sessionStore,
-  // store: MongoStore.create({
-  //   client: mongoose.connection.getClient(),
-  //   ttl: 1 * 6 * 60 * 60,  
-  //   autoRemove: 'native'
+  // store:MongoStore.create({
+  //   client:client,
+  //   mongoUrl:dbURL
   // }),
   name: "ems2K24",
   resave: false,
