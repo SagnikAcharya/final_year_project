@@ -10,7 +10,7 @@ const methodOverride = require("method-override");    //used for parsing json
 const ejsMate = require("ejs-mate");   //templating engine
 const mongoose = require("mongoose");
 const session = require('express-session');
-const MongoStore = require('connect-mongo')(session);
+const MongoStore = require('connect-mongo');
 const flash = require("connect-flash");
 const passport=require('passport');
 const LocalStrategy=require('passport-local');
@@ -64,7 +64,11 @@ app.set("views", path.join(__dirname, "views"));
 
 
 ///////////////////////////////////////////////////   MONGODB/DATABASE CONNECTION     ///////////////////////////////////////////////
-mongoose.connect(dbURL);
+mongoose.connect(dbURL, {
+  useNewUrlParser: true,
+  // useCreateIndex: true,
+  useUnifiedTopology: true,
+});
 const db = mongoose.connection;
 db.on("error", console.error.bind(console, "connection error"));
 db.once("open", () => {
@@ -73,10 +77,12 @@ db.once("open", () => {
 
 
 const sessionStore =new MongoStore({
-  url:dbURL,
+  mongoUrl:dbURL,
   touchAfter: 24 * 3600 ,
   dbName: 'ems-app',
-  mongoOptions:{useUnifiedTopology: true}
+})
+sessionStore.on("error",function (e){
+  console.log("Connection Error");
 })
 ///////////////////////////////////////////////////   SESSION CONFIG     ///////////////////////////////////////////////
 
