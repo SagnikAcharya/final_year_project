@@ -551,7 +551,8 @@ app.get("*", (req, res, next) => {                                              
 
 
 
+const port = process.env.PORT || 10000;
 
-app.listen(8080,()=>{
+app.listen(port,()=>{
     console.log("Server running successfully on port 8080 ....");
 })
