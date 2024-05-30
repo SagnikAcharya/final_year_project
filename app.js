@@ -69,7 +69,6 @@ const connectDb =async ()=>{
   try{
       await mongoose.connect(dbURL,{useNewUrlParser: true, useUnifiedTopology: true}).catch(error => console.log("App.js mongoose.connect error",error));
       console.log("Database Connected");
-      console.log(mongoose.connection.host);
   }catch(e){
     console.log("Connection issue: "+e);
   }
