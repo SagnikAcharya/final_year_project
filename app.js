@@ -73,13 +73,21 @@ db.once("open", () => {
 
 ///////////////////////////////////////////////////   SESSION CONFIG     ///////////////////////////////////////////////
 
+const mongoClientPromise = new Promise((resolve) => {
+  mongoose.connection.on("connected", () => {
+      const client = mongoose.connection.getClient();
+      resolve(client);
+  });
+});
 
+const sessionStore = MongoStore.create({
+  clientPromise: mongoClientPromise,
+  dbName: "myDb",
+  collection: "sessions"
+});
 const sessionConfig = {
   secret: "secret",
-  store: MongoStore.create({
-    mongoUrl:dbURL,
-    ttl: 14 * 24 * 60 * 60 
-  }),
+  store: sessionStore,
   name: "ems2K24",
   resave: true,
   saveUninitialized: true,
