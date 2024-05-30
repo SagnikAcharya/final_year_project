@@ -72,14 +72,17 @@ db.once("open", () => {
 });
 
 
-// const sessionStore =new MongoStore({
-//   mongoUrl:dbURL
-// })
+const sessionStore =new MongoStore({
+  url:dbURL,
+  touchAfter: 24 * 3600 ,
+  dbName: 'ems-app',
+  mongoOptions:{useUnifiedTopology: true}
+})
 ///////////////////////////////////////////////////   SESSION CONFIG     ///////////////////////////////////////////////
 
 
 const sessionConfig = {
-  store: new MongoStore({ url: dbURL ,touchAfter: 24 * 3600 ,dbName: 'ems-app',mongoOptions:{useUnifiedTopology: true}}),
+  store: sessionStore,
   name: "ems2K24",
   secret: "secret",
   resave: false,
