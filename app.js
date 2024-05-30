@@ -1,6 +1,5 @@
-if(process.env.NODE_ENV !=="production"){
-    require('dotenv').config();
-}
+require('dotenv').config();
+
 const dbURL=process.env.DB_URL;
 
 const nodemailer = require('nodemailer');
@@ -73,6 +72,16 @@ app.set("views", path.join(__dirname, "views"));
 
 ///////////////////////////////////////////////////   SESSION CONFIG     ///////////////////////////////////////////////
 
+
+mongoose.connect(dbURL,{useNewUrlParser: true, useUnifiedTopology: true}).catch(error => console.log("App.js mongoose.connect error",error));
+
+var db = mongoose.connection;
+db.on('error', console.error);
+db.once('open', function(){
+    console.log("App is connected to DB", db.name)
+});
+// mongoose.Promise = global.Promise;
+
 const mongoClientPromise = new Promise ((resolve) => {
   mongoose.connection.on("connected", async() => {
       const client = await mongoose.connection.getClient();
@@ -86,16 +95,6 @@ const sessionStore = MongoStore.create({
   dbName: "myDb",
   collection: "sessions"
 });
-
-mongoose.connect(dbURL,{useNewUrlParser: true, useUnifiedTopology: true}).catch(error => console.log("App.js mongoose.connect error",error));
-
-var db = mongoose.connection;
-db.on('error', console.error);
-db.once('open', function(){
-    console.log("App is connected to DB", db.name)
-});
-// mongoose.Promise = global.Promise;
-
 
 const sessionConfig = {
   secret: "secret",
@@ -554,5 +553,5 @@ app.get("*", (req, res, next) => {                                              
 const port = process.env.PORT || 10000;
 
 app.listen(port,()=>{
-    console.log("Server running successfully on port 8080 ....");
+    console.log("Server running successfully on port "+port);
 })
