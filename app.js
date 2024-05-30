@@ -74,8 +74,8 @@ app.set("views", path.join(__dirname, "views"));
 ///////////////////////////////////////////////////   SESSION CONFIG     ///////////////////////////////////////////////
 
 const mongoClientPromise = new Promise((resolve) => {
-  mongoose.connection.on("connected", () => {
-      const client = mongoose.connection.getClient();
+  mongoose.connection.on("connected", async() => {
+      const client = await mongoose.connection.getClient();
       resolve(client);
   });
 });
