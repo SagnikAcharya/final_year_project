@@ -64,12 +64,7 @@ app.set("views", path.join(__dirname, "views"));
 
 
 ///////////////////////////////////////////////////   MONGODB/DATABASE CONNECTION     ///////////////////////////////////////////////
-// mongoose.connect(dbURL, {});
-// const db = mongoose.connection;
-// db.on("error", console.error.bind(console, "connection error"));
-// db.once("open", () => {
-//   console.log("Database Connected");
-// });
+
 const connectDb =async ()=>{
   try{
       await mongoose.connect(dbURL,{useNewUrlParser: true, useUnifiedTopology: true}).catch(error => console.log("App.js mongoose.connect error",error));
@@ -90,40 +85,9 @@ const sessionStore=MongoStore.create({
   mongoUrl:dbURL,
 })
 
-// var db = mongoose.connection;
-// db.on('error', console.error);
-// db.once('open', function(){
-//     console.log("App is connected to DB", db.name)
-// });
-// mongoose.Promise = global.Promise;
-
-// const mongoClientPromise = new Promise ((resolve) => {
-//   mongoose.connection.on("connected", async() => {
-//       const client = await mongoose.connection.getClient();
-//       resolve(client);
-//   });
-// });
-
-// const client = new MongoClient(dbURL,options);
-// async function run() {
-//   console.log(dbURL);
-//   try {
-//     let res=await client.connect();
-//     res.db('ems');
-//     console.log("Pinged your deployment. You successfully connected to MongoDB!");
-//   }catch(e){
-//     console.log("Connection error "+e);
-//   } 
-// }
-// run();
-
 const sessionConfig = {
   secret: "secret",
   store:sessionStore,
-  // store:MongoStore.create({
-  //   client:client,
-  //   mongoUrl:dbURL
-  // }),
   name: "ems2K24",
   resave: false,
   saveUninitialized: false,
