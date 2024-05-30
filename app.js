@@ -80,20 +80,20 @@ db.on('error', console.error);
 db.once('open', function(){
     console.log("App is connected to DB", db.name)
 });
-// mongoose.Promise = global.Promise;
+mongoose.Promise = global.Promise;
 
-const mongoClientPromise = new Promise ((resolve) => {
-  mongoose.connection.on("connected", async() => {
-      const client = await mongoose.connection.getClient();
-      resolve(client);
-  });
-});
+// const mongoClientPromise = new Promise ((resolve) => {
+//   mongoose.connection.on("connected", async() => {
+//       const client = await mongoose.connection.getClient();
+//       resolve(client);
+//   });
+// });
 
 const sessionStore = MongoStore.create({
-  mongoUrl:dbURL,
-  clientPromise: mongoClientPromise,
+  client: mongoose.connection.getClient(),
   dbName: "myDb",
-  collection: "sessions"
+  ttl: 1 * 6 * 60 * 60,  
+  autoRemove: 'native' 
 });
 
 const sessionConfig = {
@@ -105,8 +105,8 @@ const sessionConfig = {
   //   autoRemove: 'native'
   // }),
   name: "ems2K24",
-  resave: true,
-  saveUninitialized: true,
+  resave: false,
+  saveUninitialized: false,
   cookie: {
     httpOnly: true,
     expires: Date.now() + 1000 * 60 * 60 * 24 * 3,
