@@ -99,6 +99,7 @@ mongoose.Promise = global.Promise;
 // });
 
 const sessionStore = MongoStore.create({
+  mongoUrl:dbURL,
   client: mongoose.connection.getClient(),
   dbName: "myDb",
   ttl: 1 * 6 * 60 * 60,  
