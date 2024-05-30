@@ -64,12 +64,12 @@ app.set("views", path.join(__dirname, "views"));
 
 
 ///////////////////////////////////////////////////   MONGODB/DATABASE CONNECTION     ///////////////////////////////////////////////
-mongoose.connect(dbURL, {});
-const db = mongoose.connection;
-db.on("error", console.error.bind(console, "connection error"));
-db.once("open", () => {
-  console.log("Database Connected");
-});
+// mongoose.connect(dbURL, {});
+// const db = mongoose.connection;
+// db.on("error", console.error.bind(console, "connection error"));
+// db.once("open", () => {
+//   console.log("Database Connected");
+// });
 
 ///////////////////////////////////////////////////   SESSION CONFIG     ///////////////////////////////////////////////
 
