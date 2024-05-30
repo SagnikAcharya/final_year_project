@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<%- include('../layouts/head.ejs') %>
+
+    <body>
+
+        <section class="d-flex flex-column" style="max-height: 100vh;">
+            <%- include('../layouts/navbar.ejs') %>
+
+
+                <section class="align-items-center d-flex" style="height: 100vh;">
+                    <div class="container width-adjust col-4 my-5 shadow rounded-3 px-5 py-5">
+                        <header class="header">
+                            <h1 id="title" class="text-center">Edit Admin Details</h1>
+                        </header>
+                        <div class="form-wrap">
+                            <form id="survey-form" method="POST" action="/admin/<%= admin._id %>?_method=PUT"
+                                class="needs-validation" novalidate>
+                                <div class="row my-2">
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            <label id="name-label" for="name" class="my-1 fw-bold">Admin Name</label>
+                                            <input type="text" name="username" id="name"
+                                                placeholder="Enter student name" class="form-control"
+                                                value="<%= admin.username %>" required>
+
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row my-2 ">
+                                    <div class="col-md-12">
+                                        <div class="form-group mb-2">
+                                            <label id="name-label" for="name" class="my-1 fw-bold">Enter Admin
+                                                Id.</label>
+                                            <input type="text" id="auto" name="admin_id"
+                                                class="search-outer form-control " placeholder="Enter Roll No"
+                                                value="<%= admin.admin_id %>">
+                                        </div>
+                                        <div id="map" class="rounded-3" style="max-height: 250px;"></div>
+                                    </div>
+                                </div>
+
+                                <div class="row my-2">
+                                    <div class="col-md-8">
+                                        <div class="form-group">
+                                            <label class="my-1 fw-bold">Department</label>
+                                            <select id="dropdown" name="department" class="form-control" required>
+                                                <option disabled selected value>
+                                                    <%= admin.department %>
+                                                </option>
+                                                <option value="Computer Science and Engineering (CSE)">Computer Science
+                                                    and
+                                                    Engineering (CSE)</option>
+                                                <option value="Electrical Engineering (EE)">Electrical Engineering (EE)
+                                                </option>
+                                                <option value="Information Technology (IT)">Information Technology (IT)
+                                                </option>
+                                                <option value="Electronics And Communication Engineering (ECE)">
+                                                    Electronics And
+                                                    Communication Engineering (ECE)</option>
+                                                <option value="Mechanical Engineering (ME)">Mechanical Engineering (ME)
+                                                </option>
+                                                <option
+                                                    value="Applied Electronics and Instrumentation Engineering (AEIE)">
+                                                    Applied Electronics and Instrumentation Engineering (AEIE)</option>
+                                                <option value="Civil Engineering (CE)">Civil Engineering (CE)</option>
+                                                <option value="Bachelor of Computer Application (BCA)">Bachelor of
+                                                    Computer
+                                                    Application (BCA)</option>
+                                                <option value="Department of Business Management (BBA)">Department of
+                                                    Business
+                                                    Management (BBA)</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <label id="name-label" for="name" class="my-1 fw-bold">Experience <span
+                                                    class="text-muted">(in years)</span> :</label>
+                                            <input class="form-control" type="number" name="experience"
+                                                placeholder="Experience" value="<%= admin.experience %>" min="0"
+                                                max="40" />
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row my-2">
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label id="name-label" for="name" class="my-1 fw-bold">Admin Mobile
+                                                No.:</label>
+                                            <input class="form-control" type="text" name="mobile"
+                                                placeholder="Mobile No." value="<%= admin.mobile %>" />
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label id="name-label" for="name" class="my-1 fw-bold">Admin
+                                                Email Id:</label>
+                                            <input class="form-control" type="text" name="email" placeholder="Email Id"
+                                                value="<%= admin.email %>" />
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="mb-3">
+                                    <label id="text-label" for="text-name" class="my-1 fw-bold">About Yourself</label>
+                                    <textarea name="about" class="form-control" id="text-name"
+                                        placeholder="About Yourself ... " value="<%= admin.about %>"></textarea>
+                                </div>
+                                <div class="row my-3">
+                                    <div class="d-grid gap-2">
+                                        <button type="submit" id="submit"
+                                            class="btn btn-primary btn-block my-1 fw-bold">Edit
+                                            Admin Details</button>
+                                    </div>
+                                </div>
+
+                            </form>
+                        </div>
+                    </div>
+                </section>
+
+                <section>
+                    <%- include('../layouts/footer.ejs') %>
+                </section>
+
+        </section>
+        <script src="/js/script.js"></script>
+        <script src="/js/flatpickr.js"></script>
+        <script src="/js/formValidation.js"></script>
+
+
+
+    </body>
+
+
+</html>

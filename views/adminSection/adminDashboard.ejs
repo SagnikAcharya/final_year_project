@@ -101,11 +101,13 @@
                                     </div>
                                 </div>
                                 <div class="card card-background card-background-mask-primary tilt my-3" data-tilt>
-                                    <div class="card-body">
-                                        <a href="" class="btn rounded btn-primary btn">Edit
+                                    <div class="card-body d-flex">
+                                        <a href="/admin/<%= admin._id %>/edit" class="btn rounded btn-primary me-2">Edit
                                             Profile</a>
-                                        <a href="" class="btn rounded btn-danger btn">Delete
-                                            Profile</a>
+                                            <form action="/admin/<%= admin._id %>?_method=DELETE" method="POST">
+                                                <button class="btn rounded btn-danger btn" type="submit">Delete
+                                                    Profile</button>
+                                            </form>
                                     </div>
                                 </div>
 

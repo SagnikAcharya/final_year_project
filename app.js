@@ -453,13 +453,14 @@ app.get('/user/:id/edit',isLoggedIn,isAdmin,async(req,res)=>{                   
     res.render('./adminSection/editUser.ejs',{user:users});
 })
 app.put('/user/:id',isLoggedIn,isAdmin, async(req,res)=>{                                                  //Edit Specific Student(POST)
-    await User.findByIdAndUpdate(req.params.id,{...req.body.user});
-    req.flash('error','Deleted');
-    res.redirect('/allStudents');
+    const newuser=await User.findByIdAndUpdate(req.params.id,{...req.body.user});
+    req.flash('success','Successfully updated student details');
+    res.redirect(`/user/${newuser._id}`);
 })
 
 app.post('/user/:id',isLoggedIn,isAdmin,async(req,res)=>{                                                     //Delete Specific Student
     await User.findByIdAndDelete(req.params.id);
+    req.flash('error','Successfully Deleted Student');
     res.redirect('/allStudents');
 })
 
@@ -477,7 +478,21 @@ app.get('/admin/:id',isAdmin,isLoggedIn, async(req,res)=>{                      
     });
 })
 
-
+app.get('/admin/:id/edit',isLoggedIn,isAdmin,async(req,res)=>{                                   //Edit Specific Student
+  const newadmin=await Admin.findById(req.params.id);
+  res.render('./adminSection/editAdmin.ejs',{admin:newadmin});
+})
+app.put('/admin/:id',isLoggedIn,isAdmin, async(req,res)=>{          
+  console.log(req.body);                                        //Edit Specific Student(POST)
+  const newadmin=await Admin.findByIdAndUpdate(req.params.id,{...req.body});
+  req.flash('success','Successfully updated details');
+  res.redirect(`/admin/${newadmin._id}`);
+})
+app.post('/admin/:id',isLoggedIn,isAdmin,async(req,res)=>{                                                     //Delete Specific Student
+  await Admin.findByIdAndDelete(req.params.id);
+  req.flash('error','Successfully Deleted Admin');
+  res.redirect('/home');
+})
 
 
 ///////////////////////////////////////////////////   CLUBS      ///////////////////////////////////////////////
