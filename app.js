@@ -406,6 +406,9 @@ app.post('/checkQR/:id',async(req,res)=>{
             await event.save();
             req.flash('success','User successfully verified');
             res.redirect(`/verifiedStudents/${event._id}`);         
+        }else{
+          req.flash('error','Sorry, user is not registered for this event');
+          res.redirect(`/event/${event._id}`);
         }
     }
 })  
