@@ -75,14 +75,13 @@ db.once("open", () => {
 
 
 const sessionConfig = {
-  store: new MongoStore({
+  secret: "secret",
+  store: MongoStore.create({
     mongoUrl:dbURL,
-    touchAfter: 24 * 3600 ,
-    dbName: 'ems-app',
+    ttl: 14 * 24 * 60 * 60 
   }),
   name: "ems2K24",
-  secret: "secret",
-  resave: false,
+  resave: true,
   saveUninitialized: true,
   cookie: {
     httpOnly: true,
