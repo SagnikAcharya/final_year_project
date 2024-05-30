@@ -72,8 +72,17 @@ app.set("views", path.join(__dirname, "views"));
 
 ///////////////////////////////////////////////////   SESSION CONFIG     ///////////////////////////////////////////////
 
+async()=>{
+  try{
+      await mongoose.connect(dbURL,{useNewUrlParser: true, useUnifiedTopology: true}).catch(error => console.log("App.js mongoose.connect error",error));
+      console.log("Database Connected");
+  }catch(e){
+    console.log("Connection issue: "+e);
+  }
+}
 
-mongoose.connect(dbURL,{useNewUrlParser: true, useUnifiedTopology: true}).catch(error => console.log("App.js mongoose.connect error",error));
+
+
 
 var db = mongoose.connection;
 db.on('error', console.error);
