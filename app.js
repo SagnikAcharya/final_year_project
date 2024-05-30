@@ -72,14 +72,14 @@ db.once("open", () => {
 });
 
 
-const sessionStore =new MongoStore({
-  mongoUrl:dbURL
-})
+// const sessionStore =new MongoStore({
+//   mongoUrl:dbURL
+// })
 ///////////////////////////////////////////////////   SESSION CONFIG     ///////////////////////////////////////////////
 
 
 const sessionConfig = {
-  store: sessionStore,
+  store: MongoStore.create({ mongoUrl: dbURL }),
   name: "ems2K24",
   secret: "secret",
   resave: false,
