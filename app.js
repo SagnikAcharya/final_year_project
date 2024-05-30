@@ -504,7 +504,8 @@ app.get('/musicClub',async(req,res)=>{
     const event=await Event.find({});                                              //Hridmajhare Club Get Route      
     res.render('./clubs/musicClub.ejs',{event});
 })
-app.get('/socialClub',async(req,res)=>{                                                   //Hiking Club Get Route      
+app.get('/socialClub',async(req,res)=>{ 
+    const event=await Event.find({});                                                   //Hiking Club Get Route      
     res.render('./clubs/socialClub.ejs',{event});
 })
 
