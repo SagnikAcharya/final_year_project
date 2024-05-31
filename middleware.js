@@ -102,6 +102,7 @@ module.exports.catchAsync=function (fn){
   module.exports.validateUser = (req, res, next) => {
     const userSchema = Joi.object({
       username: Joi.string().min(3).max(30).required().escapeHTML(),
+      about: Joi.string().escapeHTML(),
       department: Joi.string()
         .alphanum()
         .min(3)
@@ -112,6 +113,11 @@ module.exports.catchAsync=function (fn){
         .integer()
         .min(10 ** 9)
         .max(10 ** 10 - 1)
+        .required(),
+      experience: Joi.number()
+        .integer()
+        .min(0)
+        .max(40)
         .required(),
       admin_id: Joi.number().integer().required(),
       password: Joi.string()

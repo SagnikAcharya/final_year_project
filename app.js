@@ -92,8 +92,8 @@ const sessionConfig = {
   saveUninitialized: false,
   cookie: {
     httpOnly: true,
-    expires: Date.now() + 1000 * 60 * 60 * 24 * 3,
-    maxAge: 1000 * 60 * 60 * 24 * 7,
+    expires: Date.now() + 1000 * 60 ,
+    maxAge: 1000 * 60 * 2,
   },
 };
 
@@ -482,13 +482,12 @@ app.get('/admin/:id/edit',isLoggedIn,isAdmin,async(req,res)=>{                  
   const newadmin=await Admin.findById(req.params.id);
   res.render('./adminSection/editAdmin.ejs',{admin:newadmin});
 })
-app.put('/admin/:id',isLoggedIn,isAdmin, async(req,res)=>{          
-  console.log(req.body);                                        //Edit Specific Student(POST)
+app.put('/admin/:id',isLoggedIn,isAdmin, async(req,res)=>{                                                  //Edit Specific Student(POST)
   const newadmin=await Admin.findByIdAndUpdate(req.params.id,{...req.body});
   req.flash('success','Successfully updated details');
   res.redirect(`/admin/${newadmin._id}`);
 })
-app.post('/admin/:id',isLoggedIn,isAdmin,async(req,res)=>{                                                     //Delete Specific Student
+app.post('/admin/:id',isLoggedIn,isAdmin,async(req,res)=>{                                                  //Delete Specific Student
   await Admin.findByIdAndDelete(req.params.id);
   req.flash('error','Successfully Deleted Admin');
   res.redirect('/home');
@@ -540,14 +539,14 @@ app.get('/club',(req,res)=>{                                                   /
 
 ///////////////////////////////////////////////////   404/ERR TEMPLATE      ///////////////////////////////////////////////
 
-app.get("*", (req, res, next) => {                                                      //404 NOT FOUND PAGE
-    next(new ExpressError("Not Found", 404));
-  });
+// app.get("*", (req, res, next) => {                                                      //404 NOT FOUND PAGE
+//     next(new ExpressError("Not Found", 404));
+//   });
   
-  app.use((err, req, res, next) => {
-    const { statusCode = 500,message='Something went wrong' } = err;
-    res.status(statusCode).render("./templates/error_404.ejs", { err });
-  });
+//   app.use((err, req, res, next) => {
+//     const { statusCode = 500,message='Something went wrong' } = err;
+//     res.status(statusCode).render("./templates/error_404.ejs", { err });
+//   });
 
 
 
