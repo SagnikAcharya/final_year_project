@@ -185,6 +185,9 @@ body{
     .table thead tr{
       font-size: 0.6rem;
     }
+    .table tbody tr{
+      font-size: 0.6rem;
+    }
 }
     
   
