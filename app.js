@@ -543,16 +543,10 @@ app.get('/club',(req,res)=>{                                                   /
 
 ///////////////////////////////////////////////////   404/ERR TEMPLATE      ///////////////////////////////////////////////
 
-app.get("*", (req, res, next) => {                                                      //404 NOT FOUND PAGE
-    next(new ExpressError("Not Found", 404));
+app.get("*", (req, res) => {                                                      //404 NOT FOUND PAGE
+    res.render("./templates/error_404.ejs");
   });
   
-  app.use((err, req, res, next) => {
-    const { statusCode = 500,message='Something went wrong' } = err;
-    res.status(statusCode).render("./templates/error_404.ejs", { err });
-  });
-
-
 
 const port = process.env.PORT || 10000;
 
