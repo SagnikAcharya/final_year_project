@@ -81,7 +81,7 @@ module.exports.catchAsync=function (fn){
 
   module.exports.validateEvent = (req, res, next) => {
     const eventSchema = Joi.object({
-      Name: Joi.string().required().escapeHTML(),
+      Name: Joi.string().escapeHTML(),
       Description: Joi.string().required().escapeHTML(),
       Location: Joi.string().required().escapeHTML(),
       Type: Joi.string().required(),

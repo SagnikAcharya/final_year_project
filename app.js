@@ -354,7 +354,7 @@ app.get('/event/:id/edit',isLoggedIn,isAdmin,async(req,res)=>{             //Edi
     res.render('./templates/editEvent.ejs',{event});
 })
 
-app.put('/event/:id',isLoggedIn,isAdmin,validateEvent,upload.array('image'),async(req,res)=>{
+app.put('/event/:id',isLoggedIn,isAdmin,upload.array('image'),async(req,res)=>{
     const event=await Event.findByIdAndUpdate(req.params.id,{...req.body.event});   //Edit Specific Event(POST)
     const imgs=req.files.map(f=>({url:f.path,filename:f.filename}));
     event.images.push(...imgs);    
@@ -544,14 +544,14 @@ app.get('/club',(req,res)=>{                                                   /
 
 ///////////////////////////////////////////////////   404/ERR TEMPLATE      ///////////////////////////////////////////////
 
-// app.get("*", (req, res, next) => {                                                      //404 NOT FOUND PAGE
-//     next(new ExpressError("Not Found", 404));
-//   });
+app.get("*", (req, res, next) => {                                                      //404 NOT FOUND PAGE
+    next(new ExpressError("Not Found", 404));
+  });
   
-//   app.use((err, req, res, next) => {
-//     const { statusCode = 500,message='Something went wrong' } = err;
-//     res.status(statusCode).render("./templates/error_404.ejs", { err });
-//   });
+  app.use((err, req, res, next) => {
+    const { statusCode = 500,message='Something went wrong' } = err;
+    res.status(statusCode).render("./templates/error_404.ejs", { err });
+  });
 
 
 

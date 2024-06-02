@@ -45,14 +45,14 @@
                                 <div class="form-group">
                                     <label for="startDate" class="my-1 fw-bold">Event Start Date </label>
                                     <input id="startDate" class="form-control" type="datetime-local" name="event[startDate]"
-                                        placeholder="Enter event date" />
+                                        placeholder="Enter event date" value="<%= event.startDate %>" />
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label class="my-1 fw-bold" for="limit">Registration Limit</label>
                                     <input id="limit" class="form-control" type="number" name="event[limit]" min="0" max="100"
-                                        placeholder="Enter Student limit" />
+                                        placeholder="Enter Student limit" value="<%= event.limit %>" />
                                 </div>
                             </div>
                         </div>
@@ -62,7 +62,9 @@
                                 <div class="form-group">
                                     <label for="dropdown" class="my-1 fw-bold">Event Type</label>
                                     <select id="dropdown" name="event[Type]" class="form-control" required>
-                                        <option disabled selected value>Select Event Type</option>
+                                        <option disabled selected value>
+                                            <%= event.Type %>
+                                        </option>
                                         <option value="Webinar">Webinar</option>
                                         <option value="Seminar">Seminar</option>
                                         <option value="Fest">Fest</option>
@@ -95,7 +97,15 @@
                                 <% }) %>
                         </div>
                     </div>
-
+                    <div class="row my-2">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label class="my-1 fw-bold">Event Description</label>
+                                <textarea id="comments" class="form-control" name="event[Description]" placeholder="Enter event description"
+                                    required value="<%= event.Description %>"></textarea>
+                            </div>
+                        </div>
+                    </div>
                         <div class="row my-3">
                             <div class="d-grid gap-2">
                                 <button type="submit" id="submit" class="btn btn-primary btn-block my-2 py-2 fw-bold">Update
