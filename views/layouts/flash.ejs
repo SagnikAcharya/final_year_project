@@ -1,15 +1,15 @@
 <!-- <div class="container mt-4 mb-3" style="width: 100%;"> -->
     <% if(success && success.length){ %>
-        <div class="alert position-absolute px-3 alert-success flash-div  mt-4 mb-3 alert-dismissible fade show js-alert"
-            style="width: 40%;top: 80px;right: 10%;z-index: 100;" role="alert">
+        <div class="alert position-absolute container rounded alert-success flash-div  mt-4 mb-3 alert-dismissible fade show js-alert"
+            style="width: 100%;top: 80px;z-index: 100; " role="alert">
             <%= success %>
                 <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
         <%} else if(error.length){%>
-            <div class="alert position-absolute container rounded px-3 alert-danger flash-div mt-4 mb-3 alert-dismissible  fade show js-alert"
-                style="width:100%;top: 5%;left: 10%;z-index: 100;" role="alert">
+            <div class="alert position-absolute container rounded alert-danger flash-div mt-4 mb-3 alert-dismissible  fade show js-alert"
+                style="width:100%;top: 80px;z-index: 100; " role="alert">
                 <%= error %>
-                    <button type="button right-0" class="btn-close me-3" data-bs-dismiss="alert" aria-label="Close"></button>
+                    <button type="button" class="btn-close me-3" data-bs-dismiss="alert" aria-label="Close"></button>
             </div>
             <% } %>
 <!-- </div> -->

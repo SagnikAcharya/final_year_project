@@ -362,7 +362,6 @@ app.put('/event/:id',isLoggedIn,isAdmin,upload.array('image'),async(req,res)=>{
     event.moment_Date=moment(event.EventDate).format('Do MMMM YYYY');
     event.moment_Time=moment(event.EventDate).format('h:mm a');
     await event.save();
-    console.log(req.body);
     if(req.body.deleteImages){
         for(let filename of req.body.deleteImages){
             await cloudinary.uploader.destroy(filename);

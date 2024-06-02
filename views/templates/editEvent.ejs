@@ -61,7 +61,7 @@
                             <div class="col-md-12">
                                 <div class="form-group">
                                     <label for="dropdown" class="my-1 fw-bold">Event Type</label>
-                                    <select id="dropdown" name="event[Type]" class="form-control" required>
+                                    <select id="dropdown" name="event[Type]" class="form-control">
                                         <option disabled selected value>
                                             <%= event.Type %>
                                         </option>
@@ -102,7 +102,7 @@
                             <div class="form-group">
                                 <label class="my-1 fw-bold">Event Description</label>
                                 <textarea id="comments" class="form-control" name="event[Description]" placeholder="Enter event description"
-                                    required value="<%= event.Description %>"></textarea>
+                                     value="<%= event.Description %>"></textarea>
                             </div>
                         </div>
                     </div>
