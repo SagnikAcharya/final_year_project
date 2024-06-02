@@ -255,16 +255,21 @@ app.get("/addStudent", isLoggedIn, isAdmin, async (req, res) => {
 
 app.post("/addStudent", isAdmin, async (req, res) => {
   //Register Student(POST)
-  const { password } = req.body;
-  const student = new User(req.body);
-  await User.register(student, password);
-  student.QR = student.username.trim() + "_" + student.roll;
-  await student.save();
-  req.flash(
-    "success",
-    "Successfully added a new student : " + student.username
-  );
-  res.redirect(`/allStudents`);
+  try{
+    const { password } = req.body;
+    const student = new User(req.body);
+    await User.register(student, password);
+    student.QR = student.username.trim() + "_" + student.roll;
+    await student.save();
+    req.flash(
+      "success",
+      "Successfully added a new student : " + student.username
+    );
+    res.redirect(`/allStudents`);
+  }catch(e){
+    req.flash('error','User with same Username/Roll no is already Registered , Try again!');
+    res.redirect('/addStudent');
+  }
 });
 
 app.get("/studentLogin", (req, res) => {
