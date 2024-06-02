@@ -76,12 +76,14 @@
                             <p></p>
                         </div>
                         <a href="/event/<%= e._id %>" class="btn btn-sm btn-secondary rounded-pill py-2 px-3">Details</a>
-                        <a href="/verifiedStudents/<%= e._id %>" class="btn btn-sm btn-warning rounded-pill py-2 px-3">Attendees</a>
+                        <% if(currentUser && currentUser.isAdmin==false){ %>
+                            <a href="/verifiedStudents/<%= e._id %>" class="btn btn-sm btn-warning rounded-pill py-2 px-3">Attendees</a>
+                        <% } %>
                         <% if((e.limit-e.count)<=0){ %>
                             <a href="#" class="btn btn-sm btn-danger rounded-pill py-2 px-3">Closed</a>
                             <% }else{%>
                                 <% if(currentUser && currentUser.isAdmin==false){ %>
-                                    <a href="#" class="btn btn-sm btn-primary rounded-pill py-2 px-3">Register</a>
+                                    <a href="<%= e._id %>" class="btn btn-sm btn-primary rounded-pill py-2 px-3">Register</a>
                                     <% } %>
                                         <% } %>
                                             </div>
